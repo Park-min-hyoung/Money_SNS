@@ -12,11 +12,17 @@ const output = {
     register: (req, res) => {
         res.render("home/register");
     },
+    board: (req, res) => {
+        res.render("home/board");
+    },
     upload: (req, res) => {
         res.render("home/upload");
     },
     txt_upload: (req, res) => {
         res.render("home/txt_upload");
+    },
+    board_video: (req, res) => {
+        res.render("home/board_video");
     },
 };
 
@@ -34,8 +40,7 @@ const process = {
         return res.json(response);
     },
     upload: (req, res) => {
-        // console.log(req.body);
-        res.render("home/txt_upload");
+        res.render("home/upload");
     },
 };
 

@@ -11,8 +11,6 @@ function submit() {
         title: title.value,
         des: des.value,
     };
-    console.log(req);
-    alert('hi');
 
     fetch("/txt_upload", {
         method: "POST",
@@ -24,7 +22,7 @@ function submit() {
         .then((res) => res.json())
         .then((res) => {
             if (res.success) {
-                location.href = "http://127.0.0.1:5501/board.html?id=";
+                location.href = "/board";
             } else {
                 alert(res.msg);
             }
