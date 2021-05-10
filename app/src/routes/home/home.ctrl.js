@@ -1,6 +1,7 @@
 "use strict";
 
 const User = require("../../models/User");
+const fs = require("fs");
 
 const output = {
     home: (req, res) => {
@@ -13,7 +14,13 @@ const output = {
         res.render("home/register");
     },
     board: (req, res) => {
-        res.render("home/board");
+        fs.readdir('src/public/data', function(err, files){
+            if(err){
+                console.log(err);
+                res.status(500).send('Internal Server Error');
+            }
+            res.render('home/board', {topics:files});
+        })
     },
     upload: (req, res) => {
         res.render("home/upload");
@@ -38,6 +45,16 @@ const process = {
         const response = await user.register();
 
         return res.json(response);
+    },
+    view: (req, res) => {
+        const title = req.body.title;
+        const description = req.body.description;
+        fs.writeFile('./src/public/data/'+title, description, function(err){
+            if(err){
+                res.status(500).send('Internal Server Error');
+            }
+            res.render("home/view");
+        });
     },
     upload: (req, res) => {
         res.render("home/upload");

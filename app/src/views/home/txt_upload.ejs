@@ -5,15 +5,15 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        
         <script src ="/js/home/txt_upload.js" defer></script>
         <title>Document</title>
     </head>
     <body>
-        <form>
-            <input id="title" type="text" placeholder="게시글의 제목"/><br><br>
-            <textarea id="des" cols="30" rows="10"></textarea><br>
-            <button type="button" onclick="location.href='/board' ">게시글 작성</button>
+        <form action="/view" method="POST">
+            <p><input id="title" type="text" name="title" placeholder="게시글의 제목"/></p>
+            <p><textarea id="des" name="description" cols="30" rows="10"></textarea></p>
+            <p><input type="submit"></p>
+            <!--onclick="location.href='/board' "-->
         </form>
     </body>
 </html>

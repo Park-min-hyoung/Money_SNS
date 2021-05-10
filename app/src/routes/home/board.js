@@ -25,5 +25,6 @@ router.get("/board_video", ctrl.output.board_video);
 // 사용자가 post 방식으로 전달한 데이터가 업로드라는 디렉토리로 향하고 있다면 ctrl에 소스코드가 실행 될것이다.
 // 두번째 파라미터는 파일을 가공해서 req 객체에 파일이라는 프로퍼티를 암시적으로 추가함
 router.post("/upload", upload.single('userfile'), ctrl.process.upload);
+router.post("/view", ctrl.process.view);
 
 module.exports = router;

@@ -22,7 +22,7 @@
                 <div class="header__top__wrap">
                     <div class="header__top">
                         <div class="header__logo__wrap">
-                            <a href="index.html">
+                            <a href="/">
                                 <span class="header__title">Money SNS</span>
                             </a>
                             <button class="menu__btn">
@@ -35,14 +35,14 @@
                     <div class="header__bot">
                         <div class="header__bot__container">
                             <ul class="login__wrap" id="login__wrap">
-                                <li class="login"><a href="http://localhost:4000/login">LOGIN</a></li>
+                                <li class="login"><a href="/login">LOGIN</a></li>
                                 <li class="sign">
-                                  <a href="http://localhost:4000/register"><span class="sign__a">SIGN</span></a>
+                                  <a href="/register"><span class="sign__a">SIGN</span></a>
                                 </li>
                             </ul>
                             <ul class="logout__wrap" id="logout__wrap">
                                 <li class="loguut">
-                                  <a href="http://127.0.0.1:5501/board.html"><span class="logout__a">LOGUT</span></a>
+                                  <a href="/board"><span class="logout__a">LOGUT</span></a>
                                 </li>
                             </ul>
                         </div>
@@ -96,13 +96,11 @@
                                 </div>
                                 <label for="popup" class="close" id="c2" value></label>
                             </div>
-
-                            <input type="checkbox" id="popup">
-                            <label for="popup" class="imgs" id="효정" value="효정은 대한민국의 가수이다. 걸 그룹 오마이걸의 리더와 리드보컬을 맡고 있다.">
-                                <span><img src="img/board/효정.jpg" alt=""/></span></label>
-                            <input type="checkbox" id="popup">
-                            <label for="popup" class="imgs" id="서예지" value="서예지는 대한민국의 배우이다. ">
-                                <span><img src="img/board/서예지.jpg" alt=""/></span></label>
+                            <% for(var i = 0; i < topics.length; i++){ %>
+                                <input type="checkbox" id="popup">
+                                <label for="popup" class="imgs" id="<%= topics[i] %>" value="효정은 대한민국의 가수이다. 걸 그룹 오마이걸의 리더와 리드보컬을 맡고 있다.">
+                                    <span><img src="img/board/효정.jpg" alt=""/></span></label>
+                            <% } %>
 
                             <a href="board.html">
                                 <span><img src="img/index/video.png" alt=""/></span></a>
