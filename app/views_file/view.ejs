@@ -10,6 +10,14 @@
 </head>
 <body>
     <h1>Server Side avaScript</h1>
-    <p><a href="/board">업로드 완료</a></p>
+    <ul>
+        <% for(var i = 0; i < topics.length; i++){ %>
+            <li><a href="/topic/<%= topics[i] %>"><%= topics[i] %></a></</li>
+        <% } %>
+    </ul>
+    <article>
+        <h2><%= title %></h2>
+        <%= description %>
+    </article>
 </body>
 </html>

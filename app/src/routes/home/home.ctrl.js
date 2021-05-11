@@ -19,7 +19,30 @@ const output = {
                 console.log(err);
                 res.status(500).send('Internal Server Error');
             }
-            res.render('home/board', {topics:files});
+            fs.readFile('src/public/data/'+ files[0], 'utf8', function(err, data){
+                if(err){
+                    console.log(err);
+                    res.status(500).send('Internal Server Error');
+                }
+                res.render('home/board', {topics:files, description:data});
+            });
+        })
+    },
+    board_id: (req, res) => {
+        var id = req.params.id;
+        fs.readdir('src/public/data', function(err, files){
+            if(err){
+                console.log(err);
+                res.status(500).send('Internal Server Error');
+            }
+    
+            fs.readFile('src/public/data/'+id, 'utf8', function(err, data){
+                if(err){
+                    console.log(err);
+                    res.status(500).send('Internal Server Error');
+                }
+                res.render('home/board', {topics:files, title:id, description:data});
+            });
         })
     },
     upload: (req, res) => {
@@ -46,15 +69,17 @@ const process = {
 
         return res.json(response);
     },
-    view: (req, res) => {
+    txt_upload: (req, res) => {
         const title = req.body.title;
         const description = req.body.description;
         fs.writeFile('./src/public/data/'+title, description, function(err){
             if(err){
                 res.status(500).send('Internal Server Error');
             }
-            res.render("home/view");
+            const response = { success: true };
+            return res.json(response);
         });
+
     },
     upload: (req, res) => {
         res.render("home/upload");

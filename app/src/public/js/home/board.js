@@ -84,3 +84,8 @@ $('video').on('click', function(){
     var video_title = jQuery(this).attr('name');
     localStorage.setItem("storage_video_title", video_title);
 });
+
+function func() {
+    document.getElementsByName("haha").value = "<%= description =>";
+    console.log('haha')
+}

@@ -1,7 +1,7 @@
 "use strict";
 
 const title = document.querySelector("#title"),
- des = document.querySelector("#des"),
+description = document.querySelector("#description"),
  submitBtn = document.querySelector("#button");
 
 submitBtn.addEventListener("click", submit);
@@ -9,7 +9,7 @@ submitBtn.addEventListener("click", submit);
 function submit() {
     const req = {
         title: title.value,
-        des: des.value,
+        description: description.value,
     };
 
     fetch("/txt_upload", {
@@ -22,7 +22,7 @@ function submit() {
         .then((res) => res.json())
         .then((res) => {
             if (res.success) {
-                location.href = "/board";
+                location.href = "/board?id=" + req_id;
             } else {
                 alert(res.msg);
             }
