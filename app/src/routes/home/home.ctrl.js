@@ -14,35 +14,42 @@ const output = {
         res.render("home/register");
     },
     board: (req, res) => {
-        fs.readdir('src/public/data', function(err, files){
+        fs.readdir('src/public/data', function(err, txt){
             if(err){
                 console.log(err);
                 res.status(500).send('Internal Server Error');
             }
-            fs.readFile('src/public/data/'+ files[0], 'utf8', function(err, data){
+            fs.readdir('src/public/uploads', function(err, img){
                 if(err){
                     console.log(err);
                     res.status(500).send('Internal Server Error');
                 }
-                res.render('home/board', {topics:files, description:data});
-            });
+                
+                res.render('home/board', {topics: txt, photo: img});
+            })
         })
     },
     board_id: (req, res) => {
         var id = req.params.id;
+
         fs.readdir('src/public/data', function(err, files){
             if(err){
                 console.log(err);
                 res.status(500).send('Internal Server Error');
             }
-    
-            fs.readFile('src/public/data/'+id, 'utf8', function(err, data){
+            fs.readdir('src/public/uploads', function(err, img){
                 if(err){
                     console.log(err);
                     res.status(500).send('Internal Server Error');
                 }
-                res.render('home/board', {topics:files, title:id, description:data});
-            });
+                fs.readFile('src/public/data/'+id, 'utf8', function(err, data){
+                    if(err){
+                        console.log(err);
+                        res.status(500).send('Internal Server Error');
+                    }
+                    res.render('home/view', {topics:files, title:id, description:data, photo:img});
+                });
+            })
         })
     },
     upload: (req, res) => {
@@ -72,6 +79,9 @@ const process = {
     txt_upload: (req, res) => {
         const title = req.body.title;
         const description = req.body.description;
+        var k = "hi";
+        fs.rename(`../public/uploads/${title}`, `../public/uploads/${k}`, function(err){});
+
         fs.writeFile('./src/public/data/'+title, description, function(err){
             if(err){
                 res.status(500).send('Internal Server Error');

@@ -172,13 +172,13 @@
     right: 0%;
     width: 50%;
   }
-  /* 닉네임(js에서 처리)
-  input[id*="popup"] + label + div > div > div > .nickname {
+  /*닉네임(js에서 처리)*/
+  input[id*="popup"] + label + div > div > div > #nickname {
     text-align: left;
     font-size: 25px;
     margin: 15px 10px;
   }
-  */
+  
   /* 소개 */
   input[id*="popup"] + label + div > div > div > #introduce {
     text-align: left;

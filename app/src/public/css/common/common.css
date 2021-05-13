@@ -237,7 +237,7 @@
     background-color: var(--color-black);
     margin-top: 100px;
     position: relative;
-    z-index: 99;
+    z-index: 1;
   }
   .footer__container {
     max-width: 1200px;

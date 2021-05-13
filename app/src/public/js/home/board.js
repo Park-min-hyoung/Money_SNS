@@ -25,19 +25,7 @@ $('.section__logo').on('click', function(){
 
 // 사진 클릭 시 진행되는 동작들을 다루는 소스코드(사진, 닉네임, 설명글, 좋아요, 화면깨짐 등등)
 $('label').on('click', function(){
-    // id의 값을 가져와 사진을 출력
-    var src = jQuery(this).attr('id');
-    jQuery('#profile').attr("src","img/board/" + src + ".jpg");
-    // id의 값을 가져와 닉네임 출력
-    var nickname = document.getElementById('nickname');
-    nickname.innerHTML = '<div style="text-align: left; font-size:25px; margin: 15px 10px;">' + src + '<div>';
-    // value 값을 가져와 value의 내용을 출력
-    var value = jQuery(this).attr('value');
-    var element2 = document.getElementById('introduce');
-    element2.innerHTML = value;
-    // close시 화면이 깨지는데 사진 클릭시 두개의 label 태그의 id와 value 값을 수정함으로써 보완
-    $(".close").attr('id', src);
-    $(".close").attr('value', value);
+    location = '/board';
 });
 
 // 좋아요(하트) 클릭시 변화
@@ -84,8 +72,3 @@ $('video').on('click', function(){
     var video_title = jQuery(this).attr('name');
     localStorage.setItem("storage_video_title", video_title);
 });
-
-function func() {
-    document.getElementsByName("haha").value = "<%= description =>";
-    console.log('haha')
-}

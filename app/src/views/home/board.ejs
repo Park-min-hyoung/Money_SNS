@@ -13,7 +13,7 @@
         <script src="https://kit.fontawesome.com/58412d2786.js" crossorigin="anonymous"></script>
         <script src ="/js/home/login_logout.js" defer></script>
         <script src ="/js/home/board.js" defer></script>
-        <title>Board_Video</title>
+        <title>Board</title>
     </head>
 
     <body>
@@ -75,50 +75,10 @@
                     </div>
                     <div class="intro__new__wrap">
                         <div id="select__img">
-                            <input type="checkbox" id="popup">
-                            <label for="popup" class="imgs" id="Elizabeth Olsen" value="엘리자베스 올슨은 미국의 배우이다. 독립 스릴러 드라마 영화 《마사 마시 메이 마릴린》에 출연하여,
-                            크리틱스 초이스 영화상 여우주연상, 인디펜던트 스피릿 어워드 여우주연상 외 다른 시상식에서 후보에 오른 2011년부터 두각을 드러냈다.">
-                                <span><img src="img/board/Elizabeth Olsen.jpg" alt=""/></span></label>
-                            <div>
-                                <div>
-                                    <img id="profile" src="img/board/Elizabeth Olsen.jpg" alt=""/>
-                                    <div>
-                                        <div id="nickname"></div><hr>
-                                        <div id="introduce"></div>
-                                        <div class="second__line"><hr></div>
-                                        <div class="like">
-                                            <i class="far fa-heart"></i>
-                                            <i class="fas fa-heart"></i>
-                                            <div id="like_cnt" style="font-size: 20px;">좋아요</div>
-                                        </div>
-                                    </div>
-                                    <label for="popup" class="close" id="c1" value>X</label>
-                                </div>
-                                <label for="popup" class="close" id="c2" value></label>
-                            </div>
                             <% for(var i = 0; i < topics.length; i++){ %>
-                                <input type="checkbox" id="popup">
-                                <a href="/board/<%= topics[i] %>"></a>
-                                <label for="popup" class="imgs" id="<%= topics[i] %>" value="<%= description %>">
-                                    <span><img src="img/board/효정.jpg" alt=""/></span></label>
+                                <a href="/board/<%= topics[i] %>?title=<%= topics[i] %>&n=<%= i %>">
+                                    <span><img id="profile" src="uploads/<%= photo[i] %>" alt=""/></span></a>
                             <% } %>
-
-                            <a href="board.html">
-                                <span><img src="img/index/video.png" alt=""/></span></a>
-                            <a href="board.html">
-                                <span><img src="img/index/chat.jpg" alt=""/></span></a>
-                            <a href="board.html">
-                                <span><img src="img/index/video.png" alt=""/></span></a>
-                            <a href="board.html">
-                                <span><img src="img/index/chat.jpg" alt=""/></span></a>
-                            <a href="board.html">
-                                <span><img src="img/index/video.png" alt=""/></span></a>
-                            <a href="board.html">
-                                <span><img src="img/index/chat.jpg" alt=""/></span></a>
-                            <a href="board.html">
-                                <span><img src="img/index/video.png" alt=""/></span></a>
-                            <a href="board.html">
-                                <span><img src="img/index/chat.jpg" alt=""/></span></a>
                             <a href="#" id="upload" style="display: none;">게시글 작성</a>
                         </div>
                         <div id="select__video">
