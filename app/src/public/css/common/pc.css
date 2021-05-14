@@ -123,7 +123,6 @@
   .intro__new__wrap video {
     width: 90%;
     height: 100%;
-    display: none;
   }
   input[id*="popup"] {
     display: none;

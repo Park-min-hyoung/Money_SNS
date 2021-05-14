@@ -6,7 +6,6 @@ var img_num = urlParams.get('n');
 if (req_id !== null) { // 페이지 이동시 id를 넘겨줘야 로그인이 유지된다.
     $(".header__logo__wrap a").attr("href", "/?id=" + req_id);
     $("#link_board").attr("href", "/board?id=" + req_id);
-    $("#select__video a").attr("href", "/board_video?id=" + req_id);
     $('#upload').css('display', 'block');
     $("#upload").attr("href", "/upload?id=" + req_id);
     $("#txt_upload").attr("href", "/txt_upload?id=" + req_id);

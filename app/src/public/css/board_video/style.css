@@ -19,10 +19,6 @@
     --base-duration: 300ms;
 }
 
-/* 영상 크기 */
-#play_video {
-    width: 100%;
-}
 /* 영상 제목 */
 #video_title {
     color: var(--color-white);

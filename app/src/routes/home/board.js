@@ -9,10 +9,15 @@ const multer  = require('multer')
 
 var _storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, 'src/public/uploads');
+      if(file.mimetype == "image/jpeg" || file.mimetype == "image/png"){
+        cb(null, 'src/public/uploads/photo');
+      }
+      else{
+        cb(null, 'src/public/uploads/video');
+      }
     },
     filename: function (req, file, cb) {
-      cb(null, "file.originalname");
+      cb(null, file.originalname);
     }
 })
 const upload = multer({ storage: _storage })
@@ -20,7 +25,7 @@ const upload = multer({ storage: _storage })
 router.get("/board", ctrl.output.board);
 router.get("/upload", ctrl.output.upload);
 router.get("/txt_upload", ctrl.output.txt_upload);
-router.get("/board_video", ctrl.output.board_video);
+router.get("/board_video/:id", ctrl.output.board_video_id);
 router.get("/board/:id", ctrl.output.board_id);
 
 // 사용자가 post 방식으로 전달한 데이터가 업로드라는 디렉토리로 향하고 있다면 ctrl에 소스코드가 실행 될것이다.

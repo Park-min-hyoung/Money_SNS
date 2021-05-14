@@ -1,7 +1,8 @@
 "use strict";
 
 const title = document.querySelector("#title"),
-description = document.querySelector("#description"),
+ description = document.querySelector("#description"),
+ video = document.querySelector("#video"),
  submitBtn = document.querySelector("#button");
 
 submitBtn.addEventListener("click", submit);
@@ -10,6 +11,7 @@ function submit() {
     const req = {
         title: title.value,
         description: description.value,
+        video: video.value,
     };
 
     fetch("/txt_upload", {

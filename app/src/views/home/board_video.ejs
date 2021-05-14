@@ -61,16 +61,16 @@
             <section id="intro">
                 <div class="intro__container">
                     <div class="intro__new__wrap">
-                        <video id="play_video" src controls></video>
+                        <video id="play_video" src="../../uploads/video/<%= title %>.mp4" width="1200" height="100px" playsinline controls autoplay></video>
                     </div>
-                    <div id="video_title"></div>
+                    <div id="video_title"><%= title %></div>
                     <div class="video_like">
                         <i class="far fa-heart"></i>
                         <i class="fas fa-heart"></i>
                         <div id="like_cnt" style="font-size: 30px;">좋아요</div><hr style="margin: 30px 0;">
                     </div>
                     <div id="video_nickname"></div>
-                    <div id="video_introduce"></div>
+                    <div id="video_introduce"><%= description %></div>
                 </div>
             </section>
 

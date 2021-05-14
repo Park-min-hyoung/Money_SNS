@@ -23,7 +23,7 @@ $('.section__logo').on('click', function(){
     $(this).addClass('selected');
 });
 
-// 사진 클릭 시 진행되는 동작들을 다루는 소스코드(사진, 닉네임, 설명글, 좋아요, 화면깨짐 등등)
+// 모달 취소 또는 바깥 화면 누르면 board로 이동
 $('label').on('click', function(){
     location = '/board';
 });
@@ -55,20 +55,4 @@ $(document).ready(function() {
       $('video').trigger('pause').hide()
       $('video').prop('currentTime', 0);
 	 })
-});
-
-// 페이지 이동 시 값 전달하는 제이쿼리
-$('video').on('click', function(){
-    // 영상 클릭 시 그 영상의 src 저장
-    var video_src = jQuery(this).attr("src");
-    localStorage.setItem("storageName", video_src);
-    // 닉네임을 넘기기 위해 id 값을 넘김
-    var video_nickname = jQuery(this).attr('id');
-    localStorage.setItem("storage_video_nickName", video_nickname);
-    // 영상 설명 부분을 넘기기 위해 value 값을 넘김
-    var video_introduce = jQuery(this).attr('value');
-    localStorage.setItem("storage_video_introduce", video_introduce);
-    // 영상 제목을 넘기기 위해 name 값을 넘김
-    var video_title = jQuery(this).attr('name');
-    localStorage.setItem("storage_video_title", video_title);
 });

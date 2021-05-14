@@ -76,52 +76,21 @@
                     <div class="intro__new__wrap">
                         <div id="select__img">
                             <% for(var i = 0; i < topics.length; i++){ %>
-                                <a href="/board/<%= topics[i] %>?title=<%= topics[i] %>&n=<%= i %>">
-                                    <span><img id="profile" src="uploads/<%= photo[i] %>" alt=""/></span></a>
+                                <a href="/board/<%= topics[i] %>">
+                                    <span><img id="profile" src="uploads/photo/<%= topics[i]%>.png" alt=""/></span></a>
                             <% } %>
                             <a href="#" id="upload" style="display: none;">게시글 작성</a>
                         </div>
                         <div id="select__video">
-                            <a href="/board_video">
-                                <span class="pre_video" target="#Big_Face">
-                                    <img
-                                        class="video_img"
-                                        src="https://i.ytimg.com/vi/CNlp66I_2UU/maxresdefault.jpg"
-                                        alt="">
-                                    <video id="Big_Face" src="mp4/video/삼겹살.mp4" muted="muted" name="국내 최고 삼겹살 초돈 리뷰"
-                                    value="빅페이스의 삼겹살 리뷰 영상입니다."></video></span></a>
-                            <a href="/board_video">
-                                <span class="pre_video" target="#김진짜">
-                                    <img
-                                        class="video_img"
-                                        src="https://i.ytimg.com/vi/yXUZ_Fd0b7I/maxresdefault.jpg"
-                                        alt="">
-                                    <video id="김진짜" src="mp4/video/손흥민.mp4" muted="muted" name="토트넘 리버풀! 왜 토트넘이 진걸까???"
-                                    value="리버풀과 토트넘의 경기 입니다."></video></span></a>
-                            <a href="/board_video">
-                                <span class="pre_video" target="#영알남">
-                                    <img
-                                        class="video_img"
-                                        src="https://i.ytimg.com/vi/iAajM_g88cw/maxresdefault.jpg"
-                                        alt="">
-                                    <video id="영알남" src="mp4/video/조커.mp4" muted="muted" name="배트맨 시리즈 리뷰 해보자!!"
-                                    value="다크나이트 시리즈 리뷰 영상입니다."></video></span></a>
-
-                            <a href="board.html">
-                                <span><img src="img/index/video.png" alt=""/></span></a>
-                            <a href="board.html">
-                                <span><img src="img/index/money.png" alt=""/></span></a>
-                            <a href="board.html">
-                                <span><img src="img/index/video.png" alt=""/></span></a>
-                            <a href="board.html">
-                                <span><img src="img/index/money.png" alt=""/></span></a>
-                            <a href="board.html">
-                                <span><img src="img/index/video.png" alt=""/></span></a>
-                            <a href="board.html">
-                                <span><img src="img/index/money.png" alt=""/></span></a>
-                            <a href="board.html">
-                                <span><img src="img/index/video.png" alt=""/></span></a>
-                            
+                            <% for(var i = 0; i < video.length; i++){ %>
+                                <a href="/board_video/<%= video[i] %>">
+                                    <span class="pre_video" target="#<%= video[i] %>">
+                                        <img
+                                            class="video_img"
+                                            src="../../img/index/video.png"
+                                            alt="">
+                                        <video id="<%= video[i] %>" src="uploads/video/<%= video[i] %>.mp4" muted="muted"></video></span></a>
+                            <% } %>
                         </div>
                     </div>
                 </section>
@@ -130,7 +99,7 @@
                 <section id="banner__wrap">
                     <div class="banner__container">Banner Img</div>
                 </section>
-
+ 
                 <!-- footer -->
                 <footer id="footer__wrap">
                     <div class="footer__container">

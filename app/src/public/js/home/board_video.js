@@ -14,13 +14,8 @@ window.onload = function(){
         document.getElementById("logout__wrap").style.display = 'none';
     }
 
-    $("#play_video").attr("src", localStorage.getItem("storageName"));
-    $("#play_video").show().trigger('play');
-
-    // 영상 클릭 시 영상제목, 닉네임 및 영상 설명 글 출력
-    document.getElementById("video_nickname").innerHTML = localStorage.getItem("storage_video_nickName");
-    document.getElementById("video_introduce").innerHTML = localStorage.getItem("storage_video_introduce");
-    document.getElementById("video_title").innerHTML = localStorage.getItem("storage_video_title");
+    $("#play_video").width('1200px');
+    $("#play_video").height('700px');
 }
 
 // video 좋아요(하트) 클릭시 변화
