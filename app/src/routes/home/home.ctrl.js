@@ -149,7 +149,8 @@ const process = {
         }
     },
     upload: (req, res) => {
-        res.render("home/upload");
+        const response = { success: true };
+        return res.json(response);
     },
 };
 
