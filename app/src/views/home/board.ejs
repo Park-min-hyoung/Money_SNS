@@ -35,7 +35,7 @@
                     <div class="header__bot">
                         <div class="header__bot__container">
                             <ul class="login__wrap" id="login__wrap">
-                                <li class="login"><a href="/login">LOGIN</a></li>
+                                <li class="login"><a href="/login?href=board">LOGIN</a></li>
                                 <li class="sign">
                                   <a href="/register"><span class="sign__a">SIGN</span></a>
                                 </li>
@@ -75,14 +75,14 @@
                     </div>
                     <div class="intro__new__wrap">
                         <div id="select__img">
-                            <% for(var i = 0; i < topics.length; i++){ %>
-                                <a href="/board/<%= topics[i] %>">
-                                    <span><img id="profile" src="uploads/photo/<%= topics[i]%>.png" alt=""/></span></a>
+                            <% for(var i = photo.length - 1; i >= 0; i--){ %>
+                                <a href="/board/<%= photo[i] %>?id=나개발">
+                                    <span><img id="profile" src="uploads/photo/<%= photo[i]%>.png" alt=""/></span></a>
                             <% } %>
                             <a href="#" id="upload" style="display: none;">게시글 작성</a>
                         </div>
                         <div id="select__video">
-                            <% for(var i = 0; i < video.length; i++){ %>
+                            <% for(var i = video.length - 1; i >= 0; i--){ %>
                                 <a href="/board_video/<%= video[i] %>">
                                     <span class="pre_video" target="#<%= video[i] %>">
                                         <img

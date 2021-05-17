@@ -25,6 +25,7 @@ const upload = multer({ storage: _storage });
 router.get("/board", ctrl.output.board);
 router.get("/upload", ctrl.output.upload);
 router.get("/txt_upload", ctrl.output.txt_upload);
+router.get("/board_video", ctrl.output.board_video);
 router.get("/board_video/:id", ctrl.output.board_video_id);
 router.get("/board/:id", ctrl.output.board_id);
 

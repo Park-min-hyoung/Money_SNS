@@ -1,5 +1,9 @@
 "use strict";
 
+const urlQuery = window.location.search; // url query 조회
+const urlParams = new URLSearchParams(urlQuery); // id의 값을 조회하기 위한 준비
+const path = urlParams.get('href'); //
+
 const id = document.querySelector("#id"),
  psword = document.querySelector("#psword"),
  loginBtn = document.querySelector("#button");
@@ -22,7 +26,12 @@ function login() {
         .then((res) => res.json())
         .then((res) => {
             if (res.success) {
-                location.href = "/?id=" + req.id;
+                if (path == 'board'){
+                    location.href = "/board?id=" + req.id;
+                }
+                else{
+                    location.href = "/?id=" + req.id; 
+                }
             } else {
                 alert(res.msg);
             }
