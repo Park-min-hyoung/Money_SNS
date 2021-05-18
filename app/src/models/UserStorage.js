@@ -65,6 +65,25 @@ class UserStorage {
         });
     }
 
+    static async photoplusUpdate(title, like_cnt) {
+        const query = "UPDATE photo SET photo_like_cnt=? WHERE photo_title = ?";
+        db.query(query, 
+        [like_cnt + 1, title],
+        (err) => {
+            if(err) reject(`${err}`);
+        })
+    }
+
+    
+    static async photominusUpdate(title, like_cnt) {
+        const query = "UPDATE photo SET photo_like_cnt=? WHERE photo_title = ?";
+        db.query(query, 
+        [like_cnt - 1, title],
+        (err) => {
+            if(err) reject(`${err}`);
+        })
+    }
+
     static async savePhoto(contents, id) {
         return new Promise((resolve, reject) => {
             const query = "INSERT INTO photo(photo_like_cnt, photo_id, photo_title, photo_description) VALUES(?, ?, ?, ?);";

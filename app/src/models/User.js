@@ -50,6 +50,21 @@ class User {
         return video_description;
     }
 
+    async photoSearchlike(id) {
+        const {photo_like_cnt} = await UserStorage.photogetDescription(id);
+        return photo_like_cnt;
+    }
+
+    async photopluslike(id) {
+        const {photo_title, photo_like_cnt} = await UserStorage.photogetDescription(id);
+        await UserStorage.photoplusUpdate(photo_title, photo_like_cnt);
+    }
+
+    async photominuslike(id) {
+        const {photo_title, photo_like_cnt} = await UserStorage.photogetDescription(id);
+        await UserStorage.photominusUpdate(photo_title, photo_like_cnt);
+    }
+
     async photoUpload(id) {
         const client = this.body;
         try {

@@ -3,7 +3,8 @@
 var pass = document.getElementById('select__img');
 var btn = document.getElementsByClassName('section__logo__title');
 var like_check = false;
-var like_cnt = 3564;
+var like_cnt;
+var title = document.getElementById('nickname').innerHTML;
 
 function selectImg(number) {
     pass.style.display = "none";
@@ -33,13 +34,13 @@ $('.far, .fas').on('click', function(){
     if (!like_check){ // 체크 되지 않았을 때
         $('.like').addClass('selected');
         like_check = true;
-        like_cnt += 1;
+        location = "/board/" + title + "?like=1";
     } else {
         $('.like').removeClass('selected');
         like_check = false;
-        like_cnt -= 1;
+        location = "/board/" + title + "?like=0";
     }
-    document.getElementById("like_cnt").innerHTML = "좋아요 " + like_cnt + "개";
+    //document.getElementById("like_cnt").innerHTML = "좋아요 " + like_cnt + "개";
 });
 
 // 유튜브 썸네일

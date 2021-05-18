@@ -59,11 +59,23 @@ const output = {
     },
     board_id: async (req, res) => {
         var id = req.params.id;
+        var queryData = url.parse(req.url, true).query;
+        const like_check = queryData.like;
 
         const photo_user = new User();
+        var photo_like_cnt = await photo_user.photoSearchlike(id);
+        if (like_check == 1){
+            await photo_user.photopluslike(id);
+            photo_like_cnt += 1;
+        }
+        else if (like_check == 0) {
+            await photo_user.photominuslike(id);
+            photo_like_cnt -= 1;
+        }
+    
         const photo_description = await photo_user.photoSearchDescription(id);
 
-        res.render('home/board_photo', {title:id, description:photo_description, login:upload_id});
+        res.render('home/board_photo', {title:id, description:photo_description, like:photo_like_cnt, login:upload_id});
     },
     upload: (req, res) => {
         res.render("home/upload");
