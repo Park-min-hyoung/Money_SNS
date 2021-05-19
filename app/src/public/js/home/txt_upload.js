@@ -2,7 +2,6 @@
 
 const title = document.querySelector("#title"),
  description = document.querySelector("#description"),
- video = document.querySelector("#video"),
  submitBtn = document.querySelector("#button");
 
 submitBtn.addEventListener("click", submit);
@@ -11,9 +10,9 @@ function submit() {
     const req = {
         title: title.value,
         description: description.value,
-        video: video.value,
+        video: req_extension,
     };
-
+    
     fetch("/txt_upload", {
         method: "POST",
         headers: {

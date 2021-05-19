@@ -20,7 +20,7 @@
 }
 
 /* 영상 제목 */
-#video_title {
+#nickname {
     color: var(--color-white);
     font-size: var(--font-hometext);
     margin: 20px 0;

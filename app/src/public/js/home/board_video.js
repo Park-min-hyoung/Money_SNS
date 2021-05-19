@@ -17,17 +17,3 @@ window.onload = function(){
     $("#play_video").width('1200px');
     $("#play_video").height('700px');
 }
-
-// video 좋아요(하트) 클릭시 변화
-$('.video_like i').on('click', function(){
-    if (like_check == 0){
-        $(".video_like").addClass('selected');
-        like_check = 1;
-        like_cnt += 1;
-    } else {
-        $(".video_like").removeClass('selected');
-        like_check = 0;
-        like_cnt -= 1;
-    }
-    document.getElementById("like_cnt").innerHTML = "좋아요 " + like_cnt + "개";
-});

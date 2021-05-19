@@ -46,13 +46,44 @@ class User {
     }
 
     async videoSearchDescription(id) {
-        const {video_description} = await UserStorage.videogetDescription(id);
-        return video_description;
+        const {video_description, video_id} = await UserStorage.videogetDescription(id);
+        return [video_description, video_id];
     }
 
     async photoSearchlike(id) {
         const {photo_like_cnt} = await UserStorage.photogetDescription(id);
         return photo_like_cnt;
+    }
+
+    async videoSearchlike(id) {
+        const {video_like_cnt} = await UserStorage.videogetDescription(id);
+        return video_like_cnt;
+    }
+
+    async photoLike(id, title) {
+        try {
+            await UserStorage.photolikeProduce(id, title);
+        } catch (err) {
+            return { success: false, msg: "사진 클릭 중 에러가 발생하였습니다."};
+        }
+    }
+
+    async videoLike(id, title) {
+        try {
+            await UserStorage.videolikeProduce(id, title);
+        } catch (err) {
+            return { success: false, msg: "사진 클릭 중 에러가 발생하였습니다."};
+        }
+    }
+
+    async getphotoCheck(visit_id) {
+        const {like_check} = await UserStorage.getPcheck(visit_id);
+        return like_check;
+    }
+
+    async getvideoCheck(visit_id) {
+        const {like_check} = await UserStorage.getVcheck(visit_id);
+        return like_check;
     }
 
     async photopluslike(id) {
@@ -63,6 +94,32 @@ class User {
     async photominuslike(id) {
         const {photo_title, photo_like_cnt} = await UserStorage.photogetDescription(id);
         await UserStorage.photominusUpdate(photo_title, photo_like_cnt);
+    }
+
+    async videopluslike(id) {
+        const {video_title, video_like_cnt} = await UserStorage.videogetDescription(id);
+        await UserStorage.videoplusUpdate(video_title, video_like_cnt);
+    }
+
+    async videominuslike(id) {
+        const {video_title, video_like_cnt} = await UserStorage.videogetDescription(id);
+        await UserStorage.videominusUpdate(video_title, video_like_cnt);
+    }
+
+    async photoChecklike(visit_id) {
+        await UserStorage.photocheckUpdate(visit_id);
+    }
+
+    async photounChecklike(visit_id) {
+        await UserStorage.photouncheckUpdate(visit_id);
+    }
+
+    async videoChecklike(visit_id) {
+        await UserStorage.videocheckUpdate(visit_id);
+    }
+
+    async videounChecklike(visit_id) {
+        await UserStorage.videouncheckUpdate(visit_id);
     }
 
     async photoUpload(id) {

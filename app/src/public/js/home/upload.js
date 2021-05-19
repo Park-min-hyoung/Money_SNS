@@ -17,7 +17,7 @@ function plus() {
         .then((res) => res.json())
         .then((res) => {
             if (res.success) {
-                location.href = "/txt_upload?id=" + req_id;
+                location.href = "/txt_upload?id=" + req_id + "&extension=" + req_extension;
             } else {
                 alert(res.msg);
             }

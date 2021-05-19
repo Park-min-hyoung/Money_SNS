@@ -54,28 +54,38 @@ const output = {
             video_array.push(await video_user.videoSearchTitle(i));
         }
 
-        res.render('home/board', {photo: photo_array, video: video_array});
+        var queryData = url.parse(req.url, true).query;
+        upload_id = queryData.id;
+        res.render('home/board', {photo: photo_array, video: video_array, id:upload_id});
 
     },
     board_id: async (req, res) => {
         var id = req.params.id;
         var queryData = url.parse(req.url, true).query;
-        const like_check = queryData.like;
+        var check = queryData.like;
+        upload_id = queryData.id; 
 
         const photo_user = new User();
         var photo_like_cnt = await photo_user.photoSearchlike(id);
-        if (like_check == 1){
+        await photo_user.photoLike(upload_id, id); // 특정 id의 해당 사진을 방문한 이력을 가지고 있는 DB 생성
+        var photo_like_check = await photo_user.getphotoCheck(upload_id + id); // 방문 이력이 있는 DB의 like_check 값을 가져온다
+
+        if (check == 1){
             await photo_user.photopluslike(id);
             photo_like_cnt += 1;
+            await photo_user.photoChecklike(upload_id + id); // 방문 이력이 있는 DB의 like_check 값을 1로 수정
+            photo_like_check = 1;
         }
-        else if (like_check == 0) {
+        else if (check == 0) {
             await photo_user.photominuslike(id);
             photo_like_cnt -= 1;
+            await photo_user.photounChecklike(upload_id + id); // 방문 이력이 있는 DB의 like_check 값을 0으로 수정
+            photo_like_check = 0;
         }
     
         const photo_description = await photo_user.photoSearchDescription(id);
 
-        res.render('home/board_photo', {title:id, description:photo_description, like:photo_like_cnt, login:upload_id});
+        res.render('home/board_photo', {title:id, description:photo_description, like:photo_like_cnt, like_check:photo_like_check, id:upload_id});
     },
     upload: (req, res) => {
         res.render("home/upload");
@@ -91,12 +101,31 @@ const output = {
     },
     board_video_id: async (req, res) => {
         var id = req.params.id;
+        var queryData = url.parse(req.url, true).query;
+        var check = queryData.like;
+        upload_id = queryData.id; 
 
         const video_user = new User();
-        const video_description = await video_user.videoSearchDescription(id);
+        var video_like_cnt = await video_user.videoSearchlike(id);
+        await video_user.videoLike(upload_id, id); // 특정 id의 해당 영상을 방문한 이력을 가지고 있는 DB 생성
+        var video_like_check = await video_user.getvideoCheck(upload_id + id); // 방문 이력이 있는 DB의 like_check 값을 가져온다
 
+        if (check == 3){
+            await video_user.videopluslike(id);
+            video_like_cnt += 1;
+            await video_user.videoChecklike(upload_id + id); // 방문 이력이 있는 DB의 like_check 값을 3로 수정
+            video_like_check = 3;
+        }
+        else if (check == 2) {
+            await video_user.videominuslike(id);
+            video_like_cnt -= 1;
+            await video_user.videounChecklike(upload_id + id); // 방문 이력이 있는 DB의 like_check 값을 2으로 수정
+            video_like_check = 2;
+        }
+
+        var video_id_description = await video_user.videoSearchDescription(id);
         // title => 텍스트 파일 이름, description => 파일 내용
-        res.render('home/board_video', {title:id, description:video_description, id:upload_id});
+        res.render('home/board_video', {title:id, description:video_id_description[0], like:video_like_cnt, like_check:video_like_check, user_id:video_id_description[1], id:upload_id});
     },
 };
 
@@ -117,7 +146,7 @@ const process = {
         const video = req.body.video;
         const user = new User(req.body);
         
-        if(video == 1){
+        if(video == "mp4"){
             const response = await user.videoUpload(upload_id);
             await user.plusPoint(upload_id);
             return res.json(response);

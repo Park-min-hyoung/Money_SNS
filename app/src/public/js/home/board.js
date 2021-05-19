@@ -2,9 +2,6 @@
 
 var pass = document.getElementById('select__img');
 var btn = document.getElementsByClassName('section__logo__title');
-var like_check = false;
-var like_cnt;
-var title = document.getElementById('nickname').innerHTML;
 
 function selectImg(number) {
     pass.style.display = "none";
@@ -26,21 +23,41 @@ $('.section__logo').on('click', function(){
 
 // 모달 취소 또는 바깥 화면 누르면 board로 이동
 $('label').on('click', function(){
-    location = '/board';
+    location = '/board?id=' + id;
 });
 
+var title = document.getElementById('nickname').innerHTML;
+var like_check = document.getElementById("like_cnt").getAttribute('name');
+var id = document.getElementById("like_cnt").className;
+
+// 사진 또는 영상 클릭 시 like_check가 1또는 3이면 꽉찬 하트 아니면 빈 하트
+if (like_check == 1){
+    $('.like').addClass('selected');
+}
+else if (like_check == 0) {
+    $('.like').removeClass('selected');
+}
+else if (like_check == 3){
+    $('.video_like').addClass('selected');
+}
+else {
+    $('.video_like').removeClass('selected');
+}
+    
 // 좋아요(하트) 클릭시 변화
 $('.far, .fas').on('click', function(){
-    if (!like_check){ // 체크 되지 않았을 때
-        $('.like').addClass('selected');
-        like_check = true;
-        location = "/board/" + title + "?like=1";
-    } else {
-        $('.like').removeClass('selected');
-        like_check = false;
-        location = "/board/" + title + "?like=0";
+    if (like_check == 0){ // 체크 되지 않았을 때
+        location = "/board/" + title + "?id=" + id + "&like=1";
+    } 
+    else if(like_check == 1) {
+        location = "/board/" + title + "?id=" + id + "&like=0";
     }
-    //document.getElementById("like_cnt").innerHTML = "좋아요 " + like_cnt + "개";
+    else if(like_check == 2) {
+        location = "/board_video/" + title + "?id=" + id + "&like=3";
+    }
+    else{
+        location = "/board_video/" + title + "?id=" + id + "&like=2";
+    }
 });
 
 // 유튜브 썸네일
