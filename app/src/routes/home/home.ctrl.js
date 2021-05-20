@@ -19,6 +19,7 @@ const output = {
         // fs.name 까지는 가장 최근의 img 파일의 이름을 가장 최근의 txt 파일의 이름으로 변경하는 것이다.
         const dir_photo = './src/public/uploads/photo/';
         const dir_video = './src/public/uploads/video/';
+        const dir_thumbnail = './src/public/uploads/thumbnail/';
         
         const list_photo = fs.readdirSync(dir_photo).map(filename => {
             return {
@@ -33,6 +34,13 @@ const output = {
                 mtime: fs.statSync(dir_video + filename).mtime
             }
         });
+
+        const list_thumbnail = fs.readdirSync(dir_thumbnail).map(filename => {
+            return {
+                filename: filename,
+                mtime: fs.statSync(dir_thumbnail + filename).mtime
+            }
+        });
         
         list_photo.sort((a, b) => b.mtime - a.mtime);
         const photo_user = new User();
@@ -43,6 +51,9 @@ const output = {
         const video_user = new User();
         const video_title = await video_user.videoSearchTitle(list_video.length);
         fs.rename('src/public/uploads/video/' + list_video[0].filename, 'src/public/uploads/video/' + video_title + '.mp4', function(err){});
+
+        list_thumbnail.sort((a, b) => b.mtime - a.mtime);
+        fs.rename('src/public/uploads/thumbnail/' + list_thumbnail[0].filename, 'src/public/uploads/thumbnail/' + video_title + '.png', function(err){});
         
         var photo_array = [];
         for (var i = 1; i <= list_photo.length; i++){
