@@ -5,13 +5,13 @@ const db = require("../config/db");
 class UserStorage {
     static getUserInfo(id) {
         return new Promise((resolve, reject) => {
-            const query = "SELECT * FROM users WHERE id = ?";
-            db.query(query, [id], (err, data) => {
-                if(err) reject(`${err}`);
-                resolve(data[0]);
-            })
+          const query = "SELECT * FROM users WHERE id = ?;";
+          db.query(query, [id], (err, data) => {
+            if (err) reject(`${err}`);
+            else resolve(data[0]);
+          });
         });
-    }
+      }
 
     static async save(userInfo) {
         return new Promise((resolve, reject) => {
@@ -202,10 +202,10 @@ class UserStorage {
         });
     }
 
-    static async addPoint(pt, seq) {
-        const query = "UPDATE users SET point=? WHERE seq = ?";
+    static async addPoint(pt, id) {
+        const query = "UPDATE users SET point=? WHERE id = ?";
         db.query(query, 
-        [pt + 10, seq],
+        [pt + 10, id],
         (err) => {
             if(err) reject(`${err}`);
         })

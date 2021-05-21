@@ -9,15 +9,19 @@ class User {
 
     async login() {
         const client = this.body;
-        const { id, psword } = await UserStorage.getUserInfo(client.id);
+        try {
+            const user = await UserStorage.getUserInfo(client.id);
 
-        if (id) {
-            if (id === client.id && psword === client.psword){
+        if (user) {
+            if (user.id === client.id && user.psword === client.psword) {
                 return { success: true };
             }
-            return { success: false, msg: "비밀번호가 틀렸습니다."};
+            return { success: false, msg: "비밀번호가 틀렸습니다." };
         }
-        return { success: false, msg: "존재하지 않는 아이디입니다."}; 
+        return { success: false, msg: "존재하지 않는 아이디입니다." };
+        } catch (err) {
+            return { success: false, err };
+        }
     }
 
     async register() {
@@ -30,6 +34,31 @@ class User {
         }
     }
 
+    async photoUpload(id) {
+        const client = this.body;
+        try {
+            const response = await UserStorage.savePhoto(client, id);
+            return response;
+        } catch (err) {
+            return { success: false, msg: "업로드에 실패하였습니다."};
+        }
+    }
+
+    async videoUpload(id) {
+        const client = this.body;
+        try {
+            const response = await UserStorage.saveVideo(client, id);
+            return response;
+        } catch (err) {
+            return { success: false, msg: "업로드에 실패하였습니다."};
+        }
+    }
+
+    async plusPoint(id) {
+        const {point} = await UserStorage.searchPoint(id);
+        await UserStorage.addPoint(point, id);
+    }
+
     async photoSearchTitle(num) {
         const {photo_title} = await UserStorage.photogetTitle(num);
         return photo_title;
@@ -40,24 +69,14 @@ class User {
         return video_title;
     }
 
-    async photoSearchDescription(id) {
-        const {photo_description} = await UserStorage.photogetDescription(id);
-        return photo_description;
+    async photoSearchDesLike(id) {
+        const {photo_like_cnt, photo_description} = await UserStorage.photogetDescription(id);
+        return [photo_like_cnt, photo_description];
     }
 
-    async videoSearchDescription(id) {
-        const {video_description, video_id} = await UserStorage.videogetDescription(id);
-        return [video_description, video_id];
-    }
-
-    async photoSearchlike(id) {
-        const {photo_like_cnt} = await UserStorage.photogetDescription(id);
-        return photo_like_cnt;
-    }
-
-    async videoSearchlike(id) {
-        const {video_like_cnt} = await UserStorage.videogetDescription(id);
-        return video_like_cnt;
+    async videoSearchDesLike(id) {
+        const {video_like_cnt, video_description, video_id} = await UserStorage.videogetDescription(id);
+        return [video_like_cnt, video_description, video_id];
     }
 
     async photoLike(id, title) {
@@ -86,65 +105,39 @@ class User {
         return like_check;
     }
 
-    async photopluslike(id) {
+    async photoUpatelike(id, check) {
         const {photo_title, photo_like_cnt} = await UserStorage.photogetDescription(id);
-        await UserStorage.photoplusUpdate(photo_title, photo_like_cnt);
-    }
-
-    async photominuslike(id) {
-        const {photo_title, photo_like_cnt} = await UserStorage.photogetDescription(id);
-        await UserStorage.photominusUpdate(photo_title, photo_like_cnt);
-    }
-
-    async videopluslike(id) {
-        const {video_title, video_like_cnt} = await UserStorage.videogetDescription(id);
-        await UserStorage.videoplusUpdate(video_title, video_like_cnt);
-    }
-
-    async videominuslike(id) {
-        const {video_title, video_like_cnt} = await UserStorage.videogetDescription(id);
-        await UserStorage.videominusUpdate(video_title, video_like_cnt);
-    }
-
-    async photoChecklike(visit_id) {
-        await UserStorage.photocheckUpdate(visit_id);
-    }
-
-    async photounChecklike(visit_id) {
-        await UserStorage.photouncheckUpdate(visit_id);
-    }
-
-    async videoChecklike(visit_id) {
-        await UserStorage.videocheckUpdate(visit_id);
-    }
-
-    async videounChecklike(visit_id) {
-        await UserStorage.videouncheckUpdate(visit_id);
-    }
-
-    async photoUpload(id) {
-        const client = this.body;
-        try {
-            const response = await UserStorage.savePhoto(client, id);
-            return response;
-        } catch (err) {
-            return { success: false, msg: "업로드에 실패하였습니다."};
+        if (check == 1) {
+            await UserStorage.photoplusUpdate(photo_title, photo_like_cnt);
+        } else {
+            await UserStorage.photominusUpdate(photo_title, photo_like_cnt);
         }
     }
 
-    async videoUpload(id) {
-        const client = this.body;
-        try {
-            const response = await UserStorage.saveVideo(client, id);
-            return response;
-        } catch (err) {
-            return { success: false, msg: "업로드에 실패하였습니다."};
+    async videoUpatelike(id, check) {
+        const {video_title, video_like_cnt} = await UserStorage.videogetDescription(id);
+        if (check == 3) {
+            await UserStorage.videoplusUpdate(video_title, video_like_cnt);
+        } else {
+            await UserStorage.videominusUpdate(video_title, video_like_cnt);
+        }
+        
+    }
+
+    async photoChecklike(visit_id, check) {
+        if (check == 1){
+            await UserStorage.photocheckUpdate(visit_id);
+        } else {
+            await UserStorage.photouncheckUpdate(visit_id);
         }
     }
 
-    async plusPoint(id) {
-        const {point, seq} = await UserStorage.searchPoint(id);
-        await UserStorage.addPoint(point, seq);
+    async videoChecklike(visit_id, check) {
+        if (check == 3){
+            await UserStorage.videocheckUpdate(visit_id);
+        } else {
+            await UserStorage.videouncheckUpdate(visit_id);
+        }
     }
 }
 

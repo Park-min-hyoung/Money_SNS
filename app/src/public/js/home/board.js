@@ -26,6 +26,21 @@ $('label').on('click', function(){
     location = '/board?id=' + id;
 });
 
+// 유튜브 자동재생
+// $(document).ready(function() {
+// 	$('.pre_video')
+//     .mouseover(function() {
+//         $(this).find('.video_img').hide();
+//         var myVid = $(this).attr('target');
+//         $(myVid).show().trigger('play');
+// 	 })
+// 	 .mouseout(function() {
+//       $(this).find('.video_img').show()
+//       $('video').trigger('pause').hide()
+//       $('video').prop('currentTime', 0);
+// 	 })
+// });
+
 var title = document.getElementById('nickname').innerHTML;
 var like_check = document.getElementById("like_cnt").getAttribute('name');
 var id = document.getElementById("like_cnt").className;
@@ -58,19 +73,4 @@ $('.far, .fas').on('click', function(){
     else{
         location = "/board_video/" + title + "?id=" + id + "&like=2";
     }
-});
-
-// 유튜브 썸네일
-$(document).ready(function() {
-	$('.pre_video')
-    .mouseover(function() {
-      $(this).find('.video_img').hide();
-      var myVid = $(this).attr('target');
-      $( myVid ).show().trigger('play');
-	 })
-	 .mouseout(function() {
-      $(this).find('.video_img').show()
-      $('video').trigger('pause').hide()
-      $('video').prop('currentTime', 0);
-	 })
 });

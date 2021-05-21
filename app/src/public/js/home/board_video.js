@@ -1,8 +1,5 @@
 "use strict";
 
-var like_check = 0;
-var like_cnt = 3564;
-
 // 저장된 src를 통해 영상 재생
 window.onload = function(){
     if(req_id !== null) { // 다시 켜지면 이 소스가 무효화 된다
