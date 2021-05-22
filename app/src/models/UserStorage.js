@@ -25,6 +25,49 @@ class UserStorage {
         });
     }
 
+    static async savePhoto(contents, id) {
+        return new Promise((resolve, reject) => {
+            const query = "INSERT INTO photo(photo_like_cnt, photo_id, photo_title, photo_description) VALUES(?, ?, ?, ?);";
+            db.query(query, 
+            [0, id, contents.title, contents.description],
+            (err) => {
+                if(err) reject(`${err}`);
+                resolve({ success: true });
+            })
+        });
+    }
+
+    static async saveVideo(contents, id) {
+        return new Promise((resolve, reject) => {
+            const query = "INSERT INTO video(video_like_cnt, video_id, video_title, video_description) VALUES(?, ?, ?, ?);";
+            db.query(query, 
+            [0, id, contents.title, contents.description],
+            (err) => {
+                if(err) reject(`${err}`);
+                resolve({ success: true });
+            })
+        });
+    }
+
+    static searchPoint(id) {
+        return new Promise((resolve, reject) => {
+            const query = "SELECT * FROM users WHERE id = ?";
+            db.query(query, [id], (err, data) => {
+                if(err) reject(`${err}`);
+                resolve(data[0]);
+            })
+        });
+    }
+
+    static async addPoint(pt, id) {
+        const query = "UPDATE users SET point=? WHERE id = ?";
+        db.query(query, 
+        [pt + 10, id],
+        (err) => {
+            if(err) reject(`${err}`);
+        })
+    }
+
     static photogetTitle(seq) {
         return new Promise((resolve, reject) => {
             const query = "SELECT * FROM photo WHERE seq = ?";
@@ -103,112 +146,65 @@ class UserStorage {
         });
     }
 
-    static async photoplusUpdate(title, like_cnt) {
+    static async photocountUpdate(title, like_cnt, check) {
         const query = "UPDATE photo SET photo_like_cnt=? WHERE photo_title = ?";
-        db.query(query, 
-        [like_cnt + 1, title],
-        (err) => {
-            if(err) reject(`${err}`);
-        })
-    }
-
-    
-    static async photominusUpdate(title, like_cnt) {
-        const query = "UPDATE photo SET photo_like_cnt=? WHERE photo_title = ?";
-        db.query(query, 
-        [like_cnt - 1, title],
-        (err) => {
-            if(err) reject(`${err}`);
-        })
-    }
-
-    static async videoplusUpdate(title, like_cnt) {
-        const query = "UPDATE video SET video_like_cnt=? WHERE video_title = ?";
-        db.query(query, 
-        [like_cnt + 1, title],
-        (err) => {
-            if(err) reject(`${err}`);
-        })
-    }
-
-    static async videominusUpdate(title, like_cnt) {
-        const query = "UPDATE video SET video_like_cnt=? WHERE video_title = ?";
-        db.query(query, 
-        [like_cnt - 1, title],
-        (err) => {
-            if(err) reject(`${err}`);
-        })
-    }
-
-    static async photocheckUpdate(visit_id) {
-        const query = "UPDATE photo_like SET like_check=? WHERE overlap = ?";
-        db.query(query, [1, visit_id], (err, data) => {
-            if(err) reject(`${err}`);
-        })
-    }
-
-    static async photouncheckUpdate(visit_id) {
-        const query = "UPDATE photo_like SET like_check=? WHERE overlap = ?";
-        db.query(query, [0, visit_id], (err, data) => {
-            if(err) reject(`${err}`);
-        })
-    }
-
-    static async videocheckUpdate(visit_id) {
-        const query = "UPDATE video_like SET like_check=? WHERE overlap = ?";
-        db.query(query, [3, visit_id], (err, data) => {
-            if(err) reject(`${err}`);
-        })
-    }
-
-    static async videouncheckUpdate(visit_id) {
-        const query = "UPDATE video_like SET like_check=? WHERE overlap = ?";
-        db.query(query, [2, visit_id], (err, data) => {
-            if(err) reject(`${err}`);
-        })
-    }
-
-    static async savePhoto(contents, id) {
-        return new Promise((resolve, reject) => {
-            const query = "INSERT INTO photo(photo_like_cnt, photo_id, photo_title, photo_description) VALUES(?, ?, ?, ?);";
+        if (check == 1) {
             db.query(query, 
-            [0, id, contents.title, contents.description],
+            [like_cnt + 1, title],
             (err) => {
                 if(err) reject(`${err}`);
-                resolve({ success: true });
             })
-        });
-    }
-
-    static async saveVideo(contents, id) {
-        return new Promise((resolve, reject) => {
-            const query = "INSERT INTO video(video_like_cnt, video_id, video_title, video_description) VALUES(?, ?, ?, ?);";
+        } else {
             db.query(query, 
-            [0, id, contents.title, contents.description],
+            [like_cnt - 1, title],
             (err) => {
                 if(err) reject(`${err}`);
-                resolve({ success: true });
             })
-        });
+        }
     }
 
-    static searchPoint(id) {
-        return new Promise((resolve, reject) => {
-            const query = "SELECT * FROM users WHERE id = ?";
-            db.query(query, [id], (err, data) => {
+    static async videocountUpdate(title, like_cnt, check) {
+        const query = "UPDATE video SET video_like_cnt=? WHERE video_title = ?";
+        if (check == 3) {
+            db.query(query, 
+            [like_cnt + 1, title],
+            (err) => {
                 if(err) reject(`${err}`);
-                resolve(data[0]);
             })
-        });
+        } else {
+            db.query(query, 
+            [like_cnt - 1, title],
+            (err) => {
+                if(err) reject(`${err}`);
+            })
+        }
     }
 
-    static async addPoint(pt, id) {
-        const query = "UPDATE users SET point=? WHERE id = ?";
-        db.query(query, 
-        [pt + 10, id],
-        (err) => {
-            if(err) reject(`${err}`);
-        })
+    static async photocheckUpdate(visit_id, check) {
+        const query = "UPDATE photo_like SET like_check=? WHERE overlap = ?";
+        if (check == 1) {
+            db.query(query, [1, visit_id], (err, data) => {
+                if(err) reject(`${err}`);
+            })
+        } else {
+            db.query(query, [0, visit_id], (err, data) => {
+                if(err) reject(`${err}`);
+            })
+        }
+    }
+
+    static async videocheckUpdate(visit_id, check) {
+        const query = "UPDATE video_like SET like_check=? WHERE overlap = ?";
+        if (check == 3) {
+            db.query(query, [3, visit_id], (err, data) => {
+                if(err) reject(`${err}`);
+            })
+        } else {
+            db.query(query, [2, visit_id], (err, data) => {
+                if(err) reject(`${err}`);
+            })
+        }
+
     }
 }
 

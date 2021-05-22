@@ -108,35 +108,35 @@ class User {
     async photoUpatelike(id, check) {
         const {photo_title, photo_like_cnt} = await UserStorage.photogetDescription(id);
         if (check == 1) {
-            await UserStorage.photoplusUpdate(photo_title, photo_like_cnt);
+            await UserStorage.photocountUpdate(photo_title, photo_like_cnt, check);
         } else {
-            await UserStorage.photominusUpdate(photo_title, photo_like_cnt);
+            await UserStorage.photocountUpdate(photo_title, photo_like_cnt, check);
         }
     }
 
     async videoUpatelike(id, check) {
         const {video_title, video_like_cnt} = await UserStorage.videogetDescription(id);
         if (check == 3) {
-            await UserStorage.videoplusUpdate(video_title, video_like_cnt);
+            await UserStorage.videocountUpdate(video_title, video_like_cnt, check);
         } else {
-            await UserStorage.videominusUpdate(video_title, video_like_cnt);
+            await UserStorage.videocountUpdate(video_title, video_like_cnt, check);
         }
         
     }
 
     async photoChecklike(visit_id, check) {
         if (check == 1){
-            await UserStorage.photocheckUpdate(visit_id);
+            await UserStorage.photocheckUpdate(visit_id, check);
         } else {
-            await UserStorage.photouncheckUpdate(visit_id);
+            await UserStorage.photocheckUpdate(visit_id, check);
         }
     }
 
     async videoChecklike(visit_id, check) {
         if (check == 3){
-            await UserStorage.videocheckUpdate(visit_id);
+            await UserStorage.videocheckUpdate(visit_id, check);
         } else {
-            await UserStorage.videouncheckUpdate(visit_id);
+            await UserStorage.videocheckUpdate(visit_id, check);
         }
     }
 }

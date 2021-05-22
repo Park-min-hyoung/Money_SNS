@@ -11,8 +11,8 @@
             rel="stylesheet"/>
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://kit.fontawesome.com/58412d2786.js" crossorigin="anonymous"></script>
-        <script src ="/js/home/login_logout.js" defer></script>
         <script src ="/js/home/board.js" defer></script>
+        <script src ="/js/home/login_logout.js" defer></script>
         <title>Board</title>
     </head>
 
@@ -76,7 +76,7 @@
                     <div class="intro__new__wrap">
                         <div id="select__img">
                             <% for(var i = photo.length - 1; i >= 0; i--){ %>
-                                <a href="/board/<%= photo[i] %>/?id=<%= id %>">
+                                <a id="photoview" href="/board/<%= photo[i] %>/?id=<%= id %>">
                                     <span><img id="profile" src="uploads/photo/<%= photo[i]%>.png" alt=""/></span></a>
                             <% } %>
                             <a href="#" id="photo_upload" style="display: none;">사진 업로드</a>

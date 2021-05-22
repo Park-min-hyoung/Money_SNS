@@ -73,7 +73,7 @@ const output = {
         var id = req.params.id;
         var queryData = url.parse(req.url, true).query;
         var check = queryData.like;
-        upload_id = queryData.id; 
+        upload_id = queryData.id;
 
         const photo_user = new User();
         var photo_des_like = await photo_user.photoSearchDesLike(id); // photo의 des와 like를 DB에서 같이 가져오는 소스코드
