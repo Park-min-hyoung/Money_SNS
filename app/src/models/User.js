@@ -69,27 +69,27 @@ class User {
         return video_title;
     }
 
-    async photoSearchDesLike(id) {
-        const {photo_like_cnt, photo_description} = await UserStorage.photogetDescription(id);
-        return [photo_like_cnt, photo_description];
+    async photoSearchTitledesLike(seq) {
+        const {photo_like_cnt, photo_title, photo_description} = await UserStorage.photogetDescription(seq);
+        return [photo_like_cnt, photo_title, photo_description];
     }
 
-    async videoSearchDesLike(id) {
-        const {video_like_cnt, video_description, video_id} = await UserStorage.videogetDescription(id);
-        return [video_like_cnt, video_description, video_id];
+    async videoSearchTitledesLike(seq) {
+        const {video_like_cnt, video_title, video_description, video_id} = await UserStorage.videogetDescription(seq);
+        return [video_like_cnt, video_title, video_description, video_id];
     }
 
-    async photoLike(id, title) {
+    async photoLike(id, title, check_seq) {
         try {
-            await UserStorage.photolikeProduce(id, title);
+            await UserStorage.photolikeProduce(id, title, check_seq);
         } catch (err) {
             return { success: false, msg: "사진 클릭 중 에러가 발생하였습니다."};
         }
     }
 
-    async videoLike(id, title) {
+    async videoLike(id, title, check_seq) {
         try {
-            await UserStorage.videolikeProduce(id, title);
+            await UserStorage.videolikeProduce(id, title, check_seq);
         } catch (err) {
             return { success: false, msg: "사진 클릭 중 에러가 발생하였습니다."};
         }
@@ -105,21 +105,21 @@ class User {
         return like_check;
     }
 
-    async photoUpatelike(id, check) {
-        const {photo_title, photo_like_cnt} = await UserStorage.photogetDescription(id);
+    async photoUpatelike(photo_seq, check) {
+        const {seq, photo_like_cnt} = await UserStorage.photogetDescription(photo_seq);
         if (check == 1) {
-            await UserStorage.photocountUpdate(photo_title, photo_like_cnt, check);
+            await UserStorage.photocountUpdate(seq, photo_like_cnt, check);
         } else {
-            await UserStorage.photocountUpdate(photo_title, photo_like_cnt, check);
+            await UserStorage.photocountUpdate(seq, photo_like_cnt, check);
         }
     }
 
-    async videoUpatelike(id, check) {
-        const {video_title, video_like_cnt} = await UserStorage.videogetDescription(id);
+    async videoUpatelike(video_seq, check) {
+        const {seq, video_like_cnt} = await UserStorage.videogetDescription(video_seq);
         if (check == 3) {
-            await UserStorage.videocountUpdate(video_title, video_like_cnt, check);
+            await UserStorage.videocountUpdate(seq, video_like_cnt, check);
         } else {
-            await UserStorage.videocountUpdate(video_title, video_like_cnt, check);
+            await UserStorage.videocountUpdate(seq, video_like_cnt, check);
         }
         
     }
@@ -138,6 +138,16 @@ class User {
         } else {
             await UserStorage.videocheckUpdate(visit_id, check);
         }
+    }
+
+    async photodeclarationUpdate(photo_seq) {
+        const {seq, photo_declaration} = await UserStorage.photogetDescription(photo_seq);
+        await UserStorage.photodeClaration(seq, photo_declaration);
+    }
+
+    async videodeclarationUpdate(photo_seq) {
+        const {seq, video_declaration} = await UserStorage.videogetDescription(photo_seq);
+        await UserStorage.videodeClaration(seq, video_declaration);
     }
 }
 

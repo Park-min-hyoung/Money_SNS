@@ -44,15 +44,15 @@ const output = {
         list_photo.sort((a, b) => b.mtime - a.mtime);
         const photo_user = new User();
         const photo_title = await photo_user.photoSearchTitle(list_photo.length);
-        fs.rename('src/public/uploads/photo/' + list_photo[0].filename, 'src/public/uploads/photo/' + photo_title + '.png', function(err){});
+        fs.rename('src/public/uploads/photo/' + list_photo[0].filename, 'src/public/uploads/photo/' + photo_title + list_photo.length + '.png', function(err){});
         
         list_video.sort((a, b) => b.mtime - a.mtime);
         const video_user = new User();
         const video_title = await video_user.videoSearchTitle(list_video.length);
-        fs.rename('src/public/uploads/video/' + list_video[0].filename, 'src/public/uploads/video/' + video_title + '.mp4', function(err){});
+        fs.rename('src/public/uploads/video/' + list_video[0].filename, 'src/public/uploads/video/' + video_title + list_video.length + '.mp4', function(err){});
 
         list_thumbnail.sort((a, b) => b.mtime - a.mtime);
-        fs.rename('src/public/uploads/thumbnail/' + list_thumbnail[0].filename, 'src/public/uploads/thumbnail/' + video_title + '.png', function(err){});
+        fs.rename('src/public/uploads/thumbnail/' + list_thumbnail[0].filename, 'src/public/uploads/thumbnail/' + video_title + list_video.length + '.png', function(err){});
         
         var photo_array = [];
         for (var i = 1; i <= list_photo.length; i++){
@@ -73,29 +73,35 @@ const output = {
         var id = req.params.id;
         var queryData = url.parse(req.url, true).query;
         var check = queryData.like;
+        var photo_seq = queryData.n;
+        var photo_declaration = queryData.declaration;
         upload_id = queryData.id;
 
         const photo_user = new User();
-        var photo_des_like = await photo_user.photoSearchDesLike(id); // photo의 des와 like를 DB에서 같이 가져오는 소스코드
+        var photo_title_des_like = await photo_user.photoSearchTitledesLike(photo_seq); // photo의 title, des, like를 DB에서 같이 가져오는 소스코드
 
-        var photo_like_cnt = photo_des_like[0];
-        await photo_user.photoLike(upload_id, id); // 특정 id의 해당 사진을 방문한 이력을 가지고 있는 DB 생성
-        var photo_like_check = await photo_user.getphotoCheck(upload_id + id); // 방문 이력이 있는 DB의 like_check 값을 가져온다
+        var photo_like_cnt = photo_title_des_like[0];
+        await photo_user.photoLike(upload_id, id, photo_seq); // 특정 id의 해당 사진을 방문한 이력을 가지고 있는 DB 생성
+        var photo_like_check = await photo_user.getphotoCheck(upload_id + id + photo_seq); // 방문 이력이 있는 DB의 like_check 값을 가져온다
 
         if (check == 1){
-            await photo_user.photoUpatelike(id, check);
+            await photo_user.photoUpatelike(photo_seq, check);
             photo_like_cnt += 1;
-            await photo_user.photoChecklike(upload_id + id, check); // 방문 이력이 있는 DB의 like_check 값을 1로 수정
+            await photo_user.photoChecklike(upload_id + id + photo_seq, check); // 방문 이력이 있는 DB의 like_check 값을 1로 수정
             photo_like_check = 1;
         }
         else if (check == 0) {
-            await photo_user.photoUpatelike(id, check);
+            await photo_user.photoUpatelike(photo_seq, check);
             photo_like_cnt -= 1;
-            await photo_user.photoChecklike(upload_id + id, check); // 방문 이력이 있는 DB의 like_check 값을 0으로 수정
+            await photo_user.photoChecklike(upload_id + id + photo_seq, check); // 방문 이력이 있는 DB의 like_check 값을 0으로 수정
             photo_like_check = 0;
         }
 
-        res.render('home/board_photo', {title:id, description:photo_des_like[1], like:photo_like_cnt, like_check:photo_like_check, id:upload_id});
+        if (photo_declaration && photo_declaration != "null") {
+            await photo_user.photodeclarationUpdate(photo_seq); // 신고버튼을 클릭했으면 신고 Count가 올라갈 수 있도록
+        }
+
+        res.render('home/board_photo', {title:photo_title_des_like[1], description:photo_title_des_like[2], like:photo_like_cnt, like_check:photo_like_check, id:upload_id, seq:photo_seq});
     },
     upload: (req, res) => {
         res.render("home/upload");
@@ -113,29 +119,35 @@ const output = {
         var id = req.params.id;
         var queryData = url.parse(req.url, true).query;
         var check = queryData.like;
+        var video_seq = queryData.n;
+        var video_declaration = queryData.declaration;
         upload_id = queryData.id; 
 
         const video_user = new User();
-        var video_des_like = await video_user.videoSearchDesLike(id);
+        var video_title_des_like  = await video_user.videoSearchTitledesLike(video_seq);
 
-        var video_like_cnt = video_des_like[0];
-        await video_user.videoLike(upload_id, id); // 특정 id의 해당 영상을 방문한 이력을 가지고 있는 DB 생성
-        var video_like_check = await video_user.getvideoCheck(upload_id + id); // 방문 이력이 있는 DB의 like_check 값을 가져온다
+        var video_like_cnt = video_title_des_like[0];
+        await video_user.videoLike(upload_id, id, video_seq); // 특정 id의 해당 영상을 방문한 이력을 가지고 있는 DB 생성
+        var video_like_check = await video_user.getvideoCheck(upload_id + id + video_seq); // 방문 이력이 있는 DB의 like_check 값을 가져온다
 
         if (check == 3){
-            await video_user.videoUpatelike(id, check);
+            await video_user.videoUpatelike(video_seq, check);
             video_like_cnt += 1;
-            await video_user.videoChecklike(upload_id + id, check); // 방문 이력이 있는 DB의 like_check 값을 3로 수정
+            await video_user.videoChecklike(upload_id + id + video_seq, check); // 방문 이력이 있는 DB의 like_check 값을 3로 수정
             video_like_check = 3;
         }
         else if (check == 2) {
-            await video_user.videoUpatelike(id, check);
+            await video_user.videoUpatelike(video_seq, check);
             video_like_cnt -= 1;
-            await video_user.videoChecklike(upload_id + id, check); // 방문 이력이 있는 DB의 like_check 값을 2으로 수정
+            await video_user.videoChecklike(upload_id + id + video_seq, check); // 방문 이력이 있는 DB의 like_check 값을 2으로 수정
             video_like_check = 2;
         }
 
-        res.render('home/board_video', {title:id, description:video_des_like[1], like:video_like_cnt, like_check:video_like_check, user_id:video_des_like[2], id:upload_id});
+        if (video_declaration && video_declaration != "null") {
+            await video_user.videodeclarationUpdate(video_seq); // 신고버튼을 클릭했으면 신고 Count가 올라갈 수 있도록
+        }
+
+        res.render('home/board_video', {title:video_title_des_like[1], description:video_title_des_like[2], like:video_like_cnt, like_check:video_like_check, user_id:video_title_des_like[3], id:upload_id, seq:video_seq});
     },
 };
 

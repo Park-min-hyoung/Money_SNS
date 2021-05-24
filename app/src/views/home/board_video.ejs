@@ -61,7 +61,7 @@
             <section id="intro">
                 <div class="intro__container">
                     <div class="intro__new__wrap">
-                        <video id="play_video" src="../../uploads/video/<%= title %>.mp4" width="1200" height="100px" playsinline controls autoplay></video>
+                        <video id="play_video" src="../../uploads/video/<%= title %><%= seq %>.mp4" width="1200" height="100px" playsinline controls autoplay></video>
                     </div>
                     <div id="nickname"><%= title %></div>
                     <div class="video_like">
@@ -71,6 +71,8 @@
                     </div>
                     <div id="video_nickname"><%= user_id %></div>
                     <div id="video_introduce"><%= description %></div>
+                    <div id="video_declaration"><button type="button">신고</button></div>
+                    <div id="for_like" name="<%= seq %>"></div>
                 </div>
             </section>
 

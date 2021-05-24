@@ -88,39 +88,39 @@ class UserStorage {
         });
     }
 
-    static photogetDescription(id) {
+    static photogetDescription(seq) {
         return new Promise((resolve, reject) => {
-            const query = "SELECT * FROM photo WHERE photo_title = ?";
-            db.query(query, [id], (err, data) => {
+            const query = "SELECT * FROM photo WHERE seq = ?";
+            db.query(query, [seq], (err, data) => {
                 if(err) reject(`${err}`);
                 resolve(data[0]);
             })
         });
     }
 
-    static videogetDescription(id) {
+    static videogetDescription(seq) {
         return new Promise((resolve, reject) => {
-            const query = "SELECT * FROM video WHERE video_title = ?";
-            db.query(query, [id], (err, data) => {
+            const query = "SELECT * FROM video WHERE seq = ?";
+            db.query(query, [seq], (err, data) => {
                 if(err) reject(`${err}`);
                 resolve(data[0]);
             })
         });
     }
 
-    static async photolikeProduce(id, title) {
+    static async photolikeProduce(id, title, check_seq) {
         const query = "INSERT INTO photo_like(user_id, photo_title, overlap) VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE user_id = VALUES(user_id), photo_title = VALUES(photo_title);";
         db.query(query, 
-        [id, title, id + title],
+        [id, title, id + title + check_seq],
         (err) => {
             if(err) reject(`${err}`);
         })
     }
 
-    static async videolikeProduce(id, title) {
+    static async videolikeProduce(id, title, check_seq) {
         const query = "INSERT INTO video_like(user_id, video_title, overlap, like_check) VALUES(?, ?, ?, ?) ON DUPLICATE KEY UPDATE user_id = VALUES(user_id), video_title = VALUES(video_title);";
         db.query(query, 
-        [id, title, id + title, 2],
+        [id, title, id + title + check_seq, 2],
         (err) => {
             if(err) reject(`${err}`);
         })
@@ -146,34 +146,34 @@ class UserStorage {
         });
     }
 
-    static async photocountUpdate(title, like_cnt, check) {
-        const query = "UPDATE photo SET photo_like_cnt=? WHERE photo_title = ?";
+    static async photocountUpdate(seq, like_cnt, check) {
+        const query = "UPDATE photo SET photo_like_cnt=? WHERE seq = ?";
         if (check == 1) {
             db.query(query, 
-            [like_cnt + 1, title],
+            [like_cnt + 1, seq],
             (err) => {
                 if(err) reject(`${err}`);
             })
         } else {
             db.query(query, 
-            [like_cnt - 1, title],
+            [like_cnt - 1, seq],
             (err) => {
                 if(err) reject(`${err}`);
             })
         }
     }
 
-    static async videocountUpdate(title, like_cnt, check) {
-        const query = "UPDATE video SET video_like_cnt=? WHERE video_title = ?";
+    static async videocountUpdate(seq, like_cnt, check) {
+        const query = "UPDATE video SET video_like_cnt=? WHERE seq = ?";
         if (check == 3) {
             db.query(query, 
-            [like_cnt + 1, title],
+            [like_cnt + 1, seq],
             (err) => {
                 if(err) reject(`${err}`);
             })
         } else {
             db.query(query, 
-            [like_cnt - 1, title],
+            [like_cnt - 1, seq],
             (err) => {
                 if(err) reject(`${err}`);
             })
@@ -204,7 +204,24 @@ class UserStorage {
                 if(err) reject(`${err}`);
             })
         }
+    }
 
+    static async photodeClaration(seq, declaration) {
+        const query = "UPDATE photo SET photo_declaration=? WHERE seq = ?";
+            db.query(query, 
+            [declaration + 1, seq],
+            (err) => {
+                if(err) reject(`${err}`);
+            })
+    }
+
+    static async videodeClaration(seq, declaration) {
+        const query = "UPDATE video SET video_declaration=? WHERE seq = ?";
+            db.query(query, 
+            [declaration + 1, seq],
+            (err) => {
+                if(err) reject(`${err}`);
+            })
     }
 }
 

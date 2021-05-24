@@ -105,7 +105,7 @@
     left: 50%;
     transform: translate(-50%,-50%);
     width: 50%;
-    height: 60%;
+    height: 62%;
     background: var(--color-white);
     z-index: 2;
   }
@@ -167,7 +167,6 @@
   .like.selected .fas {
     display: inline;
   }
-  
   /* 닫기 버튼 */
   input[id*="popup"] + label + div > div > label {
     position: absolute;
@@ -195,8 +194,22 @@
     opacity: 1;
     visibility: visible;
   }
+  #photo_declaration { 
+    position: absolute;
+    top: 550px;
+    width: 95%;
+  }
+  /* 사진 창 신고버튼 */
+  #photo_declaration button { 
+    float: right;
+    font-size: var(--font-headermenu);
+  }
+  /* 영상 신고 버튼 */
+  #video_declaration button{
+    float: right;
+    font-size: var(--font-headermenu);
+  }
 
-  
   /* banner */
   
   #banner__wrap {

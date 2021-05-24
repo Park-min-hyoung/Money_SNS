@@ -76,20 +76,36 @@
                     <div class="intro__new__wrap">
                         <div id="select__img">
                             <% for(var i = photo.length - 1; i >= 0; i--){ %>
-                                <a id="photoview" href="/board/<%= photo[i] %>/?id=<%= id %>">
-                                    <span><img id="profile" src="uploads/photo/<%= photo[i]%>.png" alt=""/></span></a>
+                                <% if(id != null){ %>
+                                    <a href="/board/<%= photo[i] %>/?id=<%= id %>&n=<%= i + 1 %>">
+                                        <span><img id="profile" src="uploads/photo/<%= photo[i] %><%= i + 1 %>.png" alt=""/></span></a>
+                                <% } else{ %>
+                                    <a href="/board" onclick="alert('로그인 후 이용해주시길 바랍니다');">
+                                        <span><img id="profile" src="uploads/photo/<%= photo[i] %><%= i + 1 %>.png" alt=""/></span></a>
+                                <% } %>
                             <% } %>
                             <a href="#" id="photo_upload" style="display: none;">사진 업로드</a>
                         </div>
                         <div id="select__video">
                             <% for(var i = video.length - 1; i >= 0; i--){ %>
-                                <a href="/board_video/<%= video[i] %>/?id=<%= id %>">
-                                    <span class="pre_video" target="#<%= video[i] %>">
-                                        <img
-                                            class="video_img"
-                                            src="uploads/thumbnail/<%= video[i] %>.png"
-                                            alt="">
-                                            <!-- <video id="<%= video[i] %>" class="pre" src="uploads/video/<%= video[i] %>.mp4" muted="muted"></video> --></span></a>
+                                <% if(id != null){ %>
+                                    <a href="/board_video/<%= video[i] %>/?id=<%= id %>&n=<%= i + 1 %>">
+                                        <span class="pre_video" target="#<%= video[i] %>">
+                                            <img
+                                                class="video_img"
+                                                src="uploads/thumbnail/<%= video[i] %><%= i + 1 %>.png"
+                                                alt="">
+                                            </span></a>
+                                <% } else{ %>
+                                    <a href="/board" onclick="alert('로그인 후 이용해주시길 바랍니다');">
+                                        <span class="pre_video" target="#<%= video[i] %>">
+                                            <img
+                                                class="video_img"
+                                                src="uploads/thumbnail/<%= video[i] %><%= i + 1 %>.png"
+                                                alt="">
+                                                <!-- <video id="<%= video[i] %>" class="pre" src="uploads/video/<%= video[i] %>.mp4" muted="muted"></video> --></span></a>
+                                <% } %>
+                                
                             <% } %>
                             <a href="#" id="video_upload" style="display: none;">영상 업로드</a>
                         </div>

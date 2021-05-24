@@ -44,6 +44,7 @@ $('label').on('click', function(){
 var title = document.getElementById('nickname').innerHTML;
 var like_check = document.getElementById("like_cnt").getAttribute('name');
 var id = document.getElementById("like_cnt").className;
+var seq = document.getElementById("for_like").getAttribute('name');
 
 // 사진 또는 영상 클릭 시 like_check가 1또는 3이면 꽉찬 하트 아니면 빈 하트
 if (like_check == 1){
@@ -62,15 +63,25 @@ else {
 // 좋아요(하트) 클릭시 변화
 $('.far, .fas').on('click', function(){
     if (like_check == 0){ // 체크 되지 않았을 때
-        location = "/board/" + title + "?id=" + id + "&like=1";
+        location = "/board/" + title + "?id=" + id + "&n=" + seq + "&like=1";
     } 
     else if(like_check == 1) {
-        location = "/board/" + title + "?id=" + id + "&like=0";
+        location = "/board/" + title + "?id=" + id + "&n=" + seq + "&like=0";
     }
     else if(like_check == 2) {
-        location = "/board_video/" + title + "?id=" + id + "&like=3";
+        location = "/board_video/" + title + "?id=" + id + "&n=" + seq + "&like=3";
     }
     else{
-        location = "/board_video/" + title + "?id=" + id + "&like=2";
+        location = "/board_video/" + title + "?id=" + id + "&n=" + seq + "&like=2";
     }
+});
+// 사진창에서 신고 클릭 시 DB에 카운터
+$('#photo_declaration').on('click', function(){
+    var declaration_text = prompt("어떠한 사유로 신고하시는지 자세히 적어주세요");
+    location = "/board/" + title + "?id=" + id + "&n=" + seq + "&declaration=" + declaration_text;
+});
+// 영상에서 신고 클릭 시 DB에 카운터
+$('#video_declaration').on('click', function(){
+    var declaration_text = prompt("어떠한 사유로 신고하시는지 자세히 적어주세요");
+    location = "/board_video/" + title + "?id=" + id + "&n=" + seq + "&declaration=" + declaration_text;
 });

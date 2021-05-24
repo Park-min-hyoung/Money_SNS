@@ -30,7 +30,7 @@
                             <label for="popup" class="imgs" style="display: none;"></label>
                             <div>
                                 <div>
-                                    <img id="photo" src="/uploads/photo/<%= title %>.png" alt=""/ >
+                                    <img id="photo" src="/uploads/photo/<%= title %><%= seq %>.png" alt=""/ >
                                     <div>
                                         <div id="nickname"><%= title %></div><hr>
                                         <div id="introduce"><%= description %></div>
@@ -40,6 +40,8 @@
                                             <i class="fas fa-heart"></i>
                                             <div id="like_cnt" style="font-size: 20px;" name="<%= like_check %>", class="<%= id %>">좋아요 <%= like %>개</div>
                                         </div>
+                                        <div id="photo_declaration"><button type="button">신고</button></div>
+                                        <div id="for_like" name="<%= seq %>"></div>
                                     </div>
                                     <label for="popup" class="close" id="c1" value>X</label>
                                 </div>
