@@ -59,7 +59,7 @@ else if (like_check == 3){
 else {
     $('.video_like').removeClass('selected');
 }
-    
+
 // 좋아요(하트) 클릭시 변화
 $('.far, .fas').on('click', function(){
     if (like_check == 0){ // 체크 되지 않았을 때

@@ -84,13 +84,13 @@ const output = {
         await photo_user.photoLike(upload_id, id, photo_seq); // 특정 id의 해당 사진을 방문한 이력을 가지고 있는 DB 생성
         var photo_like_check = await photo_user.getphotoCheck(upload_id + id + photo_seq); // 방문 이력이 있는 DB의 like_check 값을 가져온다
 
-        if (check == 1){
+        if (check == 1 && photo_like_check == 0){
             await photo_user.photoUpatelike(photo_seq, check);
             photo_like_cnt += 1;
             await photo_user.photoChecklike(upload_id + id + photo_seq, check); // 방문 이력이 있는 DB의 like_check 값을 1로 수정
             photo_like_check = 1;
         }
-        else if (check == 0) {
+        else if (check == 0 && photo_like_check == 1) {
             await photo_user.photoUpatelike(photo_seq, check);
             photo_like_cnt -= 1;
             await photo_user.photoChecklike(upload_id + id + photo_seq, check); // 방문 이력이 있는 DB의 like_check 값을 0으로 수정
@@ -101,7 +101,8 @@ const output = {
             await photo_user.photodeclarationUpdate(photo_seq); // 신고버튼을 클릭했으면 신고 Count가 올라갈 수 있도록
         }
 
-        res.render('home/board_photo', {title:photo_title_des_like[1], description:photo_title_des_like[2], like:photo_like_cnt, like_check:photo_like_check, id:upload_id, seq:photo_seq});
+        res.render('home/board_photo', {title:photo_title_des_like[1], description:photo_title_des_like[2], like:photo_like_cnt, 
+            like_check:photo_like_check, id:upload_id, seq:photo_seq});
     },
     upload: (req, res) => {
         res.render("home/upload");
@@ -130,13 +131,13 @@ const output = {
         await video_user.videoLike(upload_id, id, video_seq); // 특정 id의 해당 영상을 방문한 이력을 가지고 있는 DB 생성
         var video_like_check = await video_user.getvideoCheck(upload_id + id + video_seq); // 방문 이력이 있는 DB의 like_check 값을 가져온다
 
-        if (check == 3){
+        if (check == 3 && video_like_check == 2){
             await video_user.videoUpatelike(video_seq, check);
             video_like_cnt += 1;
             await video_user.videoChecklike(upload_id + id + video_seq, check); // 방문 이력이 있는 DB의 like_check 값을 3로 수정
             video_like_check = 3;
         }
-        else if (check == 2) {
+        else if (check == 2 && video_like_check == 3) {
             await video_user.videoUpatelike(video_seq, check);
             video_like_cnt -= 1;
             await video_user.videoChecklike(upload_id + id + video_seq, check); // 방문 이력이 있는 DB의 like_check 값을 2으로 수정
@@ -147,7 +148,8 @@ const output = {
             await video_user.videodeclarationUpdate(video_seq); // 신고버튼을 클릭했으면 신고 Count가 올라갈 수 있도록
         }
 
-        res.render('home/board_video', {title:video_title_des_like[1], description:video_title_des_like[2], like:video_like_cnt, like_check:video_like_check, user_id:video_title_des_like[3], id:upload_id, seq:video_seq});
+        res.render('home/board_video', {title:video_title_des_like[1], description:video_title_des_like[2], like:video_like_cnt, 
+            like_check:video_like_check, user_id:video_title_des_like[3], id:upload_id, seq:video_seq});
     },
 };
 
