@@ -17,6 +17,18 @@ const output = {
         res.render("home/register");
     },
     board: async (req, res) => {
+        var queryData = url.parse(req.url, true).query;
+        var photo_delete_title = queryData.title;
+        var photo_delete = queryData.delete;
+
+        if (photo_delete == "ok"){
+            fs.unlink(`./src/public/uploads/photo/` + photo_delete_title + `.png`,(err)=>{
+                console.log(err);
+                res.writeHead(302, {Location: `/board`});
+
+            }) 
+        }
+
         // fs.name 까지는 가장 최근의 img 파일의 이름을 가장 최근의 txt 파일의 이름으로 변경하는 것이다.
         const dir_photo = './src/public/uploads/photo/';
         const dir_video = './src/public/uploads/video/';

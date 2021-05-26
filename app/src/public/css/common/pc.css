@@ -139,13 +139,15 @@
   /* 두번째 hr 위치 고정(내용마다 위아래 위치가 달라지므로 고정)*/
   input[id*="popup"] + label + div > div > div > .second__line {
     position: absolute;
-    top: 450px;
+    /* 원래는 450px */
+    top: 350px;
     width: 100%;
   }
   /* 좋아요 */
   input[id*="popup"] + label + div > div > div > .like {
     position: absolute;
-    top: 450px; /* 좋아요 글자 위치 조정 */
+    /* 원래는 450px */
+    top: 350px; /* 좋아요 글자 위치 조정 */
     color: var(--color-black);
     text-align: left;
     font-size: var(--font-hometext);
@@ -196,7 +198,8 @@
   }
   #photo_declaration { 
     position: absolute;
-    top: 550px;
+    /* 원래는 550px */
+    top: 450px; 
     width: 95%;
   }
   /* 사진 창 신고버튼 */

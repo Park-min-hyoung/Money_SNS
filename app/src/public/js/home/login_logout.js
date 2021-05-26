@@ -7,6 +7,7 @@ if (req_id !== null) { // 페이지 이동시 id를 넘겨줘야 로그인이 �
     $(".header__logo__wrap a").attr("href", "/?id=" + req_id);
     $("#link_board").attr("href", "/board?id=" + req_id);
     $('#photo_upload').css('display', 'block');
+    $('#photo_delete').css('display', 'block');
     $('#video_upload').css('display', 'block');
     $("#photo_upload").attr("href", "/upload?id=" + req_id + "&extension=img");
     $("#video_upload").attr("href", "/upload?id=" + req_id + "&extension=mp4");

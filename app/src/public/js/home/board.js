@@ -85,3 +85,7 @@ $('#video_declaration').on('click', function(){
     var declaration_text = prompt("어떠한 사유로 신고하시는지 자세히 적어주세요");
     location = "/board_video/" + title + "?id=" + id + "&n=" + seq + "&declaration=" + declaration_text;
 });
+
+$('#photo_delete').on('click', function(){
+    location = "/board?id=" + id + "&title=" + title + seq + "&delete=ok";
+});
