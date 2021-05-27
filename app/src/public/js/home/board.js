@@ -87,5 +87,5 @@ $('#video_declaration').on('click', function(){
 });
 
 $('#photo_delete').on('click', function(){
-    location = "/board?id=" + id + "&title=" + title + seq + "&delete=ok";
+    location = "/board?id=" + id + "&seq=" + seq + "&delete=ok";
 });

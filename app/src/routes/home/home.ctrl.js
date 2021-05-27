@@ -18,62 +18,81 @@ const output = {
     },
     board: async (req, res) => {
         var queryData = url.parse(req.url, true).query;
-        var photo_delete_title = queryData.title;
+        var photo_delet_seq = queryData.seq;
         var photo_delete = queryData.delete;
-
-        if (photo_delete == "ok"){
-            fs.unlink(`./src/public/uploads/photo/` + photo_delete_title + `.png`,(err)=>{
-                console.log(err);
-                res.writeHead(302, {Location: `/board`});
-
-            }) 
-        }
-
-        // fs.name 까지는 가장 최근의 img 파일의 이름을 가장 최근의 txt 파일의 이름으로 변경하는 것이다.
-        const dir_photo = './src/public/uploads/photo/';
-        const dir_video = './src/public/uploads/video/';
-        const dir_thumbnail = './src/public/uploads/thumbnail/';
-
-        const list_photo = fs.readdirSync(dir_photo).map(filename => {
-            return {
-                filename: filename,
-                mtime: fs.statSync(dir_photo + filename).mtime
-            }
-        });
-        const list_video = fs.readdirSync(dir_video).map(filename => {
-            return {
-                filename: filename,
-                mtime: fs.statSync(dir_video + filename).mtime
-            }
-        });
-        const list_thumbnail = fs.readdirSync(dir_thumbnail).map(filename => {
-            return {
-                filename: filename,
-                mtime: fs.statSync(dir_thumbnail + filename).mtime
-            }
-        });
-        
-        list_photo.sort((a, b) => b.mtime - a.mtime);
-        const photo_user = new User();
-        const photo_title = await photo_user.photoSearchTitle(list_photo.length);
-        fs.rename('src/public/uploads/photo/' + list_photo[0].filename, 'src/public/uploads/photo/' + photo_title + list_photo.length + '.png', function(err){});
-        
-        list_video.sort((a, b) => b.mtime - a.mtime);
-        const video_user = new User();
-        const video_title = await video_user.videoSearchTitle(list_video.length);
-        fs.rename('src/public/uploads/video/' + list_video[0].filename, 'src/public/uploads/video/' + video_title + list_video.length + '.mp4', function(err){});
-
-        list_thumbnail.sort((a, b) => b.mtime - a.mtime);
-        fs.rename('src/public/uploads/thumbnail/' + list_thumbnail[0].filename, 'src/public/uploads/thumbnail/' + video_title + list_video.length + '.png', function(err){});
-        
+        var photo_delete_id = queryData.id;
         var photo_array = [];
-        for (var i = 1; i <= list_photo.length; i++){
-            photo_array.push(await photo_user.photoSearchTitle(i));
-        }
-
         var video_array = [];
-        for (var i = 1; i <= list_video.length; i++){
-            video_array.push(await video_user.videoSearchTitle(i));
+
+        const photo_user = new User();
+        const video_user = new User();
+
+        if (photo_delete == "ok") {
+            var photo_delete_title = await photo_user.photoSearchTitledesLike(photo_delet_seq); // 파일 삭제시 제목 있어야 함
+            await photo_user.photoDelete(photo_delet_seq); // seq에 해당하는 데이터를 삭제
+            await photo_user.photooverlapDelete(photo_delete_title[1] + photo_delet_seq); // 삭제될 사진의 overlap을 삭제
+            await photo_user.photoseqUpdate(photo_delet_seq); // seq가 삭제 되었으므로 업데이트
+            var photo_final_seq = await photo_user.photoseqSearch(); // title의 목록을 만들기 위해 마지막 seq 조회
+            await photo_user.seqstartUpdate(photo_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트
+            await photo_user.minusPoint(photo_delete_id); // 이 사진을 올린 user의 point를 차감
+            fs.unlink(`./src/public/uploads/photo/` + photo_delete_title[1] + photo_delet_seq + `.png`,(err)=>{})
+            
+            for (var i = 1; i <= photo_final_seq; i++){
+                var photo_title = await photo_user.photoSearchTitle(i);
+                photo_array.push(photo_title);
+                if (i > photo_delet_seq - 1) {
+                    fs.rename('src/public/uploads/photo/' + photo_title + (i + 1) + ".png", 
+                    'src/public/uploads/photo/' + photo_title + i + '.png', function(err){});
+                    await photo_user.photooverlapUpdate(photo_title, i + 1, i);
+                }
+            }
+            
+            for (var i = 1; i <= 1; i++){
+                video_array.push(await video_user.videoSearchTitle(i));
+            }
+        } else {
+            // fs.name 까지는 가장 최근의 img 파일의 이름을 가장 최근의 txt 파일의 이름으로 변경하는 것이다.
+            const dir_photo = './src/public/uploads/photo/';
+            const dir_video = './src/public/uploads/video/';
+            const dir_thumbnail = './src/public/uploads/thumbnail/';
+
+            const list_photo = fs.readdirSync(dir_photo).map(filename => {
+                return {
+                    filename: filename,
+                    mtime: fs.statSync(dir_photo + filename).mtime
+                }
+            });
+            const list_video = fs.readdirSync(dir_video).map(filename => {
+                return {
+                    filename: filename,
+                    mtime: fs.statSync(dir_video + filename).mtime
+                }
+            });
+            const list_thumbnail = fs.readdirSync(dir_thumbnail).map(filename => {
+                return {
+                    filename: filename,
+                    mtime: fs.statSync(dir_thumbnail + filename).mtime
+                }
+            });
+            
+            list_photo.sort((a, b) => b.mtime - a.mtime);
+            const photo_title = await photo_user.photoSearchTitle(list_photo.length);
+            fs.rename('src/public/uploads/photo/' + list_photo[0].filename, 'src/public/uploads/photo/' + photo_title + list_photo.length + '.png', function(err){});
+            
+            list_video.sort((a, b) => b.mtime - a.mtime);
+            const video_title = await video_user.videoSearchTitle(list_video.length);
+            fs.rename('src/public/uploads/video/' + list_video[0].filename, 'src/public/uploads/video/' + video_title + list_video.length + '.mp4', function(err){});
+
+            list_thumbnail.sort((a, b) => b.mtime - a.mtime);
+            fs.rename('src/public/uploads/thumbnail/' + list_thumbnail[0].filename, 'src/public/uploads/thumbnail/' + video_title + list_video.length + '.png', function(err){});
+            
+            for (var i = 1; i <= list_photo.length; i++){
+                photo_array.push(await photo_user.photoSearchTitle(i));
+            }
+
+            for (var i = 1; i <= list_video.length; i++){
+                video_array.push(await video_user.videoSearchTitle(i));
+            }
         }
 
         var queryData = url.parse(req.url, true).query;

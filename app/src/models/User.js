@@ -59,6 +59,11 @@ class User {
         await UserStorage.addPoint(point, id);
     }
 
+    async minusPoint(id) {
+        const {point} = await UserStorage.searchPoint(id);
+        await UserStorage.removePoint(point, id);
+    }
+
     async photoSearchTitle(num) {
         const {photo_title} = await UserStorage.photogetTitle(num);
         return photo_title;
@@ -149,6 +154,33 @@ class User {
         const {seq, video_declaration} = await UserStorage.videogetDescription(photo_seq);
         await UserStorage.videodeClaration(seq, video_declaration);
     }
+
+    async photoDelete(photo_seq) {
+        await UserStorage.deletePhoto(photo_seq);
+    }
+
+    async photoseqUpdate(photo_seq, photo_final_seq) {
+        await UserStorage.seqincreasePhoto(photo_seq, photo_final_seq);
+    }
+
+    async seqstartUpdate(photo_start_seq) {
+        await UserStorage.startseqUpdate(photo_start_seq);
+    }
+
+    async photoseqSearch() {
+        const {seq} = await UserStorage.photosearchSeq();
+        return seq;
+    }
+
+    async photooverlapDelete(delete_overlap) {
+        await UserStorage.deleteoverlapPhoto(delete_overlap);
+    }
+
+    async photooverlapUpdate(update_overlap_title, update_overlap_cnt, update_cnt) {
+        const {user_id} = await UserStorage.searchoverlapPhoto(update_overlap_title + update_overlap_cnt);
+        console.log(user_id);
+    }
+    
 }
 
 module.exports = User;

@@ -68,6 +68,15 @@ class UserStorage {
         })
     }
 
+    static async removePoint(pt, id) {
+        const query = "UPDATE users SET point=? WHERE id = ?";
+        db.query(query, 
+        [pt - 10, id],
+        (err) => {
+            if(err) reject(`${err}`);
+        })
+    }
+
     static photogetTitle(seq) {
         return new Promise((resolve, reject) => {
             const query = "SELECT * FROM photo WHERE seq = ?";
@@ -222,6 +231,66 @@ class UserStorage {
             (err) => {
                 if(err) reject(`${err}`);
             })
+    }
+
+    static async deletePhoto(seq) {
+        const query = "DELETE FROM photo WHERE seq = ?";
+            db.query(query, 
+            [seq],
+            (err) => {
+                if(err) reject(`${err}`);
+            })
+    }
+
+    static async seqincreasePhoto(seq) {
+        const query = "UPDATE photo SET seq = seq - 1 WHERE seq > ?";
+            db.query(query, 
+            [seq],
+            (err) => {
+                if(err) reject(`${err}`);
+            })
+    }    
+
+    static async startseqUpdate(start_seq) {
+        const query = "ALTER TABLE photo AUTO_INCREMENT = ?;";
+            db.query(query, 
+            [start_seq],
+            (err) => {
+                if(err) reject(`${err}`);
+            })
+    }
+
+    static async photosearchSeq() {
+        return new Promise((resolve, reject) => {
+            const query = "SELECT * FROM photo ORDER BY seq DESC LIMIT 1";
+            db.query(query, (err, data) => {
+              if (err) reject(`${err}`);
+              else resolve(data[0]);
+            });
+          });
+    }
+
+    static async deleteoverlapPhoto(delete_overlap) {
+        var del_overlap = "%" + delete_overlap;
+        const query = "DELETE FROM photo_like WHERE overlap LIKE ?;";
+            db.query(query, 
+            [del_overlap],
+            (err) => {
+                if(err) reject(`${err}`);
+            })
+    }
+
+    static async searchoverlapPhoto(overlap) {
+        return new Promise((resolve, reject) =>{
+            var search_overlap = "%" + overlap;
+            const query = "SELECT * FROM photo_like WHERE overlap LIKE ?;";
+                db.query(query, 
+                [search_overlap],
+                (err) => {
+                    if(err) reject(`${err}`);
+                    else resolve(data[0]);
+                });
+        });
     }
 }
 
