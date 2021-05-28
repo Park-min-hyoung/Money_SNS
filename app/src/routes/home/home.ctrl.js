@@ -20,7 +20,6 @@ const output = {
         var queryData = url.parse(req.url, true).query;
         var photo_delet_seq = queryData.seq;
         var photo_delete = queryData.delete;
-        var photo_delete_id = queryData.id;
         var photo_array = [];
         var video_array = [];
 
@@ -34,10 +33,10 @@ const output = {
             await photo_user.photoseqUpdate(photo_delet_seq); // seq가 삭제 되었으므로 업데이트
             var photo_final_seq = await photo_user.photoseqSearch(); // title의 목록을 만들기 위해 마지막 seq 조회
             await photo_user.seqstartUpdate(photo_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트
-            await photo_user.minusPoint(photo_delete_id); // 이 사진을 올린 user의 point를 차감
+            await photo_user.minusPoint(photo_delete_title[3]); // 삭제한 사진을 업로드한 user의 point를 차감
             fs.unlink(`./src/public/uploads/photo/` + photo_delete_title[1] + photo_delet_seq + `.png`,(err)=>{})
             
-            for (var i = 1; i <= photo_final_seq; i++){
+            for (var i = 1; i <= photo_final_seq; i++){ // 삭제한 사진의 뒤의 seq에 해당하는 사진 파일과 데이터 업데이트
                 var photo_title = await photo_user.photoSearchTitle(i);
                 photo_array.push(photo_title);
                 if (i > photo_delet_seq - 1) {

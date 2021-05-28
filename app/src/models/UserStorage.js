@@ -280,13 +280,12 @@ class UserStorage {
             })
     }
 
-    static async searchoverlapPhoto(overlap) {
+    static async updateoverlapPhoto(current_overlap, title, update_cnt) {
         return new Promise((resolve, reject) =>{
-            var search_overlap = "%" + overlap;
-            const query = "SELECT * FROM photo_like WHERE overlap LIKE ?;";
+            const query = "UPDATE photo_like SET overlap = REPLACE(overlap, ?, ?);";
                 db.query(query, 
-                [search_overlap],
-                (err) => {
+                [current_overlap, title + update_cnt],
+                (err, data) => {
                     if(err) reject(`${err}`);
                     else resolve(data[0]);
                 });

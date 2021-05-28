@@ -75,8 +75,8 @@ class User {
     }
 
     async photoSearchTitledesLike(seq) {
-        const {photo_like_cnt, photo_title, photo_description} = await UserStorage.photogetDescription(seq);
-        return [photo_like_cnt, photo_title, photo_description];
+        const {photo_like_cnt, photo_title, photo_description, photo_id} = await UserStorage.photogetDescription(seq);
+        return [photo_like_cnt, photo_title, photo_description, photo_id];
     }
 
     async videoSearchTitledesLike(seq) {
@@ -176,9 +176,9 @@ class User {
         await UserStorage.deleteoverlapPhoto(delete_overlap);
     }
 
-    async photooverlapUpdate(update_overlap_title, update_overlap_cnt, update_cnt) {
-        const {user_id} = await UserStorage.searchoverlapPhoto(update_overlap_title + update_overlap_cnt);
-        console.log(user_id);
+    async photooverlapUpdate(title, current_cnt, update_cnt) {
+        var current_overlap = title + current_cnt;
+        await UserStorage.updateoverlapPhoto(current_overlap, title, update_cnt);
     }
     
 }
