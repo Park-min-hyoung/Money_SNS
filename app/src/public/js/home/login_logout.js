@@ -2,6 +2,7 @@ const urlQuery = window.location.search; // url query 조회
 const urlParams = new URLSearchParams(urlQuery); // id의 값을 조회하기 위한 준비
 const req_id = urlParams.get('id'); // id 값으로 초기화
 const req_extension = urlParams.get('extension'); // id 값으로 초기화
+const contents = window.location.pathname[6]; // video 페이지 인지 video_board 페이지인디 _를 통해 구분
 
 if (req_id !== null) { // 페이지 이동시 id를 넘겨줘야 로그인이 유지된다.
     $(".header__logo__wrap a").attr("href", "/?id=" + req_id);

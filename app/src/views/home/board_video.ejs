@@ -69,9 +69,10 @@
                         <i class="fas fa-heart"></i>
                         <div id="like_cnt" name="<%= like_check %>", class="<%= id %>", style="font-size: 30px;">좋아요 <%= like %>개</div><hr style="margin: 30px 0;">
                     </div>
-                    <div id="video_nickname"><%= user_id %></div>
+                    <div id="video_nickname" name="<%= user_id %>"><%= user_id %></div>
                     <div id="video_introduce"><%= description %></div>
                     <div id="video_declaration"><button type="button">신고</button></div>
+                    <div id="video_delete" style="display: none;"><button type="button">게시물 삭제</button></div>
                     <div id="for_like" name="<%= seq %>"></div>
                 </div>
             </section>

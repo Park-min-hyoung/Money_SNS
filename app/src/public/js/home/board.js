@@ -85,7 +85,21 @@ $('#video_declaration').on('click', function(){
     var declaration_text = prompt("어떠한 사유로 신고하시는지 자세히 적어주세요");
     location = "/board_video/" + title + "?id=" + id + "&n=" + seq + "&declaration=" + declaration_text;
 });
-
+// 사진에서 게시물 삭제 버튼을 눌렀을때
 $('#photo_delete').on('click', function(){
-    location = "/board?id=" + id + "&seq=" + seq + "&delete=ok";
+    location = "/board?id=" + id + "&seq=" + seq + "&delete=photo_delete";
 });
+// 영상에서 게시물 삭제 버튼을 눌렀을 때
+$('#video_delete').on('click', function(){
+    location = "/board?id=" + id + "&seq=" + seq + "&delete=video_delete";
+});
+
+var upload_id = document.getElementById("video_nickname").getAttribute('name');
+
+if (upload_id == req_id) { // 자신이 업로드한 사진이나 영상만 삭제 버튼이 보인다
+    if (contents == "_"){
+        document.getElementById('video_delete').style.display = "block";
+    } else {
+        document.getElementById('Photo_delete').style.display = "block";
+    }
+}

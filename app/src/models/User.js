@@ -159,12 +159,24 @@ class User {
         await UserStorage.deletePhoto(photo_seq);
     }
 
-    async photoseqUpdate(photo_seq, photo_final_seq) {
-        await UserStorage.seqincreasePhoto(photo_seq, photo_final_seq);
+    async videoDelete(photo_seq) {
+        await UserStorage.deleteVideo(photo_seq);
     }
 
-    async seqstartUpdate(photo_start_seq) {
-        await UserStorage.startseqUpdate(photo_start_seq);
+    async photoseqUpdate(photo_seq) {
+        await UserStorage.seqincreasePhoto(photo_seq);
+    }
+
+    async videoseqUpdate(video_seq) {
+        await UserStorage.seqincreaseVideo(video_seq);
+    }
+
+    async seqstartupdatePhoto(photo_start_seq) {
+        await UserStorage.startsequpdatePhoto(photo_start_seq);
+    }
+
+    async seqstartupdateVideo(video_start_seq) {
+        await UserStorage.startsequpdateVideo(video_start_seq);
     }
 
     async photoseqSearch() {
@@ -172,13 +184,27 @@ class User {
         return seq;
     }
 
+    async videoseqSearch() {
+        const {seq} = await UserStorage.videosearchSeq();
+        return seq;
+    }
+
     async photooverlapDelete(delete_overlap) {
         await UserStorage.deleteoverlapPhoto(delete_overlap);
+    }
+
+    async videooverlapDelete(delete_overlap) {
+        await UserStorage.deleteoverlapVideo(delete_overlap);
     }
 
     async photooverlapUpdate(title, current_cnt, update_cnt) {
         var current_overlap = title + current_cnt;
         await UserStorage.updateoverlapPhoto(current_overlap, title, update_cnt);
+    }
+
+    async videooverlapUpdate(title, current_cnt, update_cnt) {
+        var current_overlap = title + current_cnt;
+        await UserStorage.updateoverlapVideo(current_overlap, title, update_cnt);
     }
     
 }

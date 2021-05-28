@@ -33,6 +33,7 @@
                                     <img id="photo" src="/uploads/photo/<%= title %><%= seq %>.png" alt=""/ >
                                     <div>
                                         <div id="nickname"><%= title %></div><hr>
+                                        <div id="video_nickname" name="<%= user_id %>"></div>
                                         <div id="introduce"><%= description %></div>
                                         <div class="second__line"><hr></div>
                                         <div class="like">
@@ -41,7 +42,7 @@
                                             <div id="like_cnt" style="font-size: 20px;" name="<%= like_check %>", class="<%= id %>">좋아요 <%= like %>개</div>
                                         </div>
                                         <div id="photo_declaration"><button type="button">신고</button></div>
-                                        <div id="photo_delete"><button type="button">게시물 삭제</button></div>
+                                        <div id="photo_delete"><button id="Photo_delete" type="button" style="display: none;">게시물 삭제</button></div>
                                         <div id="for_like" name="<%= seq %>"></div>
                                     </div>
                                     <label for="popup" class="close" id="c1" value>X</label>

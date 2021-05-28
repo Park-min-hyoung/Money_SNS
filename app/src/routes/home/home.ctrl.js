@@ -18,36 +18,66 @@ const output = {
     },
     board: async (req, res) => {
         var queryData = url.parse(req.url, true).query;
-        var photo_delet_seq = queryData.seq;
-        var photo_delete = queryData.delete;
+        var delete_seq = queryData.seq;
+        var delete_check = queryData.delete;
         var photo_array = [];
         var video_array = [];
 
         const photo_user = new User();
         const video_user = new User();
 
-        if (photo_delete == "ok") {
-            var photo_delete_title = await photo_user.photoSearchTitledesLike(photo_delet_seq); // 파일 삭제시 제목 있어야 함
-            await photo_user.photoDelete(photo_delet_seq); // seq에 해당하는 데이터를 삭제
-            await photo_user.photooverlapDelete(photo_delete_title[1] + photo_delet_seq); // 삭제될 사진의 overlap을 삭제
-            await photo_user.photoseqUpdate(photo_delet_seq); // seq가 삭제 되었으므로 업데이트
+        if (delete_check == "photo_delete") {
+            var photo_delete_title = await photo_user.photoSearchTitledesLike(delete_seq); // 파일 삭제시 제목 있어야 함
+            await photo_user.photoDelete(delete_seq); // seq에 해당하는 데이터를 삭제
+            await photo_user.photooverlapDelete(photo_delete_title[1] + delete_seq); // 삭제될 사진의 overlap을 삭제
+            await photo_user.photoseqUpdate(delete_seq); // seq가 삭제 되었으므로 업데이트
             var photo_final_seq = await photo_user.photoseqSearch(); // title의 목록을 만들기 위해 마지막 seq 조회
-            await photo_user.seqstartUpdate(photo_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트
+            await photo_user.seqstartupdatePhoto(photo_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트
             await photo_user.minusPoint(photo_delete_title[3]); // 삭제한 사진을 업로드한 user의 point를 차감
-            fs.unlink(`./src/public/uploads/photo/` + photo_delete_title[1] + photo_delet_seq + `.png`,(err)=>{})
+            fs.unlink(`./src/public/uploads/photo/` + photo_delete_title[1] + delete_seq + `.png`,(err)=>{})
             
             for (var i = 1; i <= photo_final_seq; i++){ // 삭제한 사진의 뒤의 seq에 해당하는 사진 파일과 데이터 업데이트
                 var photo_title = await photo_user.photoSearchTitle(i);
                 photo_array.push(photo_title);
-                if (i > photo_delet_seq - 1) {
+                if (i > delete_seq - 1) {
                     fs.rename('src/public/uploads/photo/' + photo_title + (i + 1) + ".png", 
                     'src/public/uploads/photo/' + photo_title + i + '.png', function(err){});
                     await photo_user.photooverlapUpdate(photo_title, i + 1, i);
                 }
             }
             
-            for (var i = 1; i <= 1; i++){
-                video_array.push(await video_user.videoSearchTitle(i));
+            var video_final_seq = await photo_user.videoseqSearch();
+            for (var i = 1; i <= video_final_seq; i++){
+                var video_title = await video_user.videoSearchTitle(i);
+                video_array.push(video_title);
+            }
+        } else if (delete_check == "video_delete") {
+            var video_delete_title = await video_user.videoSearchTitledesLike(delete_seq); // 파일 삭제시 제목 있어야 함
+            await video_user.videoDelete(delete_seq); // seq에 해당하는 데이터를 삭제
+            await video_user.videooverlapDelete(video_delete_title[1] + delete_seq); // 삭제될 사진의 overlap을 삭제
+            await video_user.videoseqUpdate(delete_seq); // seq가 삭제 되었으므로 업데이트
+            var video_final_seq = await video_user.videoseqSearch(); // title의 목록을 만들기 위해 마지막 seq 조회
+            await video_user.seqstartupdateVideo(video_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트
+            await video_user.minusPoint(video_delete_title[3]); // 삭제한 사진을 업로드한 user의 point를 차감
+            fs.unlink(`./src/public/uploads/video/` + video_delete_title[1] + delete_seq + `.mp4`,(err)=>{});
+            fs.unlink(`./src/public/uploads/thumbnail/` + video_delete_title[1] + delete_seq + `.png`,(err)=>{});
+            
+            for (var i = 1; i <= video_final_seq; i++){ // 삭제한 영상의 뒤의 seq에 해당하는 사진 파일과 데이터 업데이트
+                var video_title = await video_user.videoSearchTitle(i);
+                video_array.push(video_title);
+                if (i > delete_seq - 1) {
+                    fs.rename('src/public/uploads/video/' + video_title + (i + 1) + ".mp4", 
+                    'src/public/uploads/video/' + video_title + i + '.mp4', function(err){});
+                    fs.rename('src/public/uploads/thumbnail/' + video_title + (i + 1) + ".png", 
+                    'src/public/uploads/thumbnail/' + video_title + i + '.png', function(err){});
+                    await video_user.videooverlapUpdate(video_title, i + 1, i);
+                }
+            }
+            
+            var photo_final_seq = await photo_user.photoseqSearch();
+            for (var i = 1; i <= photo_final_seq; i++){
+                var photo_title = await photo_user.photoSearchTitle(i);
+                photo_array.push(photo_title);
             }
         } else {
             // fs.name 까지는 가장 최근의 img 파일의 이름을 가장 최근의 txt 파일의 이름으로 변경하는 것이다.
@@ -132,7 +162,7 @@ const output = {
         }
 
         res.render('home/board_photo', {title:photo_title_des_like[1], description:photo_title_des_like[2], like:photo_like_cnt, 
-            like_check:photo_like_check, id:upload_id, seq:photo_seq});
+            like_check:photo_like_check, user_id:photo_title_des_like[3], id:upload_id, seq:photo_seq});
     },
     upload: (req, res) => {
         res.render("home/upload");
