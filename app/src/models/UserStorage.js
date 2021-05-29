@@ -351,6 +351,59 @@ class UserStorage {
                 });
         });
     }
+
+    static async uploadcommentPhoto(user_id, overlap, photo_comment) {
+        return new Promise((resolve, reject) => {
+            const query = "INSERT INTO photo_comment(user_id, overlap, photo_comments) VALUES(?, ?, ?);";
+            db.query(query, 
+            [user_id, overlap, photo_comment],
+            (err) => {
+                if(err) reject(`${err}`);
+                resolve({ success: true });
+            })
+        });
+    }
+
+    static async commentphotoCount(overlap) {
+        return new Promise((resolve, reject) => {
+            const query = "SELECT COUNT(overlap) as cnt FROM photo_comment WHERE overlap LIKE ?;";
+            db.query(query, [overlap], (err, data) => {
+              if (err) reject(`${err}`);
+              else resolve(data[0].cnt);
+            });
+          });
+    }
+
+    static async commentgetIdPhoto(overlap) {
+        return new Promise((resolve, reject) => {
+            const query = "SELECT * FROM photo_comment WHERE photo_comment_check = 0 and overlap LIKE ?;";
+            db.query(query, [overlap], (err, data) => {
+              if (err) reject(`${err}`);
+              else resolve(data[0]);
+            });
+          });
+    }
+
+    static async commentcheckUpdate(seq, overlap) {
+        return new Promise((resolve, reject) =>{
+            const query = "UPDATE photo_comment SET photo_comment_check = 1 WHERE seq = ? and overlap LIKE ?;";
+                db.query(query, 
+                [seq, overlap],
+                (err, data) => {
+                    if(err) reject(`${err}`);
+                    else resolve(data[0]);
+                });
+        });
+    }
+
+    static async commentRenew(overlap) {
+        const query = "UPDATE photo_comment SET photo_comment_check = 0 WHERE overlap LIKE ?;";
+            db.query(query, 
+            [overlap],
+            (err, data) => {
+                if(err) reject(`${err}`);
+            });
+    }
 }
 
 module.exports = UserStorage;

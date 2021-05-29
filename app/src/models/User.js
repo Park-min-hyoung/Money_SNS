@@ -207,6 +207,28 @@ class User {
         await UserStorage.updateoverlapVideo(current_overlap, title, update_cnt);
     }
     
+    async photocommentUpload(user_id, overlap, photo_comment) {
+        try {
+            const response = await UserStorage.uploadcommentPhoto(user_id, overlap, photo_comment);
+            return response;
+        } catch (err) {
+            return { success: false, msg: "업로드에 실패하였습니다."};
+        }
+    }
+
+    async photocommentCount(overlap) {
+        return UserStorage.commentphotoCount(overlap);
+    }
+
+    async phtocommentgetId(overlap) {
+        const {seq, user_id, photo_comments, upload_time} = await UserStorage.commentgetIdPhoto(overlap);
+        await UserStorage.commentcheckUpdate(seq, overlap); 
+        return [user_id, photo_comments, upload_time];
+    }
+
+    async commentcheckRenew(overlap) {
+        await UserStorage.commentRenew(overlap);
+    }
 }
 
 module.exports = User;

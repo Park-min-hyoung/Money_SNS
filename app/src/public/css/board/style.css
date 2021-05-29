@@ -1,0 +1,65 @@
+:root {
+    /* color */
+    --color-white: #ffffff;
+    --color-red: #f00;
+    --color-orange: #ed6d00;
+    --color-yellow: #ffc300;
+    --color-bordergrey: rgba(255, 255, 255, 0.15);
+    --color-dark-white: #bdbdbd;
+    --color-black: #000000;
+    --color-beige: #fcae8f;
+    /* size */
+    --font-biglogo: 40px;
+    --font-headermenu: 20px;
+    --font-hometext: 35px;
+    --font-basetext: 13px;
+    --font-txt: 60px;
+  
+    /* transition__druation */
+    --base-duration: 300ms;
+}
+
+#photo_upload,
+#video_upload {
+    display: block;
+    border-radius: 4px;
+    background-color: var(--color-beige);
+    border: none;
+    color: var(--color-white);
+    text-align: center;
+    font-size: 22px;
+    padding: 15px;
+    width: 180px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 10px auto;
+  }
+  
+  #photo_upload span,
+  #video_upload span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+  }
+  
+  #photo_upload span:after,
+  #video_upload span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+  }
+  
+  #photo_upload:hover span,
+  #video_upload:hover span {
+    padding-right: 25px;
+  }
+  
+  #photo_upload:hover span:after,
+  #video_upload:hover span:after {
+    opacity: 1;
+    right: 0;
+  }

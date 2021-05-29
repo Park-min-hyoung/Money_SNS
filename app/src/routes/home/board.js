@@ -50,5 +50,6 @@ router.get("/board/:id", ctrl.output.board_id);
 // 두번째 파라미터는 파일을 가공해서 req 객체에 파일이라는 프로퍼티를 암시적으로 추가함
 router.post("/upload", upload.single('upload'), ctrl.process.upload);
 router.post("/txt_upload", ctrl.process.txt_upload);
+router.post("/board/:id", ctrl.process.board_id);
 
 module.exports = router;

@@ -105,7 +105,7 @@
     left: 50%;
     transform: translate(-50%,-50%);
     width: 50%;
-    height: 62%;
+    height: 65%;
     background: var(--color-white);
     z-index: 2;
   }
@@ -140,14 +140,14 @@
   input[id*="popup"] + label + div > div > div > .second__line {
     position: absolute;
     /* 원래는 450px */
-    top: 350px;
+    top: 450px;
     width: 100%;
   }
   /* 좋아요 */
   input[id*="popup"] + label + div > div > div > .like {
     position: absolute;
     /* 원래는 450px */
-    top: 350px; /* 좋아요 글자 위치 조정 */
+    top: 450px; /* 좋아요 글자 위치 조정 */
     color: var(--color-black);
     text-align: left;
     font-size: var(--font-hometext);
@@ -198,9 +198,8 @@
   }
   #photo_declaration { 
     position: absolute;
-    /* 원래는 550px */
-    top: 450px; 
-    width: 95%;
+    top: 20px; 
+    width: 93%;
   }
   /* 사진 창 신고버튼 */
   #photo_declaration button { 
@@ -212,6 +211,33 @@
     float: right;
     font-size: var(--font-headermenu);
   }
+  /* 댓글 관련 div 태그 */
+  #photo_comment {
+    position: absolute;
+    top: 570px;
+    width: 100%;
+    text-align: left;
+  }
+  /* 댓글 입력 란 */
+  #photo_comment #comment{ 
+    width: 75%;
+    height: 50px;
+    border: none;
+    margin: auto 10px;
+  }
+  /* 댓글 전송 버튼 */
+  #photo_comment #button{
+    width: 15%;
+    height: 50px;
+    margin: auto 10px;
+  }
+  /* 댓글창 위의 라인 */
+  .three__line {
+    position: absolute;
+    top: 560px;
+    width: 100%;
+  }
+  
 
   /* banner */
   

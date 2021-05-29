@@ -8,9 +8,17 @@ function selectImg(number) {
 
     if(number == 1){
         pass = document.getElementById('select__img');
+        if (req_id != null){
+            $('#photo_upload').css('display', 'block');
+            $('#video_upload').css('display', 'none');
+        }
     }
     else if(number == 2){
         pass = document.getElementById('select__video');
+        if (req_id != null){
+            $('#video_upload').css('display', 'block');
+            $('#photo_upload').css('display', 'none');
+        }
     }
     pass.style.display = "flex";
 }

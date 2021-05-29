@@ -13,6 +13,7 @@
         <script src="https://kit.fontawesome.com/58412d2786.js" crossorigin="anonymous"></script>
         <script src ="/js/home/login_logout.js" defer></script>
         <script src ="/js/home/board.js" defer></script>
+        <script src ="/js/home/comment.js" defer></script>
         <title>Board_Photo</title>
     </head>
 
@@ -34,7 +35,12 @@
                                     <div>
                                         <div id="nickname"><%= title %></div><hr>
                                         <div id="video_nickname" name="<%= user_id %>"></div>
-                                        <div id="introduce"><%= description %></div>
+                                        <div id="introduce" style="overflow:auto; width:460px; height:350px"><%= description %>
+                                            <% for(var i = comment_cnt - 1; i >= 0; i--){ %>
+                                                <div><%= comment_time[i] %></div>
+                                                <div><%= comment_id[i] %><span> <%= comment_contents[i] %></span></div><br>
+                                            <% } %>                                          
+                                        </div>
                                         <div class="second__line"><hr></div>
                                         <div class="like">
                                             <i class="far fa-heart"></i>
@@ -43,6 +49,11 @@
                                         </div>
                                         <div id="photo_declaration"><button type="button">신고</button></div>
                                         <div id="photo_delete"><button id="Photo_delete" type="button" style="display: none;">게시물 삭제</button></div>
+                                        <div class="three__line"><hr></div>
+                                        <div id="photo_comment">
+                                            <input id="comment" type="text" name="comment" placeholder="댓글을 입력하세요"/>
+                                            <button id="comment_button">댓글 작성</button>
+                                        </div>
                                         <div id="for_like" name="<%= seq %>"></div>
                                     </div>
                                     <label for="popup" class="close" id="c1" value>X</label>

@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/css/common/common.css" />
         <link rel="stylesheet" href="/css/common/pc.css" />
+        <link rel="stylesheet" href="/css/board/style.css" />
 
         <link
             href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Gothic+A1&family=Orbitron&family=Oswald:wght@700&family=Quicksand:wght@500&display=swap"
@@ -84,8 +85,8 @@
                                         <span><img id="profile" src="uploads/photo/<%= photo[i] %><%= i + 1 %>.png" alt=""/></span></a>
                                 <% } %>
                             <% } %>
-                            <a href="#" id="photo_upload" style="display: none;">사진 업로드</a>
                         </div>
+                        
                         <div id="select__video">
                             <% for(var i = video.length - 1; i >= 0; i--){ %>
                                 <% if(id != null){ %>
@@ -107,9 +108,10 @@
                                 <% } %>
                                 
                             <% } %>
-                            <a href="#" id="video_upload" style="display: none;">영상 업로드</a>
                         </div>
                     </div>
+                    <a href="#" id="photo_upload" style="display: none;"><span>사진 업로드</span></a>
+                    <a href="#" id="video_upload" style="display: none;"><span>영상 업로드</span></a>
                 </div>
             </section>
 
