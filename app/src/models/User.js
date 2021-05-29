@@ -216,18 +216,41 @@ class User {
         }
     }
 
+    async videocommentUpload(user_id, overlap, video_comment) {
+        try {
+            const response = await UserStorage.uploadcommentVideo(user_id, overlap, video_comment);
+            return response;
+        } catch (err) {
+            return { success: false, msg: "업로드에 실패하였습니다."};
+        }
+    }
+
     async photocommentCount(overlap) {
         return UserStorage.commentphotoCount(overlap);
     }
 
-    async phtocommentgetId(overlap) {
+    async videocommentCount(overlap) {
+        return UserStorage.commentvideoCount(overlap);
+    }
+
+    async photocommentgetId(overlap) {
         const {seq, user_id, photo_comments, upload_time} = await UserStorage.commentgetIdPhoto(overlap);
-        await UserStorage.commentcheckUpdate(seq, overlap); 
+        await UserStorage.commentcheckpUpdate(seq, overlap); 
         return [user_id, photo_comments, upload_time];
     }
 
-    async commentcheckRenew(overlap) {
-        await UserStorage.commentRenew(overlap);
+    async videocommentgetId(overlap) {
+        const {seq, user_id, video_comments, upload_time} = await UserStorage.commentgetIdVideo(overlap);
+        await UserStorage.commentcheckvUpdate(seq, overlap); 
+        return [user_id, video_comments, upload_time];
+    }
+
+    async commentpcheckRenew(overlap) {
+        await UserStorage.photocommentRenew(overlap);
+    }
+
+    async commentvcheckRenew(overlap) {
+        await UserStorage.videocommentRenew(overlap);
     }
 }
 

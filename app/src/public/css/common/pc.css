@@ -211,27 +211,50 @@
     float: right;
     font-size: var(--font-headermenu);
   }
-  /* 댓글 관련 div 태그 */
+  /* 사진 댓글 관련 div 태그 */
   #photo_comment {
     position: absolute;
     top: 570px;
     width: 100%;
     text-align: left;
   }
-  /* 댓글 입력 란 */
+  /* 사진 댓글 입력 란 */
   #photo_comment #comment{ 
     width: 75%;
     height: 50px;
     border: none;
     margin: auto 10px;
   }
-  /* 댓글 전송 버튼 */
-  #photo_comment #button{
+  /* 사진 댓글 전송 버튼 */
+  #photo_comment #comment_button{
     width: 15%;
     height: 50px;
     margin: auto 10px;
   }
-  /* 댓글창 위의 라인 */
+   /* 영상 댓글 입력 란을 감싸는 태그 */
+  #video_comment {
+    margin: 30px auto;
+  }
+  /* 영상 댓글 입력 란 */
+  #video_comment #comment{
+    width: 90%;
+    height: 50px;
+    border: none;
+  }
+  /* 영상 댓글 전송 버튼 */
+  #video_comment #comment_button{
+    width: 8%;
+    height: 50px;
+    margin: auto 10px;
+  }
+  /* 영상 댓글 목록 꾸미기 */
+  .video_comment_list {
+    color: var(--color-white);
+    font-size: var(--font-headermenu);
+    height: 400px;
+    overflow:auto;
+  }
+  /* 사진 댓글창 위의 라인 */
   .three__line {
     position: absolute;
     top: 560px;
@@ -240,7 +263,6 @@
   
 
   /* banner */
-  
   #banner__wrap {
     background-color: var(--color-white);
     margin: auto;

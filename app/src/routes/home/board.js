@@ -51,5 +51,6 @@ router.get("/board/:id", ctrl.output.board_id);
 router.post("/upload", upload.single('upload'), ctrl.process.upload);
 router.post("/txt_upload", ctrl.process.txt_upload);
 router.post("/board/:id", ctrl.process.board_id);
+router.post("/board_video/:id", ctrl.process.board_video_id);
 
 module.exports = router;

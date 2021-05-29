@@ -15,6 +15,7 @@
         <script src ="/js/home/login_logout.js" defer></script>
         <script src ="/js/home/board_video.js" defer></script>
         <script src ="/js/home/board.js" defer></script>
+        <script src ="/js/home/comment.js" defer></script>
         <title>Board_Video</title>
     </head>
 
@@ -74,6 +75,18 @@
                     <div id="video_declaration"><button type="button">신고</button></div>
                     <div id="video_delete" style="display: none;"><button type="button">게시물 삭제</button></div>
                     <div id="for_like" name="<%= seq %>"></div>
+                    <hr style="margin: 40px 0;">
+                    <div id="video_comment">
+                        <input id="comment" type="text" name="comment" placeholder="댓글을 입력하세요"/>
+                        <button id="comment_button">댓글 작성</button>
+                        <div id="comment_contents_title" class="<%= title %>" name="video"></div>
+                    </div>
+                    <div class="video_comment_list">
+                        <% for(var i = comment_cnt - 1; i >= 0; i--){ %>
+                            <div><%= comment_time[i] %></div>
+                            <div><%= comment_id[i] %><span> <%= comment_contents[i] %></span></div><br>
+                        <% } %>  
+                    </div>
                 </div>
             </section>
 

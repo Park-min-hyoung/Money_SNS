@@ -171,18 +171,16 @@ const output = {
         }
 
         var comment_cnt = await photo_user.photocommentCount("%" + id + photo_seq); // photo_comment 테이블에서 특정 overlap으로 끝나는 데이터 수
-        await photo_user.commentcheckRenew("%" + id + photo_seq); // comment_check를 0으로 업데이트(댓글 여러개를 출력하기 위해)
+        await photo_user.commentpcheckRenew("%" + id + photo_seq); // comment_check를 0으로 업데이트(댓글 여러개를 출력하기 위해)
         
         var photo_comment_id = [];
         var photo_comment_contents = [];
         var photo_comment_time = [];
         for (var i = 0; i < comment_cnt; i++) { // board_photo.ejs에서 댓글 출력 하기 위한 객체에 값을 저장
-            var photo_comment_infromation = await photo_user.phtocommentgetId("%" + id + photo_seq);
+            var photo_comment_infromation = await photo_user.photocommentgetId("%" + id + photo_seq);
             photo_comment_id.push(photo_comment_infromation[0]);
             photo_comment_contents.push(photo_comment_infromation[1]);
             photo_comment_time.push(photo_comment_infromation[2]);
-            console.log(photo_comment_infromation[2]);
-            console.log(moment().format(photo_comment_infromation[2]));
         }
         
         res.render('home/board_photo', {title:photo_title_des_like[1], description:photo_title_des_like[2], like:photo_like_cnt, 
@@ -208,6 +206,8 @@ const output = {
         var video_seq = queryData.n;
         var video_declaration = queryData.declaration;
         upload_id = queryData.id; 
+        comment_seq = video_seq;
+        comment_title = id;
 
         const video_user = new User();
         var video_title_des_like  = await video_user.videoSearchTitledesLike(video_seq);
@@ -233,8 +233,22 @@ const output = {
             await video_user.videodeclarationUpdate(video_seq); // 신고버튼을 클릭했으면 신고 Count가 올라갈 수 있도록
         }
 
+        var comment_cnt = await video_user.videocommentCount("%" + id + video_seq); // video_comment 테이블에서 특정 overlap으로 끝나는 데이터 수
+        await video_user.commentvcheckRenew("%" + id + video_seq); // comment_check를 0으로 업데이트(댓글 여러개를 출력하기 위해)
+        
+        var video_comment_id = [];
+        var video_comment_contents = [];
+        var video_comment_time = [];
+        for (var i = 0; i < comment_cnt; i++) { // board_video.ejs에서 댓글 출력 하기 위한 객체에 값을 저장
+            var video_comment_infromation = await video_user.videocommentgetId("%" + id + video_seq);
+            video_comment_id.push(video_comment_infromation[0]);
+            video_comment_contents.push(video_comment_infromation[1]);
+            video_comment_time.push(video_comment_infromation[2]);
+        }
+
         res.render('home/board_video', {title:video_title_des_like[1], description:video_title_des_like[2], like:video_like_cnt, 
-            like_check:video_like_check, user_id:video_title_des_like[3], id:upload_id, seq:video_seq});
+            like_check:video_like_check, user_id:video_title_des_like[3], id:upload_id, seq:video_seq, comment_cnt:comment_cnt, 
+            comment_id:video_comment_id, comment_contents:video_comment_contents, comment_time:video_comment_time});
     },
 };
 
@@ -275,7 +289,18 @@ const process = {
         const photo_comment = req.body.comment;
         const comment_user = new User(req.body);
 
-        const response_comment = await comment_user.photocommentUpload(upload_id, photo_comment_overlap, photo_comment);
+        // photo_comment DB에 댓글을 작성한 user의 id, overlap, 댓글 내용 Insert
+        const response_comment = await comment_user.photocommentUpload(upload_id, photo_comment_overlap, photo_comment); 
+        return res.json(response_comment);
+    },
+    board_video_id: async(req, res) => {
+        var video_comment_overlap = upload_id + comment_title + comment_seq;
+
+        const video_comment = req.body.comment;
+        const comment_user = new User(req.body);
+
+        // video_comment DB에 댓글을 작성한 user의 id, overlap, 댓글 내용 Insert
+        const response_comment = await comment_user.videocommentUpload(upload_id, video_comment_overlap, video_comment);
         return res.json(response_comment);
     },
 };
