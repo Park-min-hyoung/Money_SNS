@@ -179,6 +179,10 @@ class User {
         await UserStorage.startsequpdateVideo(video_start_seq);
     }
 
+    async commentseqstartupdatePhoto(photo_start_seq) {
+        await UserStorage.startcommentsequpdatePhoto(photo_start_seq);
+    }
+
     async photoseqSearch() {
         const {seq} = await UserStorage.photosearchSeq();
         return seq;
@@ -186,6 +190,11 @@ class User {
 
     async videoseqSearch() {
         const {seq} = await UserStorage.videosearchSeq();
+        return seq;
+    }
+
+    async photocommentseqSearch() {
+        const {seq} = await UserStorage.photocommentsearchSeq();
         return seq;
     }
 
@@ -197,6 +206,10 @@ class User {
         await UserStorage.deleteoverlapVideo(delete_overlap);
     }
 
+    async photocommentoverlapDelete(delete_overlap) {
+        await UserStorage.deletecommentoverlapPhoto(delete_overlap);
+    }
+
     async photooverlapUpdate(title, current_cnt, update_cnt) {
         var current_overlap = title + current_cnt;
         await UserStorage.updateoverlapPhoto(current_overlap, title, update_cnt);
@@ -205,6 +218,11 @@ class User {
     async videooverlapUpdate(title, current_cnt, update_cnt) {
         var current_overlap = title + current_cnt;
         await UserStorage.updateoverlapVideo(current_overlap, title, update_cnt);
+    }
+
+    async photocommentoverlapUpdate(title, current_cnt, update_cnt) {
+        var current_overlap = title + current_cnt;
+        await UserStorage.updatecommentoverlapPhoto(current_overlap, title, update_cnt);
     }
     
     async photocommentUpload(user_id, overlap, photo_comment) {

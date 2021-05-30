@@ -35,11 +35,14 @@ const output = {
 
         if (delete_check == "photo_delete") {
             var photo_delete_title = await photo_user.photoSearchTitledesLike(delete_seq); // 파일 삭제시 제목 있어야 함
-            await photo_user.photoDelete(delete_seq); // seq에 해당하는 데이터를 삭제
-            await photo_user.photooverlapDelete(photo_delete_title[1] + delete_seq); // 삭제될 사진의 overlap을 삭제
-            await photo_user.photoseqUpdate(delete_seq); // seq가 삭제 되었으므로 업데이트
+            await photo_user.photoDelete(delete_seq); // seq에 해당하는 photo의 테이블의 데이터를 삭제
+            await photo_user.photooverlapDelete(photo_delete_title[1] + delete_seq); // photo_like 테이블에 삭제될 사진의 overlap을 삭제
+            await photo_user.photocommentoverlapDelete(photo_delete_title[1] + delete_seq); // photo_comment 테이블에 삭제될 사진의 overlap을 삭제
+            await photo_user.photoseqUpdate(delete_seq); // photo 테이블에 seq가 삭제 되었으므로 업데이트
             var photo_final_seq = await photo_user.photoseqSearch(); // title의 목록을 만들기 위해 마지막 seq 조회
-            await photo_user.seqstartupdatePhoto(photo_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트
+            var photo_comment_final_seq = await photo_user.photoseqSearch();
+            await photo_user.seqstartupdatePhoto(photo_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(photo TB)
+            await photo_user.commentseqstartupdatePhoto(photo_comment_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(photo_comment TB)
             await photo_user.minusPoint(photo_delete_title[3]); // 삭제한 사진을 업로드한 user의 point를 차감
             fs.unlink(`./src/public/uploads/photo/` + photo_delete_title[1] + delete_seq + `.png`,(err)=>{})
             
@@ -49,8 +52,14 @@ const output = {
                 if (i > delete_seq - 1) {
                     fs.rename('src/public/uploads/photo/' + photo_title + (i + 1) + ".png", 
                     'src/public/uploads/photo/' + photo_title + i + '.png', function(err){});
-                    await photo_user.photooverlapUpdate(photo_title, i + 1, i);
+                    await photo_user.photooverlapUpdate(photo_title, i + 1, i); // photo TB에서 삭제된 사진의 뒤의 사진들의 overlap 번호를 -1
                 }
+            }
+
+            delete_seq = parseInt(queryData.seq);
+            for (var i = delete_seq + 1; i <= photo_final_seq + 1; i++) { // 삭제한 사진의 overlap 숫자보다 큰 사진들의 숫자들을 -1 하기 위해서
+                var photo_comment_title = await photo_user.photoSearchTitle(i - 1);
+                await photo_user.photocommentoverlapUpdate(photo_comment_title, i, i - 1); // photo_comment TB에서 삭제된 사진의 뒤의 사진들의 overlap 번호를 -1
             }
             
             var video_final_seq = await photo_user.videoseqSearch();
