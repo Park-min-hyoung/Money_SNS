@@ -83,7 +83,12 @@
                     </div>
                     <div class="video_comment_list">
                         <% for(var i = comment_cnt - 1; i >= 0; i--){ %>
-                            <div><%= comment_time[i] %></div>
+                            <div><%= comment_time[i] %>
+                                <span><button onclick="videocommentDelete(<%= comment_seq[i] %>)">
+                                    댓글 삭제</button></span>
+                                <span><button onclick="videocommentUpdate(<%= comment_seq[i] %>)">
+                                    댓글 수정</button></span>
+                            </div>
                             <div><%= comment_id[i] %><span> <%= comment_contents[i] %></span></div><br>
                         <% } %>  
                     </div>

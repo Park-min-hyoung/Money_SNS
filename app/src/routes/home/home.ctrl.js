@@ -8,7 +8,6 @@ var moment = require('moment');
 require('moment-timezone');
 moment.tz.setDefault("Asia/Seoul");
 
-
 var upload_id;
 var comment_seq;
 var comment_title;
@@ -40,7 +39,7 @@ const output = {
             await photo_user.photocommentoverlapDelete(photo_delete_title[1] + delete_seq); // photo_comment 테이블에 삭제될 사진의 overlap을 삭제
             await photo_user.photoseqUpdate(delete_seq); // photo 테이블에 seq가 삭제 되었으므로 업데이트
             var photo_final_seq = await photo_user.photoseqSearch(); // title의 목록을 만들기 위해 마지막 seq 조회
-            var photo_comment_final_seq = await photo_user.photoseqSearch();
+            var photo_comment_final_seq = await photo_user.photocommentseqSearch();
             await photo_user.seqstartupdatePhoto(photo_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(photo TB)
             await photo_user.commentseqstartupdatePhoto(photo_comment_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(photo_comment TB)
             await photo_user.minusPoint(photo_delete_title[3]); // 삭제한 사진을 업로드한 user의 point를 차감
@@ -59,7 +58,7 @@ const output = {
             delete_seq = parseInt(queryData.seq);
             for (var i = delete_seq + 1; i <= photo_final_seq + 1; i++) { // 삭제한 사진의 overlap 숫자보다 큰 사진들의 숫자들을 -1 하기 위해서
                 var photo_comment_title = await photo_user.photoSearchTitle(i - 1);
-                await photo_user.photocommentoverlapUpdate(photo_comment_title, i, i - 1); // photo_comment TB에서 삭제된 사진의 뒤의 사진들의 overlap 번호를 -1
+                await photo_user.videocommentoverlapUpdate(photo_comment_title, i, i - 1); // photo_comment TB에서 삭제된 사진의 뒤의 사진들의 overlap 번호를 -1
             }
             
             var video_final_seq = await photo_user.videoseqSearch();
@@ -70,10 +69,13 @@ const output = {
         } else if (delete_check == "video_delete") {
             var video_delete_title = await video_user.videoSearchTitledesLike(delete_seq); // 파일 삭제시 제목 있어야 함
             await video_user.videoDelete(delete_seq); // seq에 해당하는 데이터를 삭제
-            await video_user.videooverlapDelete(video_delete_title[1] + delete_seq); // 삭제될 사진의 overlap을 삭제
+            await video_user.videooverlapDelete(video_delete_title[1] + delete_seq); // video TB에서 삭제될 사진의 overlap을 삭제
+            await video_user.videocommentoverlapDelete(video_delete_title[1] + delete_seq); // video_comment TB에서 삭제될 사진의 overlap을 삭제
             await video_user.videoseqUpdate(delete_seq); // seq가 삭제 되었으므로 업데이트
             var video_final_seq = await video_user.videoseqSearch(); // title의 목록을 만들기 위해 마지막 seq 조회
+            var video_comment_final_seq = await video_user.videocommentseqSearch();
             await video_user.seqstartupdateVideo(video_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트
+            await video_user.commentseqstartupdateVideo(video_comment_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(video_comment TB)
             await video_user.minusPoint(video_delete_title[3]); // 삭제한 사진을 업로드한 user의 point를 차감
             fs.unlink(`./src/public/uploads/video/` + video_delete_title[1] + delete_seq + `.mp4`,(err)=>{});
             fs.unlink(`./src/public/uploads/thumbnail/` + video_delete_title[1] + delete_seq + `.png`,(err)=>{});
@@ -88,6 +90,12 @@ const output = {
                     'src/public/uploads/thumbnail/' + video_title + i + '.png', function(err){});
                     await video_user.videooverlapUpdate(video_title, i + 1, i);
                 }
+            }
+
+            delete_seq = parseInt(queryData.seq);
+            for (var i = delete_seq + 1; i <= video_final_seq + 1; i++) { // 삭제한 영상의 overlap 숫자보다 큰 사진들의 숫자들을 -1 하기 위해서
+                var video_comment_title = await video_user.videoSearchTitle(i - 1);
+                await video_user.videocommentoverlapUpdate(video_comment_title, i, i - 1); // photo_comment TB에서 삭제된 사진의 뒤의 사진들의 overlap 번호를 -1
             }
             
             var photo_final_seq = await photo_user.photoseqSearch();
@@ -151,6 +159,9 @@ const output = {
         var check = queryData.like;
         var photo_seq = queryData.n;
         var photo_declaration = queryData.declaration;
+        var photo_comment_delete = queryData.comment_delete_seq;
+        var photo_comment_update = queryData.comment_update_seq;
+        var update_comment = queryData.update_comment;
         upload_id = queryData.id;
         comment_seq = photo_seq;
         comment_title = id;
@@ -175,26 +186,38 @@ const output = {
             photo_like_check = 0;
         }
 
-        if (photo_declaration && photo_declaration != "null") {
+        if (photo_declaration && photo_declaration != "null") { // 신고하기 버튼을 눌렀을 때
             await photo_user.photodeclarationUpdate(photo_seq); // 신고버튼을 클릭했으면 신고 Count가 올라갈 수 있도록
+        }
+
+        if (photo_comment_delete !== undefined) { // 댓글 삭제 버튼을 눌렀을 때 데이터 삭제 및 seq 초기화
+            await photo_user.photocommentDelete(photo_comment_delete); // photo_comment 테이블에서 해당 seq의 데이터를 삭제
+            var photo_comment_final_seq = await photo_user.photocommentseqSearch();
+            await photo_user.commentseqstartupdatePhoto(photo_comment_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(photo_comment TB)
+        }
+
+        if (photo_comment_update !== undefined) { // 댓글 수정 버튼을 눌렀을 때 comment 수정
+            await photo_user.photocommentUpdate(photo_comment_update, update_comment); // photo_comment 테이블에서 해당 seq의 comment 수정
         }
 
         var comment_cnt = await photo_user.photocommentCount("%" + id + photo_seq); // photo_comment 테이블에서 특정 overlap으로 끝나는 데이터 수
         await photo_user.commentpcheckRenew("%" + id + photo_seq); // comment_check를 0으로 업데이트(댓글 여러개를 출력하기 위해)
-        
         var photo_comment_id = [];
         var photo_comment_contents = [];
         var photo_comment_time = [];
+        var photo_comment_seq = [];
         for (var i = 0; i < comment_cnt; i++) { // board_photo.ejs에서 댓글 출력 하기 위한 객체에 값을 저장
             var photo_comment_infromation = await photo_user.photocommentgetId("%" + id + photo_seq);
             photo_comment_id.push(photo_comment_infromation[0]);
             photo_comment_contents.push(photo_comment_infromation[1]);
             photo_comment_time.push(photo_comment_infromation[2]);
+            photo_comment_seq.push(photo_comment_infromation[3]);
         }
         
         res.render('home/board_photo', {title:photo_title_des_like[1], description:photo_title_des_like[2], like:photo_like_cnt, 
             like_check:photo_like_check, user_id:photo_title_des_like[3], id:upload_id, seq:photo_seq, comment_cnt:comment_cnt, 
-            comment_id:photo_comment_id, comment_contents:photo_comment_contents, comment_time:photo_comment_time});
+            comment_id:photo_comment_id, comment_contents:photo_comment_contents, comment_time:photo_comment_time,
+            comment_seq:photo_comment_seq});
     },
     upload: (req, res) => {
         res.render("home/upload");
@@ -214,6 +237,9 @@ const output = {
         var check = queryData.like;
         var video_seq = queryData.n;
         var video_declaration = queryData.declaration;
+        var video_comment_delete = queryData.comment_delete_seq;
+        var video_comment_update = queryData.comment_update_seq;
+        var update_comment = queryData.update_comment;
         upload_id = queryData.id; 
         comment_seq = video_seq;
         comment_title = id;
@@ -242,22 +268,34 @@ const output = {
             await video_user.videodeclarationUpdate(video_seq); // 신고버튼을 클릭했으면 신고 Count가 올라갈 수 있도록
         }
 
+        if (video_comment_delete !== undefined) { // 댓글 삭제 버튼을 눌렀을 때 데이터 삭제 및 seq 초기화
+            await video_user.videocommentDelete(video_comment_delete); // video_comment 테이블에서 해당 seq의 데이터를 삭제
+            var video_comment_final_seq = await video_user.videocommentseqSearch();
+            await video_user.commentseqstartupdateVideo(video_comment_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(video_comment TB)
+        }
+
+        if (video_comment_update !== undefined) { // 댓글 수정 버튼을 눌렀을 때 comment 수정
+            await video_user.videocommentUpdate(video_comment_update, update_comment); // video_comment 테이블에서 해당 seq의 comment 수정
+        }
+
         var comment_cnt = await video_user.videocommentCount("%" + id + video_seq); // video_comment 테이블에서 특정 overlap으로 끝나는 데이터 수
         await video_user.commentvcheckRenew("%" + id + video_seq); // comment_check를 0으로 업데이트(댓글 여러개를 출력하기 위해)
-        
         var video_comment_id = [];
         var video_comment_contents = [];
         var video_comment_time = [];
+        var video_comment_seq = [];
         for (var i = 0; i < comment_cnt; i++) { // board_video.ejs에서 댓글 출력 하기 위한 객체에 값을 저장
             var video_comment_infromation = await video_user.videocommentgetId("%" + id + video_seq);
             video_comment_id.push(video_comment_infromation[0]);
             video_comment_contents.push(video_comment_infromation[1]);
             video_comment_time.push(video_comment_infromation[2]);
+            video_comment_seq.push(video_comment_infromation[3]);
         }
 
         res.render('home/board_video', {title:video_title_des_like[1], description:video_title_des_like[2], like:video_like_cnt, 
             like_check:video_like_check, user_id:video_title_des_like[3], id:upload_id, seq:video_seq, comment_cnt:comment_cnt, 
-            comment_id:video_comment_id, comment_contents:video_comment_contents, comment_time:video_comment_time});
+            comment_id:video_comment_id, comment_contents:video_comment_contents, comment_time:video_comment_time,
+            comment_seq:video_comment_seq});
     },
 };
 

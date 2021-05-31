@@ -183,6 +183,10 @@ class User {
         await UserStorage.startcommentsequpdatePhoto(photo_start_seq);
     }
 
+    async commentseqstartupdateVideo(video_start_seq) {
+        await UserStorage.startcommentsequpdateVideo(video_start_seq);
+    }
+
     async photoseqSearch() {
         const {seq} = await UserStorage.photosearchSeq();
         return seq;
@@ -198,6 +202,11 @@ class User {
         return seq;
     }
 
+    async videocommentseqSearch() {
+        const {seq} = await UserStorage.videocommentsearchSeq();
+        return seq;
+    }
+
     async photooverlapDelete(delete_overlap) {
         await UserStorage.deleteoverlapPhoto(delete_overlap);
     }
@@ -208,6 +217,10 @@ class User {
 
     async photocommentoverlapDelete(delete_overlap) {
         await UserStorage.deletecommentoverlapPhoto(delete_overlap);
+    }
+
+    async videocommentoverlapDelete(delete_overlap) {
+        await UserStorage.deletecommentoverlapVideo(delete_overlap);
     }
 
     async photooverlapUpdate(title, current_cnt, update_cnt) {
@@ -223,6 +236,11 @@ class User {
     async photocommentoverlapUpdate(title, current_cnt, update_cnt) {
         var current_overlap = title + current_cnt;
         await UserStorage.updatecommentoverlapPhoto(current_overlap, title, update_cnt);
+    }
+
+    async videocommentoverlapUpdate(title, current_cnt, update_cnt) {
+        var current_overlap = title + current_cnt;
+        await UserStorage.updatecommentoverlapVideo(current_overlap, title, update_cnt);
     }
     
     async photocommentUpload(user_id, overlap, photo_comment) {
@@ -243,6 +261,22 @@ class User {
         }
     }
 
+    async photocommentDelete(delete_seq) {
+        return UserStorage.deletecommentPhoto(delete_seq);
+    }
+    
+    async videocommentDelete(delete_seq) {
+        return UserStorage.deletecommentVideo(delete_seq);
+    }
+
+    async photocommentUpdate(update_seq, update_comment) {
+        return UserStorage.updatecommentPhoto(update_seq, update_comment);
+    }
+
+    async videocommentUpdate(update_seq, update_comment) {
+        return UserStorage.updatecommentVideo(update_seq, update_comment);
+    }
+
     async photocommentCount(overlap) {
         return UserStorage.commentphotoCount(overlap);
     }
@@ -254,13 +288,13 @@ class User {
     async photocommentgetId(overlap) {
         const {seq, user_id, photo_comments, upload_time} = await UserStorage.commentgetIdPhoto(overlap);
         await UserStorage.commentcheckpUpdate(seq, overlap); 
-        return [user_id, photo_comments, upload_time];
+        return [user_id, photo_comments, upload_time, seq];
     }
 
     async videocommentgetId(overlap) {
         const {seq, user_id, video_comments, upload_time} = await UserStorage.commentgetIdVideo(overlap);
         await UserStorage.commentcheckvUpdate(seq, overlap); 
-        return [user_id, video_comments, upload_time];
+        return [user_id, video_comments, upload_time, seq];
     }
 
     async commentpcheckRenew(overlap) {

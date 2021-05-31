@@ -111,3 +111,26 @@ if (upload_id == req_id) { // 자신이 업로드한 사진이나 영상만 삭�
         document.getElementById('Photo_delete').style.display = "block";
     }
 }
+
+// 사진에서 댓글 삭제 버튼을 눌렀을 때
+function photocommentDelete(delete_seq) {
+    location = "/board/" + title + "/?id=" + id + "&n=" + seq + "&comment_delete_seq=" + delete_seq;
+}
+// 사진에서 댓글 수정 버튼을 눌렀을 때
+function photocommentUpdate(update_seq) {
+    var update_comment_text = prompt("댓글 수정");
+    if (update_comment_text !== null && update_comment_text !== "") {
+        location = "/board/" + title + "/?id=" + id + "&n=" + seq + "&comment_update_seq=" + update_seq + "&update_comment=" + update_comment_text;    }
+}
+// 영상에서 댓글 삭제 버튼을 눌렀을 때
+function videocommentDelete(delete_seq) {
+    location = "/board_video/" + title + "/?id=" + id + "&n=" + seq + "&comment_delete_seq=" + delete_seq;
+}
+// 영상에서 댓글 수정 버튼을 눌렀을 때
+function videocommentUpdate(update_seq) {
+    var update_comment_text = prompt("댓글 수정");
+    if (update_comment_text !== null && update_comment_text !== "") {
+        location = "/board_video/" + title + "/?id=" + id + "&n=" + seq + "&comment_update_seq=" + update_seq + "&update_comment=" + update_comment_text;
+    }
+    
+}

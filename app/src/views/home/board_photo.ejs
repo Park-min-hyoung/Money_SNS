@@ -37,7 +37,12 @@
                                         <div id="video_nickname" name="<%= user_id %>"></div>
                                         <div id="introduce" style="overflow:auto; width:460px; height:350px"><%= description %>
                                             <% for(var i = comment_cnt - 1; i >= 0; i--){ %>
-                                                <div><%= comment_time[i] %></div>
+                                                <div><%= comment_time[i] %>
+                                                    <span><button onclick="photocommentDelete(<%= comment_seq[i] %>)">
+                                                        댓글 삭제</button></span>
+                                                    <span><button onclick="photocommentUpdate(<%= comment_seq[i] %>)">
+                                                        댓글 수정</button></span>
+                                                    </div>
                                                 <div><%= comment_id[i] %><span> <%= comment_contents[i] %></span></div><br>
                                             <% } %>                                          
                                         </div>
