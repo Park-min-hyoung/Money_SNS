@@ -3,15 +3,22 @@
 const video_plusBtn = document.querySelector("#plus_video_btn"),
  upload_videofile = document.querySelector("#file1"),
  photo_plusBtn = document.querySelector("#plus_photo_btn"),
- upload_photofile = document.querySelector("#file2");
+ upload_photofile = document.querySelector("#file2"),
+ thumbnail_photo_plusBtn = document.querySelector("#plus_thumbnailphoto_btn"),
+ upload_thumbnail_photofile = document.querySelector("#file3"),
+ title = document.querySelector("#title"),
+ description = document.querySelector("#description"),
+ submitBtn = document.querySelector("#button");
 
 video_plusBtn.addEventListener("click", videoPlus);
 photo_plusBtn.addEventListener("click", photoPlus);
+thumbnail_photo_plusBtn.addEventListener("click", photoPlus);
+submitBtn.addEventListener("click", contentsPlus);
 
 function videoPlus() {
-    const file = upload_videofile.files[0];
+    const video_file = upload_videofile.files[0];
     const formData = new FormData();
-    formData.append('upload', file);
+    formData.append('upload', video_file);
 
     fetch('/upload', {
         method: 'POST',
@@ -20,7 +27,7 @@ function videoPlus() {
         .then((res) => res.json())
         .then((res) => {
             if (res.success) {
-                location.href = "/upload?id=" + req_id + "&extension=" + req_extension;
+                document.getElementById("plus_thumbnailphoto_btn").disabled = false;
             } else {
                 alert(res.msg);
             }
@@ -31,9 +38,14 @@ function videoPlus() {
 }
 
 function photoPlus() {
-    const file = upload_photofile.files[0];
     const formData = new FormData();
-    formData.append('upload', file);
+    if (upload_photofile.files.length > 0) { // 사진 업로드 창에서 사진 추가 했을 때
+        const photo_file = upload_photofile.files[0];
+        formData.append('upload', photo_file)
+    } else if (upload_thumbnail_photofile.files.length > 0) { // 영상 업로드 창에서 썸네일용 사진 추가 했을 때
+        const thumbnail_photo_file = upload_thumbnail_photofile.files[0];
+        formData.append('upload', thumbnail_photo_file)
+    }
 
     fetch('/upload', {
         method: 'POST',
@@ -42,7 +54,14 @@ function photoPlus() {
         .then((res) => res.json())
         .then((res) => {
             if (res.success) {
-                location.href = "/txt_upload?id=" + req_id + "&extension=" + req_extension;
+                if (res.destination === 'src/public/uploads/photo') { // 사진 업로드 시에 사진 올라갔을 때
+                    document.getElementById("pre_photo").style.display = "block";
+                    document.getElementById("pre_photo").src = "uploads/photo/" + res.image;
+                } else { // 영상 업로드 시에 썸네일용 사진이 올라갔을 때
+                    document.getElementById("video_photo").style.display = "block";
+                    document.getElementById("video_photo").src = "uploads/thumbnail/" + res.image;
+                }
+                document.getElementById("button").disabled = false;
             } else {
                 alert(res.msg);
             }
@@ -52,7 +71,36 @@ function photoPlus() {
         });
 }
 
+function contentsPlus() {
+    const req = {
+        title: title.value,
+        description: description.value,
+        extension: req_extension,
+    };
+    
+    fetch("/upload", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(req),
+    })
+        .then((res) => res.json())
+        .then((res) => {
+            if (res.success) {
+                location.href = "/board?id=" + req_id;
+                console.log
+            } else {
+                alert(res.msg);
+            }
+        })
+        .catch((err) => {
+            console.error("로그인 중 에러발생");
+        });
+}
+
 if (req_extension === "mp4") { // 영상 업로드 화면에 들어오면 숨겨져 있던것 출력
     document.getElementById("mp4").style.display = "block";
-    document.getElementById("plus_photo_btn").innerText = "썸네일용 사진 추가";
+} else {
+    document.getElementById("img").style.display = "block";
 }

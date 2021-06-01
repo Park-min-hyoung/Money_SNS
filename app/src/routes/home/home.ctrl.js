@@ -221,9 +221,6 @@ const output = {
     },
     upload: (req, res) => {
         res.render("home/upload");
-    },
-    txt_upload: (req, res) => {
-        res.render("home/txt_upload");
 
         var queryData = url.parse(req.url, true).query;
         upload_id = queryData.id;
@@ -312,23 +309,31 @@ const process = {
 
         return res.json(response);
     },
-    txt_upload: async(req, res) => {
-        const video = req.body.video;
-        const user = new User(req.body);
-        
-        if(video == "mp4"){
-            const response = await user.videoUpload(upload_id);
-            await user.plusPoint(upload_id);
-            return res.json(response);
-        } else{
-            const response = await user.photoUpload(upload_id);
-            await user.plusPoint(upload_id);
-            return res.json(response);
+    upload: async(req, res) => {
+        const extension = req.body.extension;
+
+        if (extension !== undefined) { // 사진 또는 영상 추가하는 버튼 말고 마지막 버튼 눌렀을 때
+            const user = new User(req.body);
+            if (extension == "mp4"){
+                const response = await user.videoUpload(upload_id);
+                await user.plusPoint(upload_id);
+                return res.json(response);
+            } else {
+                const response = await user.photoUpload(upload_id);
+                await user.plusPoint(upload_id);
+                return res.json(response);
+            }
+        } else {
+            if (req.file !== undefined) { // 파일이 선택 되었다면
+                if (req.file.mimetype === 'image/jpeg' || req.file.mimetype === "image/png") { // 사진을 추가했을 때
+                    const response = { success: true, image: req.file.filename, destination: req.file.destination};
+                    return res.json(response);
+                } else { // 영상을 추가 했을 때
+                    const response = { success: true };
+                    return res.json(response);
+                }
+            }
         }
-    },
-    upload: (req, res) => {
-        const response = { success: true };
-        return res.json(response);
     },
     board_id: async(req, res) => {
         var photo_comment_overlap = upload_id + comment_title + comment_seq;

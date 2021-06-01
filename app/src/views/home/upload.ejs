@@ -11,11 +11,22 @@
         <title>Document</title>
     </head>
     <body>
+        <div id="img" style="display: none;">
+            <p><input id="file2" type="file" accept="image/*"></p>
+            <p><button id="plus_photo_btn">사진 추가</button></p>
+            <p><img id="pre_photo" width="300px" height="300px" src="#" alt="" style="display: none;"></p>
+        </div>
+
         <div id="mp4" style="display: none;">
             <p><input id="file1" type="file" accept="video/*"></p>
             <p><button id="plus_video_btn">영상 추가</button></p>
+            <p><input id="file3" type="file" accept="image/*"></p>
+            <p><button id="plus_thumbnailphoto_btn" disabled="disabled">썸네일용 사진 추가</button></p>
+            <p><img id="video_photo" width="300px" height="300px" src="#" alt="" style="display: none;"></p>
         </div>
-        <p><input id="file2" type="file" accept="image/*"></p>
-        <p><button id="plus_photo_btn">사진 추가</button></p>
+        
+        <p><input id="title" type="text" name="title" placeholder="게시글의 제목"/></p>
+        <p><textarea id="description" name="description" cols="30" rows="10"></textarea></p>
+        <button id="button" disabled="disabled">제출</button>
     </body>
 </html>
