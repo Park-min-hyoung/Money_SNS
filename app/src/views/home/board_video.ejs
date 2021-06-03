@@ -83,7 +83,17 @@
                     </div>
                     <div class="video_comment_list">
                         <% for(var i = comment_cnt - 1; i >= 0; i--){ %>
-                            <div><%= comment_time[i] %>
+                            <div>
+                                <% if(comment_time[i] < 1){ %>
+                                    <%= Math.floor(comment_time[i] * 60) %>초 전 <!-- 1분 이하이므로 분으로 초로 수정 -->
+                                <% } else if(comment_time[i] >= 60) { %>
+                                    <%= Math.floor(comment_time[i] / 60) %>시간 전 <!-- 1시간이 지나서 분으로 시간으로 수정 -->
+                                <% } else if(comment_time[i] >= 1440) { %>
+                                    <%= Math.floor(comment_time[i] / 60 / 24) %>일 전 <!-- 1일이 지나서 시간을 일로 수정 -->
+                                <% } else {%>
+                                    <%= Math.floor(comment_time[i]) %>분 전
+                                <% } %>
+                                
                                 <span><button onclick="videocommentDelete(<%= comment_seq[i] %>)">
                                     댓글 삭제</button></span>
                                 <span><button onclick="videocommentUpdate(<%= comment_seq[i] %>)">

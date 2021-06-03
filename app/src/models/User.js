@@ -243,18 +243,18 @@ class User {
         await UserStorage.updatecommentoverlapVideo(current_overlap, title, update_cnt);
     }
     
-    async photocommentUpload(user_id, overlap, photo_comment) {
+    async photocommentUpload(user_id, overlap, photo_comment, upload_time) {
         try {
-            const response = await UserStorage.uploadcommentPhoto(user_id, overlap, photo_comment);
+            const response = await UserStorage.uploadcommentPhoto(user_id, overlap, photo_comment, upload_time);
             return response;
         } catch (err) {
             return { success: false, msg: "업로드에 실패하였습니다."};
         }
     }
 
-    async videocommentUpload(user_id, overlap, video_comment) {
+    async videocommentUpload(user_id, overlap, video_comment, upload_time) {
         try {
-            const response = await UserStorage.uploadcommentVideo(user_id, overlap, video_comment);
+            const response = await UserStorage.uploadcommentVideo(user_id, overlap, video_comment, upload_time);
             return response;
         } catch (err) {
             return { success: false, msg: "업로드에 실패하였습니다."};

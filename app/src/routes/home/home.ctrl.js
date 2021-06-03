@@ -210,7 +210,10 @@ const output = {
             var photo_comment_infromation = await photo_user.photocommentgetId("%" + id + photo_seq);
             photo_comment_id.push(photo_comment_infromation[0]);
             photo_comment_contents.push(photo_comment_infromation[1]);
-            photo_comment_time.push(photo_comment_infromation[2]);
+
+            var now_time = new Date().getTime(); // 현재 시간
+            var comment_uploadtime = new Date(photo_comment_infromation[2]).getTime(); // 댓글 업로드 당시 시간
+            photo_comment_time.push((now_time - comment_uploadtime) / 1000 / 60); // 현재 시간 - 업로드 시간
             photo_comment_seq.push(photo_comment_infromation[3]);
         }
         
@@ -285,7 +288,10 @@ const output = {
             var video_comment_infromation = await video_user.videocommentgetId("%" + id + video_seq);
             video_comment_id.push(video_comment_infromation[0]);
             video_comment_contents.push(video_comment_infromation[1]);
-            video_comment_time.push(video_comment_infromation[2]);
+
+            var now_time = new Date().getTime(); // 현재 시간
+            var comment_uploadtime = new Date(video_comment_infromation[2]).getTime(); // 댓글 업로드 당시 시간
+            video_comment_time.push((now_time - comment_uploadtime) / 1000 / 60); // 현재 시간 - 업로드 시간
             video_comment_seq.push(video_comment_infromation[3]);
         }
 
@@ -340,9 +346,10 @@ const process = {
 
         const photo_comment = req.body.comment;
         const comment_user = new User(req.body);
+        const photo_uploadtime = new Date(); // 업로드 시간
 
         // photo_comment DB에 댓글을 작성한 user의 id, overlap, 댓글 내용 Insert
-        const response_comment = await comment_user.photocommentUpload(upload_id, photo_comment_overlap, photo_comment); 
+        const response_comment = await comment_user.photocommentUpload(upload_id, photo_comment_overlap, photo_comment, photo_uploadtime); 
         return res.json(response_comment);
     },
     board_video_id: async(req, res) => {
@@ -350,9 +357,10 @@ const process = {
 
         const video_comment = req.body.comment;
         const comment_user = new User(req.body);
+        const video_uploadtime = new Date(); // 업로드 시간
 
         // video_comment DB에 댓글을 작성한 user의 id, overlap, 댓글 내용 Insert
-        const response_comment = await comment_user.videocommentUpload(upload_id, video_comment_overlap, video_comment);
+        const response_comment = await comment_user.videocommentUpload(upload_id, video_comment_overlap, video_comment, video_uploadtime);
         return res.json(response_comment);
     },
 };

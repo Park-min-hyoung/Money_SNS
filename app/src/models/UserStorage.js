@@ -434,11 +434,11 @@ class UserStorage {
         });
     }
 
-    static async uploadcommentPhoto(user_id, overlap, photo_comment) {
+    static async uploadcommentPhoto(user_id, overlap, photo_comment, upload_time) {
         return new Promise((resolve, reject) => {
-            const query = "INSERT INTO photo_comment(user_id, overlap, photo_comments) VALUES(?, ?, ?);";
+            const query = "INSERT INTO photo_comment(user_id, overlap, photo_comments, upload_time) VALUES(?, ?, ?, ?);";
             db.query(query, 
-            [user_id, overlap, photo_comment],
+            [user_id, overlap, photo_comment, upload_time],
             (err) => {
                 if(err) reject(`${err}`);
                 resolve({ success: true });
@@ -446,11 +446,11 @@ class UserStorage {
         });
     }
 
-    static async uploadcommentVideo(user_id, overlap, video_comment) {
+    static async uploadcommentVideo(user_id, overlap, video_comment, upload_time) {
         return new Promise((resolve, reject) => {
-            const query = "INSERT INTO video_comment(user_id, overlap, video_comments) VALUES(?, ?, ?);";
+            const query = "INSERT INTO video_comment(user_id, overlap, video_comments, upload_time) VALUES(?, ?, ?, ?);";
             db.query(query, 
-            [user_id, overlap, video_comment],
+            [user_id, overlap, video_comment, upload_time],
             (err) => {
                 if(err) reject(`${err}`);
                 resolve({ success: true });

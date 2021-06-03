@@ -101,11 +101,11 @@
   /* 안쪽 */
   input[id*="popup"] + label + div > div {
     position: absolute;
-    top: 55%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
     width: 50%;
-    height: 65%;
+    height: 630px;
     background: var(--color-white);
     z-index: 2;
   }
@@ -223,13 +223,13 @@
     width: 75%;
     height: 50px;
     border: none;
-    margin: auto 10px;
+    margin: auto 1.75%;
   }
   /* 사진 댓글 전송 버튼 */
   #photo_comment #comment_button{
     width: 15%;
-    height: 50px;
-    margin: auto 10px;
+    height: 40px;
+    margin: auto 1.75%;
   }
    /* 영상 댓글 입력 란을 감싸는 태그 */
   #video_comment {
