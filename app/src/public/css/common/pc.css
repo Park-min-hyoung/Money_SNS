@@ -14,11 +14,6 @@
     --font-hometext: 35px;
     --font-basetext: 13px;
     --font-txt: 60px;
-  
-    /* transition__druation */
-    --base-duration: 300ms;
-  
-    --x: 1;
   }
   
   /* home section*/
@@ -196,22 +191,60 @@
     opacity: 1;
     visibility: visible;
   }
-  #photo_declaration { 
+
+  /* 둥근 메뉴 위치 */
+  .fa-ellipsis-h {
     position: absolute;
-    top: 20px; 
-    width: 93%;
-  }
-  /* 사진 창 신고버튼 */
-  #photo_declaration button { 
+    top: 20px;
+    width: 85%;
     float: right;
-    font-size: var(--font-headermenu);
+    font-size: var(--font-hometext);
   }
+
   /* 영상 신고 버튼 */
-  #video_declaration button{
+  /* #video_declaration button {
     float: right;
     font-size: var(--font-headermenu);
+  } */
+
+  /* 모달창 본체 */
+  #modal {
+    display: none;
+    position:absolute;
+    top: 15px;
+    width:100%;
+    height:100%;
+    z-index:1;
   }
-  /* 사진 댓글 관련 div 태그 */
+  
+  #modal #photo_declaration button,
+  #modal #photo_delete button,
+  #modal #cancel button {
+    display:inline-block;
+    width:100%;
+    height: 50px;
+  }
+  
+  #modal .modal_top_content {
+    width:400px;
+    height: 150px;
+    margin:200px auto;
+    margin-left: -200px;
+    background:#fff;
+    border:2px solid #666;
+  }
+  
+  #modal .modal_layer {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0, 0, 0, 0.5);
+    z-index:-1;
+  }   
+
+    /* 사진 댓글 관련 div 태그 */
   #photo_comment {
     position: absolute;
     top: 570px;
@@ -260,7 +293,6 @@
     top: 560px;
     width: 100%;
   }
-  
 
   /* banner */
   #banner__wrap {
@@ -277,3 +309,9 @@
     line-height: 160px;
   }
   
+  /* 창의 높이가 650px 이하 일때 */
+  @media screen and (max-height: 650px) { 
+    input[id*="popup"] + label + div > div {
+      top: 80%; /* 모달의 위치를 조정 한다 */
+    }
+  }

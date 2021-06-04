@@ -4,10 +4,6 @@ const User = require("../../models/User");
 const fs = require("fs");
 const url = require('url');
 
-var moment = require('moment');
-require('moment-timezone');
-moment.tz.setDefault("Asia/Seoul");
-
 var upload_id;
 var comment_seq;
 var comment_title;

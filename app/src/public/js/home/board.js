@@ -34,6 +34,16 @@ $('label').on('click', function(){
     location = '/board?id=' + id;
 });
 
+$('.fa-ellipsis-h').on('click', function(){
+    $("#modal").attr("style", "display:block");
+});
+
+$(".modal_layer, #cancel").click(function(){
+    $("#modal").attr("style", "display:none");
+}); 
+
+
+
 // 유튜브 자동재생
 // $(document).ready(function() {
 // 	$('.pre_video')
