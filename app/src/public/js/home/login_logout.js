@@ -1,7 +1,7 @@
 const urlQuery = window.location.search; // url query 조회
 const urlParams = new URLSearchParams(urlQuery); // id의 값을 조회하기 위한 준비
 const req_id = urlParams.get('id'); // id 값으로 초기화
-const req_extension = urlParams.get('extension'); // id 값으로 초기화
+const req_extension = urlParams.get('extension'); // 사진 인지 영상 인지 구분 하기 위해
 const contents = window.location.pathname[6]; // video 페이지 인지 video_board 페이지인디 _를 통해 구분
 const contents_num = urlParams.get('n'); // 댓글 작성 후 n을 넘겨주기 위해
 

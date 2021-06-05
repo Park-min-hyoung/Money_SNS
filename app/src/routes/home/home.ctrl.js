@@ -5,8 +5,9 @@ const fs = require("fs");
 const url = require('url');
 
 var upload_id;
+ // 댓글 처리 하기위한 변수
 var comment_seq;
-var comment_title;
+var comment_title; 
 
 const output = {
     home: (req, res) => {
@@ -33,15 +34,17 @@ const output = {
             await photo_user.photoDelete(delete_seq); // seq에 해당하는 photo의 테이블의 데이터를 삭제
             await photo_user.photooverlapDelete(photo_delete_title[1] + delete_seq); // photo_like 테이블에 삭제될 사진의 overlap을 삭제
             await photo_user.photocommentoverlapDelete(photo_delete_title[1] + delete_seq); // photo_comment 테이블에 삭제될 사진의 overlap을 삭제
+
             await photo_user.photoseqUpdate(delete_seq); // photo 테이블에 seq가 삭제 되었으므로 업데이트
             var photo_final_seq = await photo_user.photoseqSearch(); // title의 목록을 만들기 위해 마지막 seq 조회
             var photo_comment_final_seq = await photo_user.photocommentseqSearch();
             await photo_user.seqstartupdatePhoto(photo_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(photo TB)
             await photo_user.commentseqstartupdatePhoto(photo_comment_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(photo_comment TB)
+
             await photo_user.minusPoint(photo_delete_title[3]); // 삭제한 사진을 업로드한 user의 point를 차감
             fs.unlink(`./src/public/uploads/photo/` + photo_delete_title[1] + delete_seq + `.png`,(err)=>{})
             
-            for (var i = 1; i <= photo_final_seq; i++){ // 삭제한 사진의 뒤의 seq에 해당하는 사진 파일과 데이터 업데이트
+            for (var i = 1; i <= photo_final_seq; i++){ // 삭제한 사진 뒤의 seq에 해당하는 사진 파일과 데이터 업데이트
                 var photo_title = await photo_user.photoSearchTitle(i);
                 photo_array.push(photo_title);
                 if (i > delete_seq - 1) {
@@ -52,9 +55,10 @@ const output = {
             }
 
             delete_seq = parseInt(queryData.seq);
+            // 삭제 한 뒤 나머지 사진에서 댓글이 정상적으로 출력되기 위한 작업
             for (var i = delete_seq + 1; i <= photo_final_seq + 1; i++) { // 삭제한 사진의 overlap 숫자보다 큰 사진들의 숫자들을 -1 하기 위해서
                 var photo_comment_title = await photo_user.photoSearchTitle(i - 1);
-                await photo_user.videocommentoverlapUpdate(photo_comment_title, i, i - 1); // photo_comment TB에서 삭제된 사진의 뒤의 사진들의 overlap 번호를 -1
+                await photo_user.photocommentoverlapUpdate(photo_comment_title, i, i - 1); // photo_comment TB에서 삭제된 사진의 뒤의 사진들의 overlap 번호를 -1
             }
             
             var video_final_seq = await photo_user.videoseqSearch();
@@ -67,11 +71,13 @@ const output = {
             await video_user.videoDelete(delete_seq); // seq에 해당하는 데이터를 삭제
             await video_user.videooverlapDelete(video_delete_title[1] + delete_seq); // video TB에서 삭제될 사진의 overlap을 삭제
             await video_user.videocommentoverlapDelete(video_delete_title[1] + delete_seq); // video_comment TB에서 삭제될 사진의 overlap을 삭제
+
             await video_user.videoseqUpdate(delete_seq); // seq가 삭제 되었으므로 업데이트
             var video_final_seq = await video_user.videoseqSearch(); // title의 목록을 만들기 위해 마지막 seq 조회
             var video_comment_final_seq = await video_user.videocommentseqSearch();
             await video_user.seqstartupdateVideo(video_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트
             await video_user.commentseqstartupdateVideo(video_comment_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(video_comment TB)
+
             await video_user.minusPoint(video_delete_title[3]); // 삭제한 사진을 업로드한 user의 point를 차감
             fs.unlink(`./src/public/uploads/video/` + video_delete_title[1] + delete_seq + `.mp4`,(err)=>{});
             fs.unlink(`./src/public/uploads/thumbnail/` + video_delete_title[1] + delete_seq + `.png`,(err)=>{});
@@ -88,6 +94,7 @@ const output = {
                 }
             }
 
+            // 삭제 한 후 사진이 정상적으로 출력 되기 위한 작업
             delete_seq = parseInt(queryData.seq);
             for (var i = delete_seq + 1; i <= video_final_seq + 1; i++) { // 삭제한 영상의 overlap 숫자보다 큰 사진들의 숫자들을 -1 하기 위해서
                 var video_comment_title = await video_user.videoSearchTitle(i - 1);
@@ -151,6 +158,7 @@ const output = {
     },
     board_id: async (req, res) => {
         var id = req.params.id;
+
         var queryData = url.parse(req.url, true).query;
         var check = queryData.like;
         var photo_seq = queryData.n;
@@ -159,6 +167,7 @@ const output = {
         var photo_comment_update = queryData.comment_update_seq;
         var update_comment = queryData.update_comment;
         upload_id = queryData.id;
+
         comment_seq = photo_seq;
         comment_title = id;
 
@@ -202,6 +211,7 @@ const output = {
         var photo_comment_contents = [];
         var photo_comment_time = [];
         var photo_comment_seq = [];
+
         for (var i = 0; i < comment_cnt; i++) { // board_photo.ejs에서 댓글 출력 하기 위한 객체에 값을 저장
             var photo_comment_infromation = await photo_user.photocommentgetId("%" + id + photo_seq);
             photo_comment_id.push(photo_comment_infromation[0]);
@@ -229,6 +239,7 @@ const output = {
     },
     board_video_id: async (req, res) => {
         var id = req.params.id;
+        
         var queryData = url.parse(req.url, true).query;
         var check = queryData.like;
         var video_seq = queryData.n;
@@ -237,6 +248,7 @@ const output = {
         var video_comment_update = queryData.comment_update_seq;
         var update_comment = queryData.update_comment;
         upload_id = queryData.id; 
+        
         comment_seq = video_seq;
         comment_title = id;
 
@@ -280,6 +292,7 @@ const output = {
         var video_comment_contents = [];
         var video_comment_time = [];
         var video_comment_seq = [];
+        
         for (var i = 0; i < comment_cnt; i++) { // board_video.ejs에서 댓글 출력 하기 위한 객체에 값을 저장
             var video_comment_infromation = await video_user.videocommentgetId("%" + id + video_seq);
             video_comment_id.push(video_comment_infromation[0]);
@@ -325,7 +338,7 @@ const process = {
                 await user.plusPoint(upload_id);
                 return res.json(response);
             }
-        } else {
+        } else { // 사진 또는 영상 추가하는 버튼
             if (req.file !== undefined) { // 파일이 선택 되었다면
                 if (req.file.mimetype === 'image/jpeg' || req.file.mimetype === "image/png") { // 사진을 추가했을 때
                     const response = { success: true, image: req.file.filename, destination: req.file.destination};

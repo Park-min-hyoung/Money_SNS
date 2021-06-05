@@ -187,6 +187,7 @@
     background: rgba(0,0,0,.9);
     z-index: 1;
   }
+
   input[id*="popup"]:checked + label + div {
     opacity: 1;
     visibility: visible;
@@ -201,13 +202,7 @@
     font-size: var(--font-hometext);
   }
 
-  /* 영상 신고 버튼 */
-  /* #video_declaration button {
-    float: right;
-    font-size: var(--font-headermenu);
-  } */
-
-  /* 모달창 본체 */
+  /* 모달창을 감싸는 div */
   #modal {
     display: none;
     position:absolute;
@@ -216,7 +211,8 @@
     height:100%;
     z-index:1;
   }
-  
+
+  /*모달 버튼 크기 및 위치 */
   #modal #photo_declaration button,
   #modal #photo_delete button,
   #modal #cancel button {
@@ -225,6 +221,7 @@
     height: 50px;
   }
   
+  /* 모달창 */
   #modal .modal_top_content {
     width:400px;
     height: 150px;
@@ -234,6 +231,7 @@
     border:2px solid #666;
   }
   
+  /* 모달 창 바깥 부분 */
   #modal .modal_layer {
     position:fixed;
     top:0;
@@ -244,7 +242,7 @@
     z-index:-1;
   }   
 
-    /* 사진 댓글 관련 div 태그 */
+  /* 사진 댓글 관련 div 태그 */
   #photo_comment {
     position: absolute;
     top: 570px;

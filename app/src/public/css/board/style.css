@@ -19,6 +19,7 @@
     --base-duration: 300ms;
 }
 
+/* 사진, 영상 업로드 버튼 */
 #photo_upload,
 #video_upload {
     display: block;

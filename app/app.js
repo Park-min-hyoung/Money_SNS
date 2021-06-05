@@ -19,7 +19,5 @@ app.use(express.urlencoded( {extended: true} ));
 
 app.use("/", home); // use -> 미들 웨어를 등록해주는 메소드
 app.use("/", board);
-// app.use("/board", board);
-// app.use("/txt_upload", board);
 
 module.exports = app;

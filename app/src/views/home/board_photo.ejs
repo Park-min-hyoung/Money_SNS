@@ -21,7 +21,6 @@
             <ul class="login__wrap" id="login__wrap"></ul>
             <ul class="logout__wrap" id="logout__wrap"></ul>
 
-
             <!-- Select Content -->
             <section id="intro">
                 <div class="intro__container">
@@ -42,18 +41,15 @@
                                                 <div id="cancel"><button>취소</button></div>
                                             </div>
                                             <div class="modal_layer"></div>
-                                        </div>
-                                        
-                                        
+                                        </div><hr>
 
-                                        </i><hr>
                                         <div id="video_nickname" name="<%= user_id %>"></div>
                                         <div id="introduce" style="overflow:auto; width:95%; height:370px"><%= description %>
                                             <% for(var i = comment_cnt - 1; i >= 0; i--){ %>
                                                 <div>
                                                     <% if(comment_time[i] < 1){ %>
                                                         <%= Math.floor(comment_time[i] * 60) %>초 전 <!-- 1분 이하이므로 분으로 초로 수정 -->
-                                                    <% } else if(comment_time[i] >= 60) { %>
+                                                    <% } else if(comment_time[i] >= 60 && comment_time[i] < 1440) { %>
                                                         <%= Math.floor(comment_time[i] / 60) %>시간 전 <!-- 1시간이 지나서 분으로 시간으로 수정 -->
                                                     <% } else if(comment_time[i] >= 1440) { %>
                                                         <%= Math.floor(comment_time[i] / 60 / 24) %>일 전 <!-- 1일이 지나서 시간을 일로 수정 -->

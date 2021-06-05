@@ -2,10 +2,13 @@
 
 const video_plusBtn = document.querySelector("#plus_video_btn"),
  upload_videofile = document.querySelector("#file1"),
+
  photo_plusBtn = document.querySelector("#plus_photo_btn"),
  upload_photofile = document.querySelector("#file2"),
+
  thumbnail_photo_plusBtn = document.querySelector("#plus_thumbnailphoto_btn"),
  upload_thumbnail_photofile = document.querySelector("#file3"),
+ 
  title = document.querySelector("#title"),
  description = document.querySelector("#description"),
  submitBtn = document.querySelector("#button");
