@@ -420,7 +420,6 @@ class UserStorage {
         });
     }
 
-     /////
     static async deletecommentPhoto(delete_seq) {
         const query = "DELETE FROM photo_comment WHERE seq = ?;";
             db.query(query, 

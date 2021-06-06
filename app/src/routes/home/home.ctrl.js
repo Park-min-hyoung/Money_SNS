@@ -309,6 +309,30 @@ const output = {
             comment_id:video_comment_id, comment_contents:video_comment_contents, comment_time:video_comment_time,
             comment_seq:video_comment_seq});
     },
+    find: (req, res) => {
+        res.render("home/find");
+    },
+    join: (req, res) => {
+        res.render("home/join");
+    },
+    login2: (req, res) => {
+        res.render("home/login2");
+    },
+    member: (req, res) => {
+        res.render("home/member");
+    },
+    resign: (req, res) => {
+        res.render("home/resign");
+    },
+    resignA: (req, res) => {
+        res.render("home/resignA");
+    },
+    terms: (req, res) => {
+        res.render("home/terms");
+    },
+    chat: (req, res) => {
+        res.render("home/chat");
+    },
 };
 
 const process = {
