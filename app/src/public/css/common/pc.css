@@ -291,6 +291,22 @@
     top: 560px;
     width: 100%;
   }
+  /* 사진 광고 배너 관련 div 태그 */
+  #photo__banner__wrap {
+    position: absolute;
+    background-color: var(--color-white);
+    margin: auto;
+    top: 640px;
+    width: 100%;
+  }
+  /* 광고 배너 디자인 */
+  #photo__banner__wrap .photo__banner__container {
+    height: 100px;
+    margin: auto;
+    font-size: var(--font-biglogo);
+    text-align: center;
+    line-height: 110px;
+  }
 
   /* banner */
   #banner__wrap {

@@ -94,10 +94,12 @@
                                     <%= Math.floor(comment_time[i]) %>분 전
                                 <% } %>
                                 
-                                <span><button onclick="videocommentDelete(<%= comment_seq[i] %>)">
-                                    댓글 삭제</button></span>
-                                <span><button onclick="videocommentUpdate(<%= comment_seq[i] %>)">
-                                    댓글 수정</button></span>
+                                <% if(comment_id[i] === id){ %> <!-- id는 방문자의 id를 나타낸다, 댓글 작성자와 방문자가 같아야 수정 및 삭제 가능-->
+                                    <span><button onclick="videocommentDelete(<%= comment_seq[i] %>)">
+                                        댓글 삭제</button></span>
+                                    <span><button onclick="videocommentUpdate(<%= comment_seq[i] %>)">
+                                        댓글 수정</button></span>
+                                <% } %>
                             </div>
                             <div><%= comment_id[i] %><span> <%= comment_contents[i] %></span></div><br>
                         <% } %>  
@@ -106,9 +108,11 @@
             </section>
 
             <!-- banner -->
-            <section id="banner__wrap">
-                <div class="banner__container">Banner Img</div>
-            </section>
+            <% if(banner_check_point > 100){ %> 
+                <section id="banner__wrap">
+                    <div class="banner__container">Banner Img</div>
+                </section>
+            <% } %>
 
             <!-- footer -->
             <footer id="footer__wrap">

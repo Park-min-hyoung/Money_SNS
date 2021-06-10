@@ -59,10 +59,10 @@ class UserStorage {
         });
     }
 
-    static async addPoint(pt, id) {
+    static async addPoint(pt, id, pluspoint) {
         const query = "UPDATE users SET point=? WHERE id = ?";
         db.query(query, 
-        [pt + 10, id],
+        [pt + pluspoint, id],
         (err) => {
             if(err) reject(`${err}`);
         })

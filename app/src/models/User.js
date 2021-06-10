@@ -56,9 +56,14 @@ class User {
         }
     }
 
-    async plusPoint(id) {
+    async getPoint(id) {
         const {point} = await UserStorage.searchPoint(id);
-        await UserStorage.addPoint(point, id);
+        return point;
+    }
+
+    async plusPoint(id, pluspoint) {
+        const {point} = await UserStorage.searchPoint(id);
+        await UserStorage.addPoint(point, id, pluspoint);
     }
 
     async minusPoint(id) {

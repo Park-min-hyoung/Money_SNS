@@ -57,11 +57,13 @@
                                                         <%= Math.floor(comment_time[i]) %>분 전
                                                     <% } %>
 
-                                                    <span><button onclick="photocommentDelete(<%= comment_seq[i] %>)">
-                                                        댓글 삭제</button></span>
-                                                    <span><button onclick="photocommentUpdate(<%= comment_seq[i] %>)">
-                                                        댓글 수정</button></span>
-                                                    </div>
+                                                    <% if(comment_id[i] === id){ %> <!--댓글 작성자와 방문자가 같아야 수정 및 삭제 가능, id는 방문자의 id를 나타낸다-->
+                                                        <span><button onclick="photocommentDelete(<%= comment_seq[i] %>)">
+                                                            댓글 삭제</button></span>
+                                                        <span><button onclick="photocommentUpdate(<%= comment_seq[i] %>)">
+                                                            댓글 수정</button></span>
+                                                    <% } %>
+                                                </div>
                                                 <div><%= comment_id[i] %><span> <%= comment_contents[i] %></span></div><br>
                                             <% } %>                                          
                                         </div>
@@ -79,6 +81,11 @@
                                         </div>
                                         <div id="for_like" name="<%= seq %>"></div>
                                     </div>
+                                    <% if(banner_check_point > 100){ %> 
+                                        <div id="photo__banner__wrap">
+                                            <div class="photo__banner__container">Banner Img</div>
+                                        </div>
+                                    <% } %>
                                     <label for="popup" class="close" id="c1" value>X</label>
                                 </div>
                                 <label for="popup" class="close" id="c2" value></label>

@@ -173,6 +173,7 @@ const output = {
 
         const photo_user = new User();
         var photo_title_des_like = await photo_user.photoSearchTitledesLike(photo_seq); // photo의 title, des, like를 DB에서 같이 가져오는 소스코드
+        var user_point = await photo_user.getPoint(photo_title_des_like[3]); // user의 point에 따라 광고를 표시 할지 말지 결정하기 위한 소스코드
 
         var photo_like_cnt = photo_title_des_like[0];
         await photo_user.photoLike(upload_id, id, photo_seq); // 특정 id의 해당 사진을 방문한 이력을 가지고 있는 DB 생성
@@ -183,6 +184,7 @@ const output = {
             photo_like_cnt += 1;
             await photo_user.photoChecklike(upload_id + id + photo_seq, check); // 방문 이력이 있는 DB의 like_check 값을 1로 수정
             photo_like_check = 1;
+            await photo_user.plusPoint(photo_title_des_like[3], 5); // 좋아요 누른 사진을 업로드한 user의 point + 5
         }
         else if (check == 0 && photo_like_check == 1) {
             await photo_user.photoUpatelike(photo_seq, check);
@@ -226,7 +228,7 @@ const output = {
         res.render('home/board_photo', {title:photo_title_des_like[1], description:photo_title_des_like[2], like:photo_like_cnt, 
             like_check:photo_like_check, user_id:photo_title_des_like[3], id:upload_id, seq:photo_seq, comment_cnt:comment_cnt, 
             comment_id:photo_comment_id, comment_contents:photo_comment_contents, comment_time:photo_comment_time,
-            comment_seq:photo_comment_seq});
+            comment_seq:photo_comment_seq, banner_check_point:user_point});
     },
     upload: (req, res) => {
         res.render("home/upload");
@@ -254,6 +256,7 @@ const output = {
 
         const video_user = new User();
         var video_title_des_like  = await video_user.videoSearchTitledesLike(video_seq);
+        var user_point = await video_user.getPoint(video_title_des_like[3]); // user의 point에 따라 광고를 표시 할지 말지 결정하기 위한 소스코드
 
         var video_like_cnt = video_title_des_like[0];
         await video_user.videoLike(upload_id, id, video_seq); // 특정 id의 해당 영상을 방문한 이력을 가지고 있는 DB 생성
@@ -264,6 +267,7 @@ const output = {
             video_like_cnt += 1;
             await video_user.videoChecklike(upload_id + id + video_seq, check); // 방문 이력이 있는 DB의 like_check 값을 3로 수정
             video_like_check = 3;
+            await video_user.plusPoint(video_title_des_like[3], 5); 
         }
         else if (check == 2 && video_like_check == 3) {
             await video_user.videoUpatelike(video_seq, check);
@@ -307,7 +311,7 @@ const output = {
         res.render('home/board_video', {title:video_title_des_like[1], description:video_title_des_like[2], like:video_like_cnt, 
             like_check:video_like_check, user_id:video_title_des_like[3], id:upload_id, seq:video_seq, comment_cnt:comment_cnt, 
             comment_id:video_comment_id, comment_contents:video_comment_contents, comment_time:video_comment_time,
-            comment_seq:video_comment_seq});
+            comment_seq:video_comment_seq, banner_check_point:user_point});
     },
     find: (req, res) => {
         res.render("home/find");
@@ -355,11 +359,11 @@ const process = {
             const user = new User(req.body);
             if (extension == "mp4"){
                 const response = await user.videoUpload(upload_id);
-                await user.plusPoint(upload_id);
+                await user.plusPoint(upload_id, 10);
                 return res.json(response);
             } else {
                 const response = await user.photoUpload(upload_id);
-                await user.plusPoint(upload_id);
+                await user.plusPoint(upload_id, 10);
                 return res.json(response);
             }
         } else { // 사진 또는 영상 추가하는 버튼
