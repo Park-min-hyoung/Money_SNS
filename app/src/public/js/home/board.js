@@ -115,12 +115,15 @@ $('#video_delete').on('click', function(){
 });
 
 var upload_id = document.getElementById("video_nickname").getAttribute('name');
-if (upload_id == req_id) { // 자신이 업로드한 사진이나 영상만 삭제 버튼이 보인다
+if (upload_id === req_id) { // 자신이 업로드한 사진이나 영상만 삭제 버튼이 보인다
     if (contents == "_"){ // board_video 창에서
-        document.getElementById('video_delete').style.display = "block";
+        document.getElementById('video_delete').style.display = "inline-block";
     } else {
         document.getElementById('Photo_delete').style.display = "block";
+        document.getElementById('Photo_delete_line').style.display = "block";
     }
+} else { // 자신이 업로드한 사진이 아닌 경우 삭제 하지 못하므로 칸이 1개 없으므로 전체 높이를 줄여준다
+    document.getElementById('modal_top_content').style.height = "100px";
 }
 
 // 사진에서 댓글 삭제 버튼을 눌렀을 때

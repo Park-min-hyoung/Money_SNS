@@ -193,7 +193,7 @@
     visibility: visible;
   }
 
-  /* 둥근 메뉴 위치 */
+  /* 둥근 가로 메뉴 위치(사진) */
   .fa-ellipsis-h {
     position: absolute;
     top: 20px;
@@ -222,7 +222,7 @@
   }
   
   /* 모달창 */
-  #modal .modal_top_content {
+  #modal #modal_top_content {
     width:400px;
     height: 150px;
     margin:200px auto;
@@ -240,8 +240,60 @@
     height:100%;
     background:rgba(0, 0, 0, 0.5);
     z-index:-1;
-  }   
-
+  }
+  /* 영상 신고 및 삭제 아이콘 포함하는 div 태그 */
+  #video_manage {
+    display: inline-block;
+    width: 1055px;
+    text-align: right;
+  }
+  /* 영상 신고 아이콘 */
+  #video_manage #video_declaration{
+    display: inline-block;
+    margin: auto 10px;
+  }
+  
+  /* 댓글 수정 버튼 CSS */
+  #comment__update__btn {
+    color: white;
+    border: 1px solid #FB8F3D; 
+    background: -webkit-linear-gradient(top, #FDA251, #FB8F3D);
+    background: -moz-linear-gradient(top, #FDA251, #FB8F3D);
+    background: -ms-linear-gradient(top, #FDA251, #FB8F3D);
+    border-radius: 10%;
+  }
+  #comment__update__btn:hover {
+    border: 1px solid #EB5200;
+    background: -webkit-linear-gradient(top, #FD924C, #F9760B); 
+    background: -moz-linear-gradient(top, #FD924C, #F9760B); 
+    background: -ms-linear-gradient(top, #FD924C, #F9760B); 
+    box-shadow: 0 1px #EFEFEF;
+  }
+  #comment__update__btn:active {
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.3);
+  }
+  /* 댓글 삭제 버튼 CSS */
+  #comment__delete__btn {
+    background: -webkit-linear-gradient(top, #DD4B39, #D14836); 
+    background: -moz-linear-gradient(top, #DD4B39, #D14836); 
+    background: -ms-linear-gradient(top, #DD4B39, #D14836); 
+    border: 1px solid #DD4B39;
+    color: white;
+    text-shadow: 0 1px 0 #C04131;
+    border-radius: 10%;
+  }
+  #comment__delete__btn:hover {
+    background: -webkit-linear-gradient(top, #DD4B39, #C53727);
+    background: -moz-linear-gradient(top, #DD4B39, #C53727);
+    background: -ms-linear-gradient(top, #DD4B39, #C53727);
+    border: 1px solid #AF301F;
+  }
+  #comment__delete__btn:active {
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.2);
+    background: -webkit-linear-gradient(top, #D74736, #AD2719);
+    background: -moz-linear-gradient(top, #D74736, #AD2719);
+    background: -ms-linear-gradient(top, #D74736, #AD2719);
+  }
   /* 사진 댓글 관련 div 태그 */
   #photo_comment {
     position: absolute;

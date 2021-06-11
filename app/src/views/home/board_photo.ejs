@@ -35,9 +35,9 @@
                                         <div id="nickname"><%= title %></div>
                                         <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
                                         <div id="modal">
-                                            <div class="modal_top_content">
+                                            <div id="modal_top_content">
                                                 <div id="photo_declaration"><button type="button">신고</button></div><hr>
-                                                <div id="photo_delete"><button id="Photo_delete" type="button" style="display: none;">삭제</button></div><hr>
+                                                <div id="photo_delete"><button id="Photo_delete" type="button" style="display: none;">삭제</button></div><hr id="Photo_delete_line" style="display: none;">
                                                 <div id="cancel"><button>취소</button></div>
                                             </div>
                                             <div class="modal_layer"></div>
@@ -58,9 +58,9 @@
                                                     <% } %>
 
                                                     <% if(comment_id[i] === id){ %> <!--댓글 작성자와 방문자가 같아야 수정 및 삭제 가능, id는 방문자의 id를 나타낸다-->
-                                                        <span><button onclick="photocommentDelete(<%= comment_seq[i] %>)">
+                                                        <span><button id="comment__delete__btn" onclick="photocommentDelete(<%= comment_seq[i] %>)">
                                                             댓글 삭제</button></span>
-                                                        <span><button onclick="photocommentUpdate(<%= comment_seq[i] %>)">
+                                                        <span><button id="comment__update__btn" onclick="photocommentUpdate(<%= comment_seq[i] %>)">
                                                             댓글 수정</button></span>
                                                     <% } %>
                                                 </div>
