@@ -79,7 +79,7 @@ else {
 }
 
 // 좋아요(하트) 클릭시 변화
-$('.far, .fas').on('click', function(){
+$('.fa-heart, .fa-heart').on('click', function(){
     if (like_check == 0){ // 체크 되지 않았을 때 클릭하면
         location = "/board/" + title + "?id=" + id + "&n=" + seq + "&like=1";
     } 
@@ -97,12 +97,16 @@ $('.far, .fas').on('click', function(){
 // 사진창에서 신고 클릭 시 DB에 카운터
 $('#photo_declaration').on('click', function(){
     var declaration_text = prompt("어떠한 사유로 신고하시는지 자세히 적어주세요");
-    location = "/board/" + title + "?id=" + id + "&n=" + seq + "&declaration=" + declaration_text;
+    if (declaration_text !== null && declaration_text !== ""){
+        location = "/board/" + title + "?id=" + id + "&n=" + seq + "&declaration=" + declaration_text;
+    }
 });
 // 영상에서 신고 클릭 시 DB에 카운터
 $('#video_declaration').on('click', function(){
     var declaration_text = prompt("어떠한 사유로 신고하시는지 자세히 적어주세요");
-    location = "/board_video/" + title + "?id=" + id + "&n=" + seq + "&declaration=" + declaration_text;
+    if (declaration_text !== null && declaration_text !== "") {
+        location = "/board_video/" + title + "?id=" + id + "&n=" + seq + "&declaration=" + declaration_text;
+    }
 });
 
 // 사진에서 게시물 삭제 버튼을 눌렀을때

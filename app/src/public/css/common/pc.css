@@ -241,16 +241,18 @@
     background:rgba(0, 0, 0, 0.5);
     z-index:-1;
   }
-  /* 영상 신고 및 삭제 아이콘 포함하는 div 태그 */
-  #video_manage {
+   /* 영상 신고 아이콘 */
+   #video_declaration{
     display: inline-block;
-    width: 1055px;
-    text-align: right;
+    font-size: 30px;
+    float: right;
   }
-  /* 영상 신고 아이콘 */
-  #video_manage #video_declaration{
+  /* 영상 게시물 삭제 아이콘 */
+  #video_delete{
     display: inline-block;
-    margin: auto 10px;
+    font-size: 30px;
+    margin: 0 20px;
+    float: right;
   }
   
   /* 댓글 수정 버튼 CSS */
