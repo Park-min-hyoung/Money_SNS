@@ -1,6 +1,6 @@
 "use strict";
 
-const User = require("../../models/User");
+const User = require("../../models/Board");
 const fs = require("fs");
 const url = require('url');
 

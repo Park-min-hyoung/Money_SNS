@@ -41,6 +41,7 @@ $(document).ready(function () {
             {
               alert("입력이 가능합니다.");
               $("#join").submit();
+              
             }
 
           },
