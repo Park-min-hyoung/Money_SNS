@@ -30,14 +30,14 @@ router.get("/finded", ctrl.output.finded); //3
 router.get("/membered", ctrl.output.membered); //1
 router.get("/loginout", ctrl.output.loginout); //2
 
-router.post("/finding", ctrl.process.finding); //8
-router.post("/nickcheck", ctrl.process.nickcheck); //2
 router.post("/usercheck", ctrl.process.usercheck); //1
+router.post("/nickcheck", ctrl.process.nickcheck); //2
 router.post("/docheck", ctrl.process.docheck); //4
 router.post("/member", ctrl.process.member); //3
-router.post("/member2", ctrl.process.member2); //5
+router.post("/member2", ctrl.process.member2); //5 // 보류
+router.post("/loging", ctrl.process.loging); //6 // 보류
 router.post("/modfiy-save", ctrl.process.modfiysave); //7
-router.post("/loging", ctrl.process.loging); //6
+router.post("/finding", ctrl.process.finding); //8
 router.post("/resigned", ctrl.process.resigned); //9
 
 module.exports = router;

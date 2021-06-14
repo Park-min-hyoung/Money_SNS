@@ -3,15 +3,15 @@
 const db = require("../config/db");
 
 class UserStorage {
-    static getUserInfo(id) {
-        return new Promise((resolve, reject) => {
-          const query = "SELECT * FROM users WHERE id = ?;";
-          db.query(query, [id], (err, data) => {
-            if (err) reject(`${err}`);
-            else resolve(data[0]);
-          });
-        });
-      }
+    // static getUserInfo(id) {
+    //     return new Promise((resolve, reject) => {
+    //       const query = "SELECT * FROM users WHERE id = ?;";
+    //       db.query(query, [id], (err, data) => {
+    //         if (err) reject(`${err}`);
+    //         else resolve(data[0]);
+    //       });
+    //     });
+    //   }
 
     // static async save(userInfo) {
     //     return new Promise((resolve, reject) => {
@@ -125,6 +125,20 @@ class UserStorage {
               return true;
           }
           });
+      });
+    }
+
+    static loginMember(memberid) {
+      return new Promise((resolve, reject) => {
+        const query = "SELECT * FROM member WHERE memberid = ?;";
+        db.query(query, [memberid], (err, data) => {
+          if (err) {
+            console.log("err ocurred", err);
+          }
+          else {
+            resolve(data);
+          }
+        });
       });
     }
 }

@@ -237,46 +237,38 @@ const process = {
             });
     },
     loging: async(req, res) => {
-        var comand = req.body;
-        var memberid = comand.data1;
-        var password = comand.data2;
+        const user = new User(req.body);
+        const response = await user.login();
 
-        connection.query('SELECT * FROM member WHERE memberid = ?', [memberid], function (error, data) {
+        console.log(response.length);
 
-            if (error) {
-                console.log("err ocurred", error);
+        if (response !== null) {
+            if (req.session.user) 
+            {
+                res.send("<h1>또 오실려고요?</h1>");
             }
             else {
-
-                if (req.session.user) 
-                {
-                    res.send("<h1>또 오실려고요?</h1>");
-                }
-                else {
-
-
-                    if (data.length > 0) {
-                        if (data[0].password == password) 
-                        {
-                            req.session.user = req.body;
-                            req.session.user_id = req.body.data1;
-                            req.session.user.expire = new Date();
-                            console.log("The solution is :", data)
-                            console.log("로그인에 성공하였습니다.");
-                            res.json(data);
-                        }
-                        else {
-                            console.log("비밀번호가 다릅니다.");
-                            res.json(data);
-                        }
+                if (response.length > 0) {
+                    if (response[0].password == req.body.data2) 
+                    {
+                        req.session.user = req.body;
+                        req.session.user_id = req.body.data1;
+                        req.session.user.expire = new Date();
+                        console.log("The solution is :", response)
+                        console.log("로그인에 성공하였습니다.");
+                        return response;
                     }
                     else {
-                        console.log("아이디가 정확하지 않습니다.");
-                        res.json(data);
+                        console.log("비밀번호가 다릅니다.");
+                        return response;
                     }
                 }
+                else {
+                    console.log("아이디가 정확하지 않습니다.");
+                    return response;
+                }
             }
-        });
+        }
     },
     resigned: async(req, res) => {
         var comand = req.body;
