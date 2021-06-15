@@ -141,6 +141,137 @@ class UserStorage {
         });
       });
     }
+
+    static infomationModify(infomation) {
+      return new Promise((resolve, reject) => {
+        const query = "UPDATE member SET password=?, nickname=?,  mail=?, phone=?, passwordfind=?, passwordanswer=? WHERE memberid =?;";
+        db.query(query, [infomation.memberid, infomation.password, infomation.nickname, 
+        information.mobile, infomation.mail, infomation.passwordfind, infomation.passwordanswer], 
+        (err, data) => {
+          if (err) 
+                {
+                    console.log(err);
+                    msg.info("시스템에 오류가 생겨 수정하기 전으로 되돌아갑니다.")
+                    // res.redirect('/modify');
+                }
+                else 
+                {
+                    console.log(Object.keys(data).length);
+                    resolve(data);
+                }
+        });
+      });
+    }
+
+    static infomationFind(infomation) {
+      return new Promise((resolve, reject) => {
+        const query = "UPDATE member SET password=?, nickname=?,  mail=?, phone=?, passwordfind=?, passwordanswer=? WHERE memberid =?;";
+        db.query(query, [infomation.memberid, infomation.password, infomation.nickname, 
+        information.mobile, infomation.mail, infomation.passwordfind, infomation.passwordanswer], 
+        (err, data) => {
+          if (err) 
+                {
+                    console.log(err);
+                    msg.info("시스템에 오류가 생겨 수정하기 전으로 되돌아갑니다.")
+                    // res.redirect('/modify');
+                }
+                else 
+                {
+                    console.log(Object.keys(data).length);
+                    resolve(data);
+                }
+        });
+      });
+    }
+
+    static idFind(mail, phone) {
+      return new Promise((resolve, reject) => {
+        const query = "SELECT memberid FROM member WHERE mail =? AND phone =?;";
+        db.query(query, [mail, phone], (err, data) => {
+          if (data.length != 0) {
+            if (err) {
+                console.log('user infor is:', err);
+            }
+            else {
+                console.log("귀하의 아이디는 :", data[0].memberid);
+                resolve(data);
+            }
+        } else {
+              console.log('귀하의 조건에 맞는 아이디가 존재하지 않습니다.');
+              resolve(data);
+          }
+        });
+      });
+    }
+
+    static passwordFind(memberid, sua, sub) {
+      return new Promise((resolve, reject) => {
+        const query = "SELECT password FROM member WHERE memberid =? AND passwordfind =? AND passwordanswer =?;";
+        db.query(query, [memberid, sua, sub], (err, data) => {
+          if (data.length != 0) {
+              if (err) {
+                  console.log('user infor is:', err);
+              }
+              else {
+                  console.log("귀하의 아이디는 :", memberid);
+                  console.log("그에 맞는 귀하의 비밀번호는", data[0].password);
+                  resolve(data);
+              }
+          }
+          else {
+              console.log('회원 정보에 없는 아이디이거나, 비밀번호 찾기와 답이 틀립니다.');
+              resolve(data);
+          }
+        });
+      });
+    }
+
+    static resignMember(memberid, password1, password2) {
+      return new Promise((resolve, reject) => {
+        const query = "SELECT * FROM member WHERE memberid = ?;";
+        db.query(query, [memberid], (err, data) => {
+          if (data.length != 0) {
+            if (error) {
+              console.log("err ocurred", error);
+            }
+            else {
+                if (data.length > 0) {
+                    if (data[0].password == password1) {
+                        if (password1 == password2) {
+                            console.log("회원님과 함께 할 수 있어 영광이었습니다.");
+                            db.query('DELETE FROM member WHERE memberid = ?', [memberid], function (error, results, field) {
+                                if (error) {
+                                    cnonsole.log("err ocurred", error);
+                                }
+                                else {
+                                    console.log("떠나신 회원님의 앞날에 행복이 있기를....")
+                                    resolve(data);
+                                }
+                            });
+                        }
+                        else {
+                            console.log("본 회사의 회원이나, 두 비밀번호가 다릅니다.");
+                            resolve(data);
+                        }
+                    }
+                    else {
+                        console.log("본 회사의 회원이나, 비밀번호가 다릅니다.");
+                        resolve(data);
+                    }
+                }
+                else {
+                    console.log("관련 아이디가 존재하지 않습니다.");
+                    resolve(data);
+                }
+            }
+          }
+          else {
+              console.log('회원 정보에 없는 아이디이거나, 비밀번호 찾기와 답이 틀립니다.');
+              resolve(data);
+          }
+        });
+      });
+    }
 }
 
 module.exports = UserStorage;

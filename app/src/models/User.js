@@ -74,6 +74,28 @@ class User {
         const response = await UserStorage.loginMember(client.data1);
         return response;
     }
+
+    async modifyInfomation() {
+        const client = this.body;
+        const response = await UserStorage.infomationModify(client);
+        return response;
+    }
+
+    async findId(mail, phone) {
+        const response = await UserStorage.idFind(mail, phone);
+        return response;
+    }
+
+    async findPassword(memberid, sua, sub) {
+        const response = await UserStorage.passwordFind(memberid, sua, sub);
+        return response;
+    }
+
+    async meberResign() {
+        const client = this.body;
+        const response = await UserStorage.resignMember(client.data1, client.data2, client.data3);
+        return response;
+    }
 }
 
 module.exports = User;

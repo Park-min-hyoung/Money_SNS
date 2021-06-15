@@ -22,13 +22,13 @@ router.get("/resign", ctrl.output.resign);
 router.get("/resignA", ctrl.output.resignA);
 router.get("/terms", ctrl.output.terms);
 router.get("/idfind", ctrl.output.idfind);
-router.get("/modify", ctrl.output.modify);
+router.get("/modify", ctrl.output.modify); // 보류
 router.get("/passwordfind", ctrl.output.passwordfind);
 
 // ejs 파일 없는 거
-router.get("/finded", ctrl.output.finded); //3
+router.get("/finded", ctrl.output.finded); //3 
 router.get("/membered", ctrl.output.membered); //1
-router.get("/loginout", ctrl.output.loginout); //2
+router.get("/loginout", ctrl.output.loginout); //2 //보류
 
 router.post("/usercheck", ctrl.process.usercheck); //1
 router.post("/nickcheck", ctrl.process.nickcheck); //2

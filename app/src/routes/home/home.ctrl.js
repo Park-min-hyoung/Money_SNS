@@ -80,6 +80,9 @@ const output = {
     finded: (req, res) => {
         var data1 = req.query.data1;
         var data2 = req.query.data2;
+        console.log(data1);
+        console.log(data2);
+
         if (data1 != "" && data2 == "undefined") {
             res.render("login/passwordfind", { data: data1 });
         }
@@ -89,7 +92,7 @@ const output = {
     },
     membered: (req, res) => {
         var data = req.query.data;
-        res.render('member.ejs', { data: data });
+        res.render("login/meber", { data: data });
     },
     loginout: (req, res) => {
         console.log("clear cookie");
@@ -126,6 +129,8 @@ const process = {
         return res.json(response);
     },
     finding: async(req, res) => {
+        const user = new User(req.body);
+
         var comand = req.body;
         var phone = comand.data1;
         var mail = comand.data2;
@@ -135,44 +140,14 @@ const process = {
 
         console.log(phone);
         console.log(mail);
-
-        if (phone != "" && mail != "" && memberid == "" && sua == "00" && sub == "") {
-            connection.query("SELECT memberid FROM member WHERE mail =? AND phone =?", [mail, phone], function (err, data) {
-                if (data.length != 0) {
-                    if (err) {
-                        console.log('user infor is:', err);
-                    }
-                    else {
-                        console.log("귀하의 아이디는 :", data[0].memberid);
-                        res.json(data);
-                    }
-                }
-                else {
-                    console.log('귀하의 조건에 맞는 아이디가 존재하지 않습니다.');
-                    res.json(data);
-                }
-            });
-        }
-        else if (phone == "" && mail == "" && memberid != "" && sua != "00" && sub != "") {
-            connection.query("SELECT password FROM member WHERE memberid =? AND passwordfind =? AND passwordanswer =?", [memberid, sua, sub], function (err, data) {
-
-
-                if (data.length != 0) {
-                    if (err) {
-                        console.log('user infor is:', err);
-                    }
-                    else {
-                        console.log("귀하의 아이디는 :", memberid);
-                        console.log("그에 맞는 귀하의 비밀번호는", data[0].password);
-                        res.json(data);
-                    }
-                }
-                else {
-                    console.log('회원 정보에 없는 아이디이거나, 비밀번호 찾기와 답이 틀립니다.');
-                    res.json(data);
-                }
-
-            });
+   
+        if (phone != "" && mail != "" && memberid == "" && sua == "00" && sub == ""){
+            const response = await user.findId(mail, phone);
+            return res.json(response);
+        } 
+        else if (phone == "" && mail == "" && memberid != "" && sua != "00" && sub != ""){
+            const response = await user.findPassword(memberid, sua, sub);
+            return res.json(response);
         }
     },
     nickcheck: async(req, res) => {
@@ -183,6 +158,8 @@ const process = {
     },
     usercheck: async(req, res) => {
         const user = new User(req.body);
+        console.log(req.body.data); // 잘들어 온다
+
         const response = await user.idCheck();
 
         return res.json(response);
@@ -208,33 +185,10 @@ const process = {
         }
     },
     modfiysave: async(req, res) => {
-        var comand = req.body;
-        var memberid = comand.memberid;
-        var password = comand.password;
-        var nickname = comand.nickname;
-        var phone = comand.mobile;
-        var email = comand.mail;
-        var sua = comand.passwordfind;
-        var sub = comand.passwordanswer;
+        const user = new User(req.body);
+        const response = await user.modifyInfomation();
 
-        console.log(memberid,password, nickname, email, phone, sua, sub);
-            var sql = 'UPDATE member SET password=?, nickname=?,  mail=?, phone=?, passwordfind=?, passwordanswer=? WHERE memberid =?';
-            var params = [password, nickname, email, phone, sua, sub, memberid];
-            connection.query(sql, params, function (err, data) 
-            {
-                if (err) 
-                {
-                    console.log(err);
-                    msg.info("시스템에 오류가 생겨 수정하기 전으로 되돌아갑니다.")
-                    res.redirect('/modify');
-
-                }
-                else 
-                {
-                    console.log(Object.keys(data).length);
-                    res.json(data);
-                }
-            });
+        return res.json(response);
     },
     loging: async(req, res) => {
         const user = new User(req.body);
@@ -271,50 +225,18 @@ const process = {
         }
     },
     resigned: async(req, res) => {
-        var comand = req.body;
-        var memberid = comand.data1;
-        var password1 = comand.data2;
-        var password2 = comand.data3;
+        const user = new User(req.body);
+        console.log(req.body.data1);
+        console.log(req.body.data2);
+        console.log(req.body.data3);
 
-        connection.query('SELECT * FROM member WHERE memberid = ?', [memberid], function (error, data) {
-
-            if (error) {
-                console.log("err ocurred", error);
-            }
-            else {
-                if (data.length > 0) {
-                    if (data[0].password == password1) {
-                        if (password1 == password2) {
-                            console.log("회원님과 함께 할 수 있어 영광이었습니다.");
-                            connection.query('DELETE FROM member WHERE memberid = ?', [memberid], function (error, results, field) {
-
-                                if (error) {
-                                    cnonsole.log("err ocurred", error);
-                                }
-                                else {
-                                    console.log("떠나신 회원님의 앞날에 행복이 있기를....")
-                                    res.json(data);
-                                }
-                            });
-                        }
-                        else {
-                            console.log("본 회사의 회원이나, 두 비밀번호가 다릅니다.");
-                            res.json(data);
-                        }
-                    }
-                    else {
-                        console.log("본 회사의 회원이나, 비밀번호가 다릅니다.");
-                        res.json(data);
-                    }
-                }
-                else {
-                    console.log("관련 아이디가 존재하지 않습니다.");
-                    res.json(data);
-                }
-            }
-
-        });
+        const response = await user.meberResign();
+        return res.json(response);
     },
+
+        
+
+        
 };
 
 module.exports = {
