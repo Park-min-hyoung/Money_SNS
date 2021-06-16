@@ -9,7 +9,7 @@ $(document).ready(function () {
       $("#popup").fadeOut();
     }
   }); screen
-  $("#TestBtn").click(function () 
+  $("#ResignBtn").click(function () 
   {
 
     var input_value1 = $("input[id='userId']").val();

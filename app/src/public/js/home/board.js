@@ -25,7 +25,7 @@ function selectImg(number) {
 
 // 사진 또는 비디오 항목 선택 시 글자 색상 변경
 $('.section__logo').on('click', function(){
-    $('.section__logo').removeClass('selected');
+    $('.section__logo').removeClass('selected');R
     $(this).addClass('selected');
 });
 

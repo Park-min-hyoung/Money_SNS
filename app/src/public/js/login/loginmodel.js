@@ -9,6 +9,7 @@ $(document).ready(function () {
       $("#popup").fadeOut();
     }
   }); screen
+  
   $("#TestBtn").click(function () {
 
     var input_value1 = $("input[id='userId']").val();
@@ -21,13 +22,15 @@ $(document).ready(function () {
         dataType: 'json',
         type: 'POST',
         data: { data1: input_value1, data2: input_value2 },
+        async: false,
         success: function (result) 
         {
           if (result.length > 0) 
           { 
             if(result[0].password == input_value2)
             {
-              location.href = "/index";
+              alert('hello');
+              location.href = "/board?id=" + input_value1;
             }
             else
             {

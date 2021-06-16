@@ -17,7 +17,7 @@ $(document).ready(function ()
       $("#popup").fadeOut();
     }
   }); screen
-  $("#TestBtn").click(function () {
+  $("#ModifyBtn").click(function () {
 
     var input_value1 = $("input[id='userId']").val();
     var input_value2 = $("input[id='password1']").val();

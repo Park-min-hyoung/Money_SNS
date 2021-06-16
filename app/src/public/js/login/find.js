@@ -29,6 +29,8 @@ $(function () {
             $('#aaax').css('display', 'none');
             
             $('#_check6').css('display', 'none');
+
+            $('#TestBtn').attr("disabled",false);
             
         }
 
@@ -63,6 +65,8 @@ $(function () {
                 position: 'relative'
             });
             $('#_check6').css({display : 'block', position: 'relative'});
+
+            $('#TestBtn').attr("disabled",false);
        } 
 
     });

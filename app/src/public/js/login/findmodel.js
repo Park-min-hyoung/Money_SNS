@@ -12,7 +12,6 @@ $(document).ready(function () {
 
     $("#TestBtn").click(function () 
     {
-
         var input_value1 = $("input[id='mobile']").val();
         var input_value2 = $("input[id='mail']").val();
         var input_value3 = $("input[id='userId']").val();
@@ -22,6 +21,8 @@ $(document).ready(function () {
 
         if ((input_value1 != "" && input_value2 != "") || (input_value3 != "" && input_value4 != "" && input_value5 != "")) 
         {
+            alert("hi");
+            alert(input_value2);
             $.ajax({
                 url: '/finding',
                 dataType: 'json',

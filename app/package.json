@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/Park-min-hyoung/login-lecture-excute#readme",
   "dependencies": {
+    "ajax": "^0.0.4",
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.6.0",
     "ejs": "^3.1.6",

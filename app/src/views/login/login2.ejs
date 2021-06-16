@@ -71,14 +71,36 @@
             <span class="box int_pass">
               <input type="password" id="password1" class="int" maxlength="20" name="password1" placeholder="비밀번호 입력" onblur = "check(form.userId.value, form,password1.value)">
             </span>
+          </form>
 
               <a href = '/join' style="color: black; font-size: 0.8em; font-weight: bold;" title="회원가입"> 회원가입 </a> 
               <a href = '/find' style="color: black; font-size: 0.8em; font-weight: bold;" title="아이디/비밀번호 찾기"> 아이디/비밀번호 찾기 </a> 
           </div>
          </div> 
-        <button id = "TestBtn" type = "submit"  class="snip1535" disabled = true> 로그인</button>
+        <button id="TestBtn" type = "submit"  class="snip1535" disabled = true> 로그인</button>
       </div>
     </section>
+
+    <div class="popup-wrap" id="popup">
+      <div class="popup">
+        <div class="popup-body">
+          <div class="body-content">
+            <div class="body-titlebox">
+              <h1 class="txt0">Confirm Modal</h1>
+            </div>
+            <div class="body-contentbox">
+              <label class="txt9" id = "erroring"> 아이디와 비밀번호를 입력하셔야 합니다.</label>
+            </div>
+            
+          </div>
+        </div>
+        <div class="popup-foot">
+          <span class="pop-btn confirm" id="confirm">확인</span>
+        </div>
+      </div>
+   </div>
+
+
 
     <!-- banner -->
     <section id="banner__wrap">
