@@ -21,8 +21,6 @@ $(document).ready(function () {
 
         if ((input_value1 != "" && input_value2 != "") || (input_value3 != "" && input_value4 != "" && input_value5 != "")) 
         {
-            alert("hi");
-            alert(input_value2);
             $.ajax({
                 url: '/finding',
                 dataType: 'json',
@@ -57,5 +55,45 @@ $(document).ready(function () {
         }
 
     })
+    $('#mobile').keypress(function (e) 
+    {
+        var input_value1 = $("input[id='mobile']").val();
+        var input_value2 = $("input[id='mail']").val();
+       
 
+        if (e.which == 13) 
+        {
+            if (input_value1 != "" && input_value2 != "") 
+            {   
+                $('#TestBtn').click();
+            }
+            else
+            {
+                $("#erroring").text('하나 이상의 값을 입력하지 않으셨습니다.');
+                $("#popup").css('display', 'flex').hide().fadeIn();
+            }
+        }
+
+    })//수정 : 폼의 비밀번호에서 엔터키를 누를 시 키 감지 가능.
+    $('#subb').keypress(function (e) 
+    {
+        var input_value3 = $("input[id='userId']").val();
+        var input_value4 = $("select[name ='suba']").val();
+        var input_value5 = $("input[id='subb']").val();
+
+        if (e.which == 13) 
+        {
+            if (input_value3 != "" && input_value4 != "" && input_value5 != "") 
+            {   
+                $('#TestBtn').click();
+            }
+            else
+            {
+                $("#erroring").text('하나 이상의 값을 입력하지 않으셨습니다.');
+                $("#popup").css('display', 'flex').hide().fadeIn();
+            }
+        }
+
+    })//수정 : 폼의 비밀번호 찾기 답에서 엔터키를 누를 시 키 감지 가능.
+    
 });

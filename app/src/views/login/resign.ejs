@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/common/common.css" />
     <link rel="stylesheet" href="/css/login/style.css" />
+    <link rel="stylesheet" href="/css/search/login-model.css" /> <!-- login-model-->
     
     <!-- font -->
     <link
@@ -81,8 +82,26 @@
                     </div>
 
                 </div>
-                <button type="submit" class="snip1535" id="ResignBtn"> 회원탈퇴 </button>
+                <button type="button" class="snip1535" id="TestBtn"> 회원탈퇴 </button>
             </div>
+            <div class="popup-wrap" id="popup">
+                <div class="popup">
+                  <div class="popup-body">
+                    <div class="body-content">
+                      <div class="body-titlebox">
+                        <h1 class="txt0">Confirm Modal</h1>
+                      </div>
+                      <div class="body-contentbox">
+                        <label class="txt9" id = "erroring"> 정확한 아이디를 입력하셔야 합니다.</label>
+                      </div>
+                      
+                    </div>
+                  </div>
+                  <div class="popup-foot">
+                    <span class="pop-btn confirm" id="confirm">확인</span>
+                  </div>
+                </div>
+             </div>
         </section>
 
         <!-- banner -->

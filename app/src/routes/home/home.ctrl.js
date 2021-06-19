@@ -1,5 +1,6 @@
 "use strict";
 
+const db = require("../../config/db");
 const User = require("../../models/User");
 
 const output = {
@@ -37,9 +38,11 @@ const output = {
         res.render("login/idfind");
     },
     modify: (req, res) => {
-        if (req.session.user) {
+        
+        if (req.session.user) 
+        {
             console.log(req.session.user_id);
-            connection.query('SELECT * FROM member WHERE memberid = ?', [req.session.user_id], function (error, data) 
+            db.query('SELECT * FROM member WHERE memberid = ?', [req.session.user_id], function (error, data) 
             {
 
 
@@ -49,7 +52,7 @@ const output = {
                     }
                     else {
                         console.log("귀하의 아이디는 :", data[0].memberid);
-                        res.render('modify.ejs', { 'data': data }, function (err, html) {
+                        res.render('login/modify.ejs', { 'data': data }, function (err, html) {
                             if (err) {
                                 console.log(err);
                             }
@@ -70,15 +73,14 @@ const output = {
         else {
             console.log("session is not finded")
             console.log('로그인 정보가 없어, 회원정보를 수정할 수 없습니다.');
-            res.redirect('/login');
+            res.redirect('/login2');
         }
     },
     passwordfind: (req, res) => {
         res.render("login/passwordfind");
     },
     membered: (req, res) => {
-        var data = req.query.data;
-        res.render("login/meber", { data: data });
+        res.render("login/member");
     },
     loginout: (req, res) => {
         console.log("clear cookie");
@@ -91,12 +93,12 @@ const output = {
                     return;
                 }
                 console.log("회원이 로그아웃하였습니다.");
-                res.redirect("/index");
+                res.redirect('/login2');
             });
         }
         else {
             console.log('로그인이 되어있지 않음');
-            res.redirect('/login');
+            res.redirect('/login2');
         }
     },
     finded: (req, res) => {
@@ -154,12 +156,11 @@ const process = {
         return res.json(response);
     },
     member2: async(req, res) => {
+
         const user = new User(req.body);
         const response = await user.register();
-
-        if (response === true) {
-            res.redirect("login/member");
-        }
+        
+        return res.json(response);
     },
     loging: async(req, res) => {
         if (req.session.user) 
@@ -195,29 +196,31 @@ const process = {
         }
     },
     modfiysave: async(req, res) => {
+
         const user = new User(req.body);
         const response = await user.modifyInfomation();
-
         return res.json(response);
+
     },
     finding: async(req, res) => {
         const user = new User(req.body);
 
         var comand = req.body;
-        var phone = comand.data1;
-        var mail = comand.data2;
+        var mail = comand.data1;
+        var phone = comand.data2;
         var memberid = comand.data3;
         var sua = comand.data4;
         var sub = comand.data5;
 
-        console.log(phone);
-        console.log(mail);
-   
-        if (phone != "" && mail != "" && memberid == "" && sua == "00" && sub == ""){
+        if (phone != "" && mail != "" && memberid == "" && sua == "" && sub == "")
+        {
+            console.log(mail);
+            console.log(phone);
             const response = await user.findId(mail, phone);
             return res.json(response);
         } 
-        else if (phone == "" && mail == "" && memberid != "" && sua != "00" && sub != ""){
+        else if (phone == "" && mail == "" && memberid != "" && sua != "" && sub != "")
+        {
             const response = await user.findPassword(memberid, sua, sub);
             return res.json(response);
         }

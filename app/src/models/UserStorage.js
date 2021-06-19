@@ -109,20 +109,20 @@ class UserStorage {
       });
     }
 
-    static saveMember(userInfo) {
+    static saveMember(memberid,password,nickname,mail,phone,sua,sub) 
+    {
       return new Promise((resolve, reject) => {
         const query = "INSERT INTO member(memberid, password, nickname, mail, phone, passwordfind, passwordanswer) VALUES(?, ?, ?, ?, ?, ?, ?);";
         
-        db.query(query, [userInfo.userId, userInfo.password2, userInfo.nickname,
-          userInfo.mail, userInfo.mobile, userInfo.suba, userInfo.subb], 
+        db.query(query, [memberid, password, nickname, mail, phone, sua, sub], 
           (err, data) => {
           if (err) {
-            console.log('user infor is:', error);
+            console.log('user infor is:', err);
           }
           else {
               console.log('성공적으로 쿼리 문을 이식하였습니다.');
               console.log(Object.keys(data).length);
-              return true;
+              resolve(data);
           }
           });
       });
@@ -132,27 +132,32 @@ class UserStorage {
       return new Promise((resolve, reject) => {
         const query = "SELECT * FROM member WHERE memberid = ?;";
         db.query(query, [memberid], (err, data) => {
-          if (err) {
+          if (err) 
+          {
             console.log("err ocurred", err);
+            resolve(data);
           }
-          else {
+          else 
+          {
             resolve(data);
           }
         });
       });
     }
 
-    static infomationModify(infomation) {
+    static infomationModify(memberid,password,nickname,mail,phone,sua,sub) 
+    {
+
+      console.log(memberid);
       return new Promise((resolve, reject) => {
         const query = "UPDATE member SET password=?, nickname=?,  mail=?, phone=?, passwordfind=?, passwordanswer=? WHERE memberid =?;";
-        db.query(query, [infomation.memberid, infomation.password, infomation.nickname, 
-        information.mobile, infomation.mail, infomation.passwordfind, infomation.passwordanswer], 
+        db.query(query, [password, nickname, mail, phone, sua, sub, memberid], 
         (err, data) => {
           if (err) 
                 {
+
                     console.log(err);
-                    msg.info("시스템에 오류가 생겨 수정하기 전으로 되돌아갑니다.")
-                    // res.redirect('/modify');
+                    resolve(data);
                 }
                 else 
                 {
@@ -172,8 +177,7 @@ class UserStorage {
           if (err) 
                 {
                     console.log(err);
-                    msg.info("시스템에 오류가 생겨 수정하기 전으로 되돌아갑니다.")
-                    // res.redirect('/modify');
+                    resolve(data);
                 }
                 else 
                 {
@@ -188,7 +192,8 @@ class UserStorage {
       return new Promise((resolve, reject) => {
         const query = "SELECT memberid FROM member WHERE mail =? AND phone =?;";
         db.query(query, [mail, phone], (err, data) => {
-          if (data.length != 0) {
+          if (data.length != 0) 
+          {
             if (err) {
                 console.log('user infor is:', err);
             }
@@ -231,8 +236,8 @@ class UserStorage {
         const query = "SELECT * FROM member WHERE memberid = ?;";
         db.query(query, [memberid], (err, data) => {
           if (data.length != 0) {
-            if (error) {
-              console.log("err ocurred", error);
+            if (err) {
+              console.log("err ocurred", err);
             }
             else {
                 if (data.length > 0) {

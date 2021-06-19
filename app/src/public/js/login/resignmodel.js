@@ -9,7 +9,7 @@ $(document).ready(function () {
       $("#popup").fadeOut();
     }
   }); screen
-  $("#ResignBtn").click(function () 
+  $("#TestBtn").click(function () 
   {
 
     var input_value1 = $("input[id='userId']").val();
@@ -39,19 +39,22 @@ $(document).ready(function () {
               }
             }
             else {
-              $("#erroring").text('아이디나 비밀번호가 달라 탈퇴를 받아드릴 수 없습니다.');
+              $("#erroring").text('없는 회원이거나, 아이디나 비밀번호가 달라 탈퇴를 받아드릴 수 없습니다.');
               $("#popup").css('display', 'flex').hide().fadeIn();
             }
           },
-          error: function (error) {
-            if (error) {
+          error: function (error) 
+          {
+            if (error) 
+            {
               $("#erroring").text('서버 접속 도중 오류가 발생하였습니다.');
               $("#popup").css('display', 'flex').hide().fadeIn();
             }
           }
         })
       }
-      else {
+      else 
+      {
         $("#erroring").text('비밀번호와 비밀번호 확인의 값이 다릅니다.');
         $("#popup").css('display', 'flex').hide().fadeIn();
       }
@@ -62,4 +65,26 @@ $(document).ready(function () {
       $("#popup").css('display', 'flex').hide().fadeIn();
     }
   })
+  $('#password2').keypress(function(e)
+  {
+
+    if(e.which == 13)
+    {
+      var input_value1 = $("input[id='userId']").val();
+      var input_value2 = $("input[id='password1']").val();
+      var input_value3 = $("input[id='password2']").val();
+  
+      if (input_value1 != "" && input_value2 != "" && input_value3 != "") 
+      {
+        $('#TestBtn').click();
+      }
+      else
+      {
+        $("#erroring").text('하나 이상의 값을 입력하지 않으셨습니다.');
+        $("#popup").css('display', 'flex').hide().fadeIn();
+      }
+    }
+    
+  })
+  
 });

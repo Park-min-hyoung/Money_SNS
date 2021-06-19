@@ -63,9 +63,10 @@ class User {
         
     }
 
-    async register() {
+    async register() 
+    {
         const client = this.body;
-        const response = await UserStorage.saveMember(client);
+        const response = await UserStorage.saveMember(client.data1,client.data2,client.data4,client.data5,client.data6,client.data7,client.data8);
         return response;
     }
 
@@ -76,7 +77,7 @@ class User {
 
     async modifyInfomation() {
         const client = this.body;
-        const response = await UserStorage.infomationModify(client);
+        const response = await UserStorage.infomationModify(client.data1,client.data2,client.data4,client.data5,client.data6,client.data7,client.data8);
         return response;
     }
 

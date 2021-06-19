@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=, initial-scale=1.0" />
   <link rel="stylesheet" href="/css/common/common.css" />
   <link rel="stylesheet" href="/css/search/style.css" /> <!-- find css -->
+  <link rel="stylesheet" href="/css/search/login-model.css" /> <!-- login-model. css 오류 : 누락됨.-->
 
   <!-- font -->
   <link
@@ -16,9 +17,10 @@
   <script type="text/javascript" src="http://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
   <script src ="/js/login/useing.js" defer></script>
   <script src ="/js/login/find.js" defer></script>
-  <script src ="/js/login/login2.js" defer></script>
+  <script src="/js/login/findmodel.js" defer></script>
   <script>
-    function doNotReload() {
+    function doNotReload() 
+    {
       if ((event.ctrlKey == true && (event.keyCode == 78 || event.keyCode == 82)) || (event.keyCode == 116)) {
         event.keyCode = 0;
         event.cancelBubble = true;
@@ -75,7 +77,7 @@
                 <h3 class="join_title" id="mobile2"><label for="mobile" class="txt5">휴대전화</label></h3>
                 <span class="box int_mobile" id="mobile">
                   <input type="tel" id="mobile" class="int" maxlength="16" placeholder="휴대전화 입력" name="mobile"
-                    onblur="checkmobile(form.mobile.value); checkfind1(form.mail.value, form.mobile.value);">
+                    onblur="checkmobile(form.mobile.value);">
                 </span>
                 <label class="error_next_box" id="_check5"></label>
               </div>
@@ -83,7 +85,7 @@
                 <label for="userid" class="txt5">아이디</label>
               </h3>
               <span class="box int_id" id="userId">
-                <input type="text" id="userId" class="int" maxlength="20" name="userId" placeholder="아이디 입력" onblur="checkUserId(form.userId.value); checkfind2(form.userId.value,form.suba.value,form.subb.value); ">
+                <input type="text" id="userId" class="int" maxlength="20" name="userId" placeholder="아이디 입력" onblur="checkUserId(form.userId.value);">
               </span>
               <label class="error_next_box" id="_check1" for="labelA"></label>
 
@@ -94,7 +96,7 @@
                   <!-- BIRTH_MM -->
                     <div id="bir_mm"> 
                       <span class="box" id="aaax">
-                      <select id="suba" name="suba" onblur="checkfind2(form.userId.value,form.suba.value,form.subb.value);">
+                      <select id="suba" name="suba">
                         <option value="">비밀번호 찾기 질문</option>
                         <option value="01"> 기억에 남는 추억의 장소는?</option>
                         <option value="02"> 자신의 인생 좌우명은?</option>
@@ -121,20 +123,35 @@
                   <div id="bir_dd">
                   <span class="box" id="aaab">
                     <input type="text" id="subb" class="int" maxlength="10" placeholder="답" name="subb"
-                      onblur="checkB(form.subb.value); checkfind2(form.userId.value,form.suba.value,form.subb.value);">
+                      onblur="checkB(form.subb.value);">
                   </span>
                   </div>
                 </div>
                 <label class="error_next_box" id="_check6"></label>
               </div>
-
-           
-
           </div>
         </div>
-         <button type="submit" class="snip1535" id = "TestBtn" disabled = true> 확인</button> 
+         <button type="button" class="snip1535" id = "TestBtn" disabled = true> 확인</button> 
       </div>
+      <div class="popup-wrap" id="popup">
+        <div class="popup">
+          <div class="popup-body">
+            <div class="body-content">
+              <div class="body-titlebox">
+                <h1 class="txt0">Confirm Modal</h1>
+              </div>
+              <div class="body-contentbox">
+                <label class="txt9" id = "erroring"> 정확한 아이디를 입력하셔야 합니다.</label>
+              </div>
+            </div>
+          </div>
+          <div class="popup-foot">
+            <span class="pop-btn confirm" id="confirm">확인</span>
+          </div>
+        </div>
+     </div>
     </section>
+
 
     <!-- banner -->
     <section id="banner__wrap">

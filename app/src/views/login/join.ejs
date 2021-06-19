@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/css/common/common.css" />
   <link rel="stylesheet" href="/css/login/style.css" /> <!-- new.js -->
-
+  <link rel="stylesheet" href="/css/search/login-model.css" /> <!-- login-model. css -->
   <!-- font -->
   <link
     href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Gothic+A1&family=Orbitron&family=Oswald:wght@700&family=Quicksand:wght@500&display=swap"
@@ -28,7 +28,6 @@
 </head>
 
 <body>
-   <form id = "join" name= "join" action='/member2' method="POST" onsubmit="return checkAll();">
   <div class="wrap">
     <header id="header__wrap">
       <div class="header__top__wrap">
@@ -173,11 +172,27 @@
           <label class="error_next_box" id="_check6"></label>
       
         </div>
-        <div class="open">
-          <button type = "submit" class="snip1535"  id = "JoinBtn"> 회원가입 신청</button>
+      <div class="open">
+          <button type = "button" class="snip1535"  id = "TestBtn"> 회원가입 신청</button>
+      </div>
+      <div class="popup-wrap" id="popup">
+        <div class="popup">
+          <div class="popup-body">
+            <div class="body-content">
+              <div class="body-titlebox">
+                <h1 class="txt0">Confirm Modal</h1>
+              </div>
+              <div class="body-contentbox">
+                <label class="txt9" id = "erroring"> 정확한 아이디를 입력하셔야 합니다.</label>
+              </div>
+              
+            </div>
+          </div>
+          <div class="popup-foot">
+            <span class="pop-btn confirm" id="confirm">확인</span>
+          </div>
         </div>
-      </form>
-      
+     </div>
     </section>
 
     <!-- banner 단 회원가입엔 없는 게 맞다고 생각되면 제거 예정-->

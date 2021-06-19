@@ -66,6 +66,7 @@ $(function () {
             });
             $('#_check6').css({display : 'block', position: 'relative'});
 
+            
             $('#TestBtn').attr("disabled",false);
        } 
 

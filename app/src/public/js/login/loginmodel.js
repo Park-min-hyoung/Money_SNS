@@ -14,7 +14,6 @@ $(document).ready(function () {
 
     var input_value1 = $("input[id='userId']").val();
     var input_value2 = $("input[id='password1']").val();
-
     if (input_value1 != "" && input_value2 != "") 
     {
       $.ajax({
@@ -30,7 +29,8 @@ $(document).ready(function () {
             if(result[0].password == input_value2)
             {
               alert('hello');
-              location.href = "/board?id=" + input_value1;
+              location.replace('/modify');//이걸 사용하면 뒤로가기를 하여도 로그인 상태로 인한 오류가 발생되지 않는다.(앞에 접속 기록은 지워짐.)
+              //location.replace('/board?id=" + input_value1'); -> 로그인 시스템 확인차 주석으로 묶어뒀음.
             }
             else
             {
@@ -44,8 +44,10 @@ $(document).ready(function () {
             $("#popup").css('display', 'flex').hide().fadeIn();
           }
         },
-        error: function (error) {
-          if (error) {
+        error: function (error) 
+        {
+          if (error) 
+          {
             $("#erroring").text('서버 접속 도중 오류가 발생하였습니다.');
             $("#popup").css('display', 'flex').hide().fadeIn();
           }
@@ -54,9 +56,26 @@ $(document).ready(function () {
     }
     else
     {
+      $("#erroring").text('아이디나 비밀번호를 입력하지 않았습니다.');
       $("#popup").css('display', 'flex').hide().fadeIn();
-      $("#erroring").val('아이디나 비밀번호를 입력하지 않았습니다.');
-
     }
   })
+  $('#password1').keypress(function(e){
+
+    if(e.which == 13)
+    {
+      var input_value1 = $("input[id='userId']").val();
+      var input_value2 = $("input[id='password1']").val();
+      if (input_value1 != "" && input_value2 != "") 
+      {
+        $('#TestBtn').click();
+      }
+      else
+      {
+        $("#erroring").text('아이디나 비밀번호를 입력하지 않았습니다.');
+        $("#popup").css('display', 'flex').hide().fadeIn();
+      }
+    }  
+  })
+  
 });

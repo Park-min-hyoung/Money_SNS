@@ -134,7 +134,8 @@ function checkAll()
 
    }
 
-   function checkPasswordB(id, password1, password2) {
+   function checkPasswordB(id, password1, password2) 
+   {
 
        //비밀번호 확인이 입력되었는지 확인하기
        if (!checkExistData(password2, "비밀번호 확인을"))
@@ -175,13 +176,17 @@ function checkAll()
            form.password2.focus();
            return false;
          }
-         document.getElementById('pswd2_img1').src= "img/icon/m_icon_check_enable.png";
-           document.getElementById('_check2').innerHTML = "비밀번호가 조건에 부합합니다.";
-           document.getElementById('_check3').innerHTML = "바람직한 조건의 비밀번호 입니다.";
+         
+         if(checkPasswordA(password1))
+         {
+           document.getElementById('pswd2_img1').src= "img/icon/m_icon_check_enable.png";
+           document.getElementById('_check3').innerHTML = "비밀번호와 비밀번호 확인이 같습니다.";
            document.getElementById('_check3').style.display = "block";
-           document.getElementById('_check2').style.color = "#08A600";
            document.getElementById('_check3').style.color = "#08A600";
-         return true; //확인이 완료되었을 때
+           
+            return true; //확인이 완료되었을 때
+         }
+
        }
    }
  
