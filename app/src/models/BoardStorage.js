@@ -29,7 +29,7 @@ class BoardStorage {
 
     static searchPoint(id) {
         return new Promise((resolve, reject) => {
-            const query = "SELECT * FROM users WHERE id = ?";
+            const query = "SELECT * FROM member WHERE memberid = ?";
             db.query(query, [id], (err, data) => {
                 if(err) reject(`${err}`);
                 resolve(data[0]);
@@ -38,7 +38,7 @@ class BoardStorage {
     }
 
     static async addPoint(pt, id, pluspoint) {
-        const query = "UPDATE users SET point=? WHERE id = ?";
+        const query = "UPDATE member SET point=? WHERE memberid = ?";
         db.query(query, 
         [pt + pluspoint, id],
         (err) => {
@@ -47,7 +47,7 @@ class BoardStorage {
     }
 
     static async removePoint(pt, id) {
-        const query = "UPDATE users SET point=? WHERE id = ?";
+        const query = "UPDATE member SET point=? WHERE memberid = ?";
         db.query(query, 
         [pt - 10, id],
         (err) => {

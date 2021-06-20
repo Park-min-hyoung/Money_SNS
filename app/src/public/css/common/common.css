@@ -105,7 +105,7 @@
     margin: 15px auto;
   }
   .header__bot__container {
-    width: 50%;
+    width: 60%;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -119,10 +119,11 @@
   }
   .login__wrap li,
   .logout__wrap li {
-    width: 40%;
+    width: 50%;
     border: 1px solid var(--color-white);
     text-align: center;
     border-radius: 30px;
+    margin: auto 20px;
   }
   .login__wrap .sign
   .logout__wrap .logout {
@@ -142,11 +143,11 @@
     line-height: 32px;
   }
   .sign:hover,
-  .loguut:hover {
+  .logout:hover {
     background-color: var(--color-orange);
   }
   .sign:hover .sign__a,
-  .loguut:hover .logout__a {
+  .logout:hover .logout__a {
     color: var(--color-white);
   }
   

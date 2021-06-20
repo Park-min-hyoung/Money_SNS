@@ -1,8 +1,8 @@
 "use strict";
 
-const urlQuery = window.location.search; // url query 조회
-const urlParams = new URLSearchParams(urlQuery); // id의 값을 조회하기 위한 준비
-const path = urlParams.get('href'); //
+const urlQuery = window.location.search;
+const urlParams = new URLSearchParams(urlQuery);
+const path = urlParams.get('href');
 
 const id = document.querySelector("#id"),
  psword = document.querySelector("#psword"),

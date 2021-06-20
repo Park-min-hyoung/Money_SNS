@@ -1,3 +1,7 @@
+const urlQuery = window.location.search;
+const urlParams = new URLSearchParams(urlQuery);
+const path = urlParams.get('href');
+
 $(document).ready(function () {
 
   $(function () {
@@ -29,7 +33,11 @@ $(document).ready(function () {
             if(result[0].password == input_value2)
             {
               alert('hello');
-              location.replace('/modify');//이걸 사용하면 뒤로가기를 하여도 로그인 상태로 인한 오류가 발생되지 않는다.(앞에 접속 기록은 지워짐.)
+              if (path == "board") {
+                location.replace('/board?id=' + input_value1);//이걸 사용하면 뒤로가기를 하여도 로그인 상태로 인한 오류가 발생되지 않는다.(앞에 접속 기록은 지워짐.)
+              } else {
+                location.replace('/?id=' + input_value1);
+              }
               //location.replace('/board?id=" + input_value1'); -> 로그인 시스템 확인차 주석으로 묶어뒀음.
             }
             else

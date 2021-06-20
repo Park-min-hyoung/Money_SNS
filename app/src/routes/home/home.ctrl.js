@@ -38,7 +38,6 @@ const output = {
         res.render("login/idfind");
     },
     modify: (req, res) => {
-        
         if (req.session.user) 
         {
             console.log(req.session.user_id);
@@ -93,12 +92,12 @@ const output = {
                     return;
                 }
                 console.log("회원이 로그아웃하였습니다.");
-                res.redirect('/login2');
+                res.redirect('/');
             });
         }
         else {
             console.log('로그인이 되어있지 않음');
-            res.redirect('/login2');
+            res.redirect('/');
         }
     },
     finded: (req, res) => {
@@ -119,13 +118,13 @@ const output = {
 const process = {
     login: async(req, res) => {
         const user = new User(req.body);
-        const response = await user.login();
+        const response = await user.loginB();
 
         return res.json(response);
     },
     register: async(req, res) => {
         const user = new User(req.body);
-        const response = await user.register();
+        const response = await user.registerB();
 
         return res.json(response);
     },
@@ -196,7 +195,6 @@ const process = {
         }
     },
     modfiysave: async(req, res) => {
-
         const user = new User(req.body);
         const response = await user.modifyInfomation();
         return res.json(response);
@@ -231,8 +229,16 @@ const process = {
         console.log(req.body.data2);
         console.log(req.body.data3);
 
-        const response = await user.meberResign();
-        return res.json(response);
+        if (req.session.user) 
+        {
+            const response = await user.meberResign();
+            return res.json(response);
+        }
+        else {
+            console.log("session is not finded")
+            console.log('로그인 정보가 없어, 회원탈퇴를 수정할 수 없습니다.');
+            res.redirect('/login2');
+        }
     },   
 };
 

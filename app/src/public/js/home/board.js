@@ -25,13 +25,8 @@ function selectImg(number) {
 
 // 사진 또는 비디오 항목 선택 시 글자 색상 변경
 $('.section__logo').on('click', function(){
-    $('.section__logo').removeClass('selected');R
+    $('.section__logo').removeClass('selected');
     $(this).addClass('selected');
-});
-
-// 모달 취소 또는 바깥 화면 누르면 board로 이동
-$('label').on('click', function(){
-    location = '/board?id=' + id;
 });
 
 // 둥근 탭 버튼을 클릭 했을 때
@@ -44,25 +39,19 @@ $(".modal_layer, #cancel").click(function(){
     $("#modal").attr("style", "display:none");
 }); 
 
-// 유튜브 자동재생
-// $(document).ready(function() {
-// 	$('.pre_video')
-//     .mouseover(function() {
-//         $(this).find('.video_img').hide();
-//         var myVid = $(this).attr('target');
-//         $(myVid).show().trigger('play');
-// 	 })
-// 	 .mouseout(function() {
-//       $(this).find('.video_img').show()
-//       $('video').trigger('pause').hide()
-//       $('video').prop('currentTime', 0);
-// 	 })
-// });
-
 var title = document.getElementById('nickname').innerHTML;
 var like_check = document.getElementById("like_cnt").getAttribute('name');
 var id = document.getElementById("like_cnt").className;
 var seq = document.getElementById("for_like").getAttribute('name');
+
+// 모달 취소 또는 바깥 화면 누르면 board로 이동
+$('label').on('click', function(){
+    if (label == 'g'){ // mypage에서 모달을 클릭했으면..
+        location = '/mypage?id=' + id;
+    } else { // board에서 모달을 클릭했으면..
+        location = '/board?id=' + id;
+    }
+});
 
 // 사진 또는 영상 클릭 시 like_check가 1또는 3이면 꽉찬 하트 아니면 빈 하트
 if (like_check == 1){

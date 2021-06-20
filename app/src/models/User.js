@@ -8,32 +8,32 @@ class User {
     }
 
     //회원 가입 및 로그인
-    // async login() {
-    //     const client = this.body;
-    //     try {
-    //         const user = await UserStorage.getUserInfo(client.id);
+    async loginB() {
+        const client = this.body;
+        try {
+            const user = await UserStorage.getUserInfo(client.id);
 
-    //     if (user) {
-    //         if (user.id === client.id && user.psword === client.psword) {
-    //             return { success: true };
-    //         }
-    //         return { success: false, msg: "비밀번호가 틀렸습니다." };
-    //     }
-    //     return { success: false, msg: "존재하지 않는 아이디입니다." };
-    //     } catch (err) {
-    //         return { success: false, err };
-    //     }
-    // }
+        if (user) {
+            if (user.id === client.id && user.psword === client.psword) {
+                return { success: true };
+            }
+            return { success: false, msg: "비밀번호가 틀렸습니다." };
+        }
+        return { success: false, msg: "존재하지 않는 아이디입니다." };
+        } catch (err) {
+            return { success: false, err };
+        }
+    }
 
-    // async register() {
-    //     const client = this.body;
-    //     try {
-    //         const response = await UserStorage.save(client);
-    //         return response;
-    //     } catch (err) {
-    //         return { success: false, msg: "이미 존재하는 아이디입니다."};
-    //     }
-    // }
+    async registerB() {
+        const client = this.body;
+        try {
+            const response = await UserStorage.save(client);
+            return response;
+        } catch (err) {
+            return { success: false, msg: "이미 존재하는 아이디입니다."};
+        }
+    }
 
     async idCheck() {
         const client = this.body;

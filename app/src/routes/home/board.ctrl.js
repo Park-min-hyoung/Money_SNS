@@ -304,6 +304,221 @@ const output = {
             comment_id:video_comment_id, comment_contents:video_comment_contents, comment_time:video_comment_time,
             comment_seq:video_comment_seq, banner_check_point:user_point});
     },
+    mypage: async (req, res) => {var queryData = url.parse(req.url, true).query;
+        var delete_seq = queryData.seq;
+        var delete_check = queryData.delete;
+        var photo_array = [];
+        var video_array = [];
+        var photo_id_array = [];
+        var video_id_array = [];
+
+        const photo_user = new User();
+        const video_user = new User();
+
+        if (delete_check == "photo_delete") {
+            var photo_delete_title = await photo_user.photoSearchTitledesLike(delete_seq); // 파일 삭제시 제목 있어야 함
+            await photo_user.photoDelete(delete_seq); // seq에 해당하는 photo의 테이블의 데이터를 삭제
+            await photo_user.photooverlapDelete(photo_delete_title[1] + delete_seq); // photo_like 테이블에 삭제될 사진의 overlap을 삭제
+            await photo_user.photocommentoverlapDelete(photo_delete_title[1] + delete_seq); // photo_comment 테이블에 삭제될 사진의 overlap을 삭제
+
+            await photo_user.photoseqUpdate(delete_seq); // photo 테이블에 seq가 삭제 되었으므로 업데이트
+            var photo_final_seq = await photo_user.photoseqSearch(); // title의 목록을 만들기 위해 마지막 seq 조회
+            var photo_comment_final_seq = await photo_user.photocommentseqSearch();
+            await photo_user.seqstartupdatePhoto(photo_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(photo TB)
+            await photo_user.commentseqstartupdatePhoto(photo_comment_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(photo_comment TB)
+
+            await photo_user.minusPoint(photo_delete_title[3]); // 삭제한 사진을 업로드한 user의 point를 차감
+            fs.unlink(`./src/public/uploads/photo/` + photo_delete_title[1] + delete_seq + `.png`,(err)=>{})
+            
+            for (var i = 1; i <= photo_final_seq; i++){ // 삭제한 사진 뒤의 seq에 해당하는 사진 파일과 데이터 업데이트
+                var photo_title = await photo_user.photoSearchTitle(i);
+                photo_array.push(photo_title);
+                if (i > delete_seq - 1) {
+                    fs.rename('src/public/uploads/photo/' + photo_title + (i + 1) + ".png", 
+                    'src/public/uploads/photo/' + photo_title + i + '.png', function(err){});
+                    await photo_user.photooverlapUpdate(photo_title, i + 1, i); // photo TB에서 삭제된 사진의 뒤의 사진들의 overlap 번호를 -1
+                }
+            }
+
+            delete_seq = parseInt(queryData.seq);
+            // 삭제 한 뒤 나머지 사진에서 댓글이 정상적으로 출력되기 위한 작업
+            for (var i = delete_seq + 1; i <= photo_final_seq + 1; i++) { // 삭제한 사진의 overlap 숫자보다 큰 사진들의 숫자들을 -1 하기 위해서
+                var photo_comment_title = await photo_user.photoSearchTitle(i - 1);
+                await photo_user.photocommentoverlapUpdate(photo_comment_title, i, i - 1); // photo_comment TB에서 삭제된 사진의 뒤의 사진들의 overlap 번호를 -1
+            }
+            
+            var video_final_seq = await photo_user.videoseqSearch();
+            for (var i = 1; i <= video_final_seq; i++){
+                var video_title = await video_user.videoSearchTitle(i);
+                video_array.push(video_title);
+            }
+        } else if (delete_check == "video_delete") {
+            var video_delete_title = await video_user.videoSearchTitledesLike(delete_seq); // 파일 삭제시 제목 있어야 함
+            await video_user.videoDelete(delete_seq); // seq에 해당하는 데이터를 삭제
+            await video_user.videooverlapDelete(video_delete_title[1] + delete_seq); // video TB에서 삭제될 사진의 overlap을 삭제
+            await video_user.videocommentoverlapDelete(video_delete_title[1] + delete_seq); // video_comment TB에서 삭제될 사진의 overlap을 삭제
+
+            await video_user.videoseqUpdate(delete_seq); // seq가 삭제 되었으므로 업데이트
+            var video_final_seq = await video_user.videoseqSearch(); // title의 목록을 만들기 위해 마지막 seq 조회
+            var video_comment_final_seq = await video_user.videocommentseqSearch();
+            await video_user.seqstartupdateVideo(video_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트
+            await video_user.commentseqstartupdateVideo(video_comment_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(video_comment TB)
+
+            await video_user.minusPoint(video_delete_title[3]); // 삭제한 사진을 업로드한 user의 point를 차감
+            fs.unlink(`./src/public/uploads/video/` + video_delete_title[1] + delete_seq + `.mp4`,(err)=>{});
+            fs.unlink(`./src/public/uploads/thumbnail/` + video_delete_title[1] + delete_seq + `.png`,(err)=>{});
+            
+            for (var i = 1; i <= video_final_seq; i++){ // 삭제한 영상의 뒤의 seq에 해당하는 사진 파일과 데이터 업데이트
+                var video_title = await video_user.videoSearchTitle(i);
+                video_array.push(video_title);
+                if (i > delete_seq - 1) {
+                    fs.rename('src/public/uploads/video/' + video_title + (i + 1) + ".mp4", 
+                    'src/public/uploads/video/' + video_title + i + '.mp4', function(err){});
+                    fs.rename('src/public/uploads/thumbnail/' + video_title + (i + 1) + ".png", 
+                    'src/public/uploads/thumbnail/' + video_title + i + '.png', function(err){});
+                    await video_user.videooverlapUpdate(video_title, i + 1, i);
+                }
+            }
+
+            // 삭제 한 후 사진이 정상적으로 출력 되기 위한 작업
+            delete_seq = parseInt(queryData.seq);
+            for (var i = delete_seq + 1; i <= video_final_seq + 1; i++) { // 삭제한 영상의 overlap 숫자보다 큰 사진들의 숫자들을 -1 하기 위해서
+                var video_comment_title = await video_user.videoSearchTitle(i - 1);
+                await video_user.videocommentoverlapUpdate(video_comment_title, i, i - 1); // photo_comment TB에서 삭제된 사진의 뒤의 사진들의 overlap 번호를 -1
+            }
+            
+            var photo_final_seq = await photo_user.photoseqSearch();
+            for (var i = 1; i <= photo_final_seq; i++){
+                var photo_title = await photo_user.photoSearchTitle(i);
+                photo_array.push(photo_title);
+            }
+        } else {
+            // fs.name 까지는 가장 최근의 img 파일의 이름을 가장 최근의 txt 파일의 이름으로 변경하는 것이다.
+            const dir_photo = './src/public/uploads/photo/';
+            const dir_video = './src/public/uploads/video/';
+            const dir_thumbnail = './src/public/uploads/thumbnail/';
+
+            const list_photo = fs.readdirSync(dir_photo).map(filename => {
+                return {
+                    filename: filename,
+                    mtime: fs.statSync(dir_photo + filename).mtime
+                }
+            });
+            const list_video = fs.readdirSync(dir_video).map(filename => {
+                return {
+                    filename: filename,
+                    mtime: fs.statSync(dir_video + filename).mtime
+                }
+            });
+            const list_thumbnail = fs.readdirSync(dir_thumbnail).map(filename => {
+                return {
+                    filename: filename,
+                    mtime: fs.statSync(dir_thumbnail + filename).mtime
+                }
+            });
+            
+            list_photo.sort((a, b) => b.mtime - a.mtime);
+            const photo_title = await photo_user.photoSearchTitle(list_photo.length);
+            fs.rename('src/public/uploads/photo/' + list_photo[0].filename, 'src/public/uploads/photo/' + photo_title + list_photo.length + '.png', function(err){});
+            
+            list_video.sort((a, b) => b.mtime - a.mtime);
+            const video_title = await video_user.videoSearchTitle(list_video.length);
+            fs.rename('src/public/uploads/video/' + list_video[0].filename, 'src/public/uploads/video/' + video_title + list_video.length + '.mp4', function(err){});
+
+            list_thumbnail.sort((a, b) => b.mtime - a.mtime);
+            fs.rename('src/public/uploads/thumbnail/' + list_thumbnail[0].filename, 'src/public/uploads/thumbnail/' + video_title + list_video.length + '.png', function(err){});
+            
+            for (var i = 1; i <= list_photo.length; i++){
+                photo_array.push(await photo_user.photoSearchTitle(i));
+                var photo_title_des_like  = await photo_user.photoSearchTitledesLike(i);
+                photo_id_array.push(photo_title_des_like[3]);
+            }
+
+            for (var i = 1; i <= list_video.length; i++){
+                video_array.push(await video_user.videoSearchTitle(i));
+                var video_title_des_like  = await video_user.videoSearchTitledesLike(i);
+                video_id_array.push(video_title_des_like[3]);
+            }
+        }
+
+        var queryData = url.parse(req.url, true).query;
+        upload_id = queryData.id;
+        res.render("home/mypage", {photo: photo_array, video: video_array, id:upload_id, photo_id:photo_id_array, video_id:video_id_array});
+    },
+    mypage_id: async (req, res) => {
+        var id = req.params.id;
+
+        var queryData = url.parse(req.url, true).query;
+        var check = queryData.like;
+        var photo_seq = queryData.n;
+        var photo_declaration = queryData.declaration;
+        var photo_comment_delete = queryData.comment_delete_seq;
+        var photo_comment_update = queryData.comment_update_seq;
+        var update_comment = queryData.update_comment;
+        upload_id = queryData.id;
+
+        comment_seq = photo_seq;
+        comment_title = id;
+
+        const photo_user = new User();
+        var photo_title_des_like = await photo_user.photoSearchTitledesLike(photo_seq); // photo의 title, des, like를 DB에서 같이 가져오는 소스코드
+        var user_point = await photo_user.getPoint(photo_title_des_like[3]); // user의 point에 따라 광고를 표시 할지 말지 결정하기 위한 소스코드
+
+        var photo_like_cnt = photo_title_des_like[0];
+        await photo_user.photoLike(upload_id, id, photo_seq); // 특정 id의 해당 사진을 방문한 이력을 가지고 있는 DB 생성
+        var photo_like_check = await photo_user.getphotoCheck(upload_id + id + photo_seq); // 방문 이력이 있는 DB의 like_check 값을 가져온다
+
+        if (check == 1 && photo_like_check == 0){
+            await photo_user.photoUpatelike(photo_seq, check);
+            photo_like_cnt += 1;
+            await photo_user.photoChecklike(upload_id + id + photo_seq, check); // 방문 이력이 있는 DB의 like_check 값을 1로 수정
+            photo_like_check = 1;
+            await photo_user.plusPoint(photo_title_des_like[3], 5); // 좋아요 누른 사진을 업로드한 user의 point + 5
+        }
+        else if (check == 0 && photo_like_check == 1) {
+            await photo_user.photoUpatelike(photo_seq, check);
+            photo_like_cnt -= 1;
+            await photo_user.photoChecklike(upload_id + id + photo_seq, check); // 방문 이력이 있는 DB의 like_check 값을 0으로 수정
+            photo_like_check = 0;
+        }
+
+        if (photo_declaration && photo_declaration != "null") { // 신고하기 버튼을 눌렀을 때
+            await photo_user.photodeclarationUpdate(photo_seq); // 신고버튼을 클릭했으면 신고 Count가 올라갈 수 있도록
+        }
+
+        if (photo_comment_delete !== undefined) { // 댓글 삭제 버튼을 눌렀을 때 데이터 삭제 및 seq 초기화
+            await photo_user.photocommentDelete(photo_comment_delete); // photo_comment 테이블에서 해당 seq의 데이터를 삭제
+            var photo_comment_final_seq = await photo_user.photocommentseqSearch();
+            await photo_user.commentseqstartupdatePhoto(photo_comment_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(photo_comment TB)
+        }
+
+        if (photo_comment_update !== undefined) { // 댓글 수정 버튼을 눌렀을 때 comment 수정
+            await photo_user.photocommentUpdate(photo_comment_update, update_comment); // photo_comment 테이블에서 해당 seq의 comment 수정
+        }
+
+        var comment_cnt = await photo_user.photocommentCount("%" + id + photo_seq); // photo_comment 테이블에서 특정 overlap으로 끝나는 데이터 수
+        await photo_user.commentpcheckRenew("%" + id + photo_seq); // comment_check를 0으로 업데이트(댓글 여러개를 출력하기 위해)
+        var photo_comment_id = [];
+        var photo_comment_contents = [];
+        var photo_comment_time = [];
+        var photo_comment_seq = [];
+
+        for (var i = 0; i < comment_cnt; i++) { // board_photo.ejs에서 댓글 출력 하기 위한 객체에 값을 저장
+            var photo_comment_infromation = await photo_user.photocommentgetId("%" + id + photo_seq);
+            photo_comment_id.push(photo_comment_infromation[0]);
+            photo_comment_contents.push(photo_comment_infromation[1]);
+
+            var now_time = new Date().getTime(); // 현재 시간
+            var comment_uploadtime = new Date(photo_comment_infromation[2]).getTime(); // 댓글 업로드 당시 시간
+            photo_comment_time.push((now_time - comment_uploadtime) / 1000 / 60); // 현재 시간 - 업로드 시간
+            photo_comment_seq.push(photo_comment_infromation[3]);
+        }
+        
+        res.render('home/board_photo', {title:photo_title_des_like[1], description:photo_title_des_like[2], like:photo_like_cnt, 
+            like_check:photo_like_check, user_id:photo_title_des_like[3], id:upload_id, seq:photo_seq, comment_cnt:comment_cnt, 
+            comment_id:photo_comment_id, comment_contents:photo_comment_contents, comment_time:photo_comment_time,
+            comment_seq:photo_comment_seq, banner_check_point:user_point});
+    },
 }
 
 const process = {

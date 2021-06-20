@@ -12,8 +12,8 @@ $(document).ready(function () {
 
     $("#TestBtn").click(function () 
     {
-        var input_value1 = $("input[id='mobile']").val();
-        var input_value2 = $("input[id='mail']").val();
+        var input_value1 = $("input[id='mail']").val();
+        var input_value2 = $("input[id='mobile']").val();
         var input_value3 = $("input[id='userId']").val();
         var input_value4 = $("select[name ='suba']").val();
         var input_value5 = $("input[id='subb']").val();
