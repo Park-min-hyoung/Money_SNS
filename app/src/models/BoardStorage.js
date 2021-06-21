@@ -374,11 +374,31 @@ class BoardStorage {
             })
     }
 
-    static async uploadcommentPhoto(user_id, overlap, photo_comment, upload_time) {
+    static searchnickPhoto(user_id) {
         return new Promise((resolve, reject) => {
-            const query = "INSERT INTO photo_comment(user_id, overlap, photo_comments, upload_time) VALUES(?, ?, ?, ?);";
+            const query = "SELECT * FROM member WHERE memberid = ?";
+            db.query(query, [user_id], (err, data) => {
+                if(err) reject(`${err}`);
+                resolve(data[0]);
+            })
+        });
+    }
+    
+    static searchnickVideo(user_id) {
+        return new Promise((resolve, reject) => {
+            const query = "SELECT * FROM member WHERE memberid = ?";
+            db.query(query, [user_id], (err, data) => {
+                if(err) reject(`${err}`);
+                resolve(data[0]);
+            })
+        });
+    }
+
+    static async uploadcommentPhoto(user_id, overlap, photo_comment, photo_comment_nickname, upload_time) {
+        return new Promise((resolve, reject) => {
+            const query = "INSERT INTO photo_comment(user_id, overlap, photo_comments, nickname, upload_time) VALUES(?, ?, ?, ?, ?);";
             db.query(query, 
-            [user_id, overlap, photo_comment, upload_time],
+            [user_id, overlap, photo_comment, photo_comment_nickname, upload_time],
             (err) => {
                 if(err) reject(`${err}`);
                 resolve({ success: true });
@@ -386,11 +406,11 @@ class BoardStorage {
         });
     }
 
-    static async uploadcommentVideo(user_id, overlap, video_comment, upload_time) {
+    static async uploadcommentVideo(user_id, overlap, video_comment, video_comment_nickname, upload_time) {
         return new Promise((resolve, reject) => {
-            const query = "INSERT INTO video_comment(user_id, overlap, video_comments, upload_time) VALUES(?, ?, ?, ?);";
+            const query = "INSERT INTO video_comment(user_id, overlap, video_comments, nickname, upload_time) VALUES(?, ?, ?, ?, ?);";
             db.query(query, 
-            [user_id, overlap, video_comment, upload_time],
+            [user_id, overlap, video_comment, video_comment_nickname, upload_time],
             (err) => {
                 if(err) reject(`${err}`);
                 resolve({ success: true });

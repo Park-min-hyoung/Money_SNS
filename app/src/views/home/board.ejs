@@ -14,10 +14,21 @@
         <script src="https://kit.fontawesome.com/58412d2786.js" crossorigin="anonymous"></script>
         <script src ="/js/home/board.js" defer></script>
         <script src ="/js/home/login_logout.js" defer></script>
+        <script type="text/javascript">
+            // window.history.forward();
+            var urlQuery = window.location.search; // url query 조회
+            var urlParams = new URLSearchParams(urlQuery); // id의 값을 조회하기 위한 준비
+            var back_id = urlParams.get('id'); // back_id가 null이면 뒤로가기 x, back_id이 아니면 뒤로가기 o
+
+            if (back_id === null) {
+                alert(back_id + "hi");
+                // window.history.forward();
+            }
+        </script>
         <title>Board</title>
     </head>
 
-    <body>
+    <body onload="noBack();" onpageshow="if(event.persisted) noBack();" onunload="">
         <div class="wrap">
             <header id="header__wrap">
                 <div class="header__top__wrap">

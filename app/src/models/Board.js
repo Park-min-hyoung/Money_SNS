@@ -205,19 +205,29 @@ class Board {
         const {seq, video_declaration} = await UserStorage.videogetDescription(photo_seq);
         await UserStorage.videodeClaration(seq, video_declaration);
     }
+
+    async photonickSearch(user_id) {
+        const {nickname} = await UserStorage.searchnickPhoto(user_id);
+        return nickname;
+    }
+ 
+    async videonickSearch(user_id) {
+        const {nickname} = await UserStorage.searchnickVideo(user_id);
+        return nickname;
+    }
     
-    async photocommentUpload(user_id, overlap, photo_comment, upload_time) {
+    async photocommentUpload(user_id, overlap, photo_comment, photo_comment_nickname, upload_time) {
         try {
-            const response = await UserStorage.uploadcommentPhoto(user_id, overlap, photo_comment, upload_time);
+            const response = await UserStorage.uploadcommentPhoto(user_id, overlap, photo_comment, photo_comment_nickname, upload_time);
             return response;
         } catch (err) {
             return { success: false, msg: "업로드에 실패하였습니다."};
         }
     }
 
-    async videocommentUpload(user_id, overlap, video_comment, upload_time) {
+    async videocommentUpload(user_id, overlap, video_comment, video_comment_nickname, upload_time) {
         try {
-            const response = await UserStorage.uploadcommentVideo(user_id, overlap, video_comment, upload_time);
+            const response = await UserStorage.uploadcommentVideo(user_id, overlap, video_comment, video_comment_nickname, upload_time);
             return response;
         } catch (err) {
             return { success: false, msg: "업로드에 실패하였습니다."};
@@ -275,15 +285,15 @@ class Board {
     }
 
     async photocommentgetId(overlap) {
-        const {seq, user_id, photo_comments, upload_time} = await UserStorage.commentgetIdPhoto(overlap);
+        const {seq, user_id, photo_comments, nickname, upload_time} = await UserStorage.commentgetIdPhoto(overlap);
         await UserStorage.commentcheckpUpdate(seq, overlap); 
-        return [user_id, photo_comments, upload_time, seq];
+        return [user_id, photo_comments, upload_time, seq, nickname];
     }
 
     async videocommentgetId(overlap) {
-        const {seq, user_id, video_comments, upload_time} = await UserStorage.commentgetIdVideo(overlap);
+        const {seq, user_id, video_comments, nickname, upload_time} = await UserStorage.commentgetIdVideo(overlap);
         await UserStorage.commentcheckvUpdate(seq, overlap); 
-        return [user_id, video_comments, upload_time, seq];
+        return [user_id, video_comments, upload_time, seq, nickname];
     }
 }
 

@@ -204,6 +204,7 @@ const output = {
         var photo_comment_contents = [];
         var photo_comment_time = [];
         var photo_comment_seq = [];
+        var photo_comment_nick = [];
 
         for (var i = 0; i < comment_cnt; i++) { // board_photo.ejs에서 댓글 출력 하기 위한 객체에 값을 저장
             var photo_comment_infromation = await photo_user.photocommentgetId("%" + id + photo_seq);
@@ -214,12 +215,13 @@ const output = {
             var comment_uploadtime = new Date(photo_comment_infromation[2]).getTime(); // 댓글 업로드 당시 시간
             photo_comment_time.push((now_time - comment_uploadtime) / 1000 / 60); // 현재 시간 - 업로드 시간
             photo_comment_seq.push(photo_comment_infromation[3]);
+            photo_comment_nick.push(photo_comment_infromation[4]);
         }
         
         res.render('home/board_photo', {title:photo_title_des_like[1], description:photo_title_des_like[2], like:photo_like_cnt, 
             like_check:photo_like_check, user_id:photo_title_des_like[3], id:upload_id, seq:photo_seq, comment_cnt:comment_cnt, 
             comment_id:photo_comment_id, comment_contents:photo_comment_contents, comment_time:photo_comment_time,
-            comment_seq:photo_comment_seq, banner_check_point:user_point});
+            comment_seq:photo_comment_seq, comment_nick:photo_comment_nick, banner_check_point:user_point});
     },
     upload: (req, res) => {
         res.render("home/upload");
@@ -287,6 +289,7 @@ const output = {
         var video_comment_contents = [];
         var video_comment_time = [];
         var video_comment_seq = [];
+        var video_comment_nick = [];
         
         for (var i = 0; i < comment_cnt; i++) { // board_video.ejs에서 댓글 출력 하기 위한 객체에 값을 저장
             var video_comment_infromation = await video_user.videocommentgetId("%" + id + video_seq);
@@ -297,12 +300,13 @@ const output = {
             var comment_uploadtime = new Date(video_comment_infromation[2]).getTime(); // 댓글 업로드 당시 시간
             video_comment_time.push((now_time - comment_uploadtime) / 1000 / 60); // 현재 시간 - 업로드 시간
             video_comment_seq.push(video_comment_infromation[3]);
+            video_comment_nick.push(video_comment_infromation[4]);
         }
 
         res.render('home/board_video', {title:video_title_des_like[1], description:video_title_des_like[2], like:video_like_cnt, 
             like_check:video_like_check, user_id:video_title_des_like[3], id:upload_id, seq:video_seq, comment_cnt:comment_cnt, 
             comment_id:video_comment_id, comment_contents:video_comment_contents, comment_time:video_comment_time,
-            comment_seq:video_comment_seq, banner_check_point:user_point});
+            comment_seq:video_comment_seq, comment_nick:video_comment_nick, banner_check_point:user_point});
     },
     mypage: async (req, res) => {var queryData = url.parse(req.url, true).query;
         var delete_seq = queryData.seq;
@@ -502,6 +506,7 @@ const output = {
         var photo_comment_contents = [];
         var photo_comment_time = [];
         var photo_comment_seq = [];
+        var photo_comment_nick = [];
 
         for (var i = 0; i < comment_cnt; i++) { // board_photo.ejs에서 댓글 출력 하기 위한 객체에 값을 저장
             var photo_comment_infromation = await photo_user.photocommentgetId("%" + id + photo_seq);
@@ -512,12 +517,13 @@ const output = {
             var comment_uploadtime = new Date(photo_comment_infromation[2]).getTime(); // 댓글 업로드 당시 시간
             photo_comment_time.push((now_time - comment_uploadtime) / 1000 / 60); // 현재 시간 - 업로드 시간
             photo_comment_seq.push(photo_comment_infromation[3]);
+            photo_comment_nick.push(photo_comment_infromation[4]);
         }
         
         res.render('home/board_photo', {title:photo_title_des_like[1], description:photo_title_des_like[2], like:photo_like_cnt, 
             like_check:photo_like_check, user_id:photo_title_des_like[3], id:upload_id, seq:photo_seq, comment_cnt:comment_cnt, 
             comment_id:photo_comment_id, comment_contents:photo_comment_contents, comment_time:photo_comment_time,
-            comment_seq:photo_comment_seq, banner_check_point:user_point});
+            comment_seq:photo_comment_seq, comment_nick:photo_comment_nick, banner_check_point:user_point});
     },
 }
 
@@ -554,9 +560,11 @@ const process = {
         const photo_comment = req.body.comment;
         const comment_user = new User(req.body);
         const photo_uploadtime = new Date(); // 업로드 시간
+        const photo_comment_nickname = await comment_user.photonickSearch(upload_id);
 
         // photo_comment DB에 댓글을 작성한 user의 id, overlap, 댓글 내용 Insert
-        const response_comment = await comment_user.photocommentUpload(upload_id, photo_comment_overlap, photo_comment, photo_uploadtime); 
+        const response_comment = await comment_user.photocommentUpload(upload_id, photo_comment_overlap, 
+            photo_comment, photo_comment_nickname, photo_uploadtime); 
         return res.json(response_comment);
     },
     board_video_id: async(req, res) => {
@@ -565,9 +573,11 @@ const process = {
         const video_comment = req.body.comment;
         const comment_user = new User(req.body);
         const video_uploadtime = new Date(); // 업로드 시간
+        const video_comment_nickname = await comment_user.videonickSearch(upload_id);
 
         // video_comment DB에 댓글을 작성한 user의 id, overlap, 댓글 내용 Insert
-        const response_comment = await comment_user.videocommentUpload(upload_id, video_comment_overlap, video_comment, video_uploadtime);
+        const response_comment = await comment_user.videocommentUpload(upload_id, video_comment_overlap, 
+            video_comment, video_comment_nickname, video_uploadtime);
         return res.json(response_comment);
     },
 };

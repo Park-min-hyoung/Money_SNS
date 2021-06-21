@@ -14,13 +14,19 @@
         <script src="https://kit.fontawesome.com/58412d2786.js" crossorigin="anonymous"></script>
         <script src="/js/home/login_logout.js" defer="defer"></script>
         <script src="/js/home/index.js" defer="defer"></script>
-        <!-- <script type="text/javascript"
-        src="http://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-        : 슬라이드-->
+        <script type="text/javascript">
+            var urlQuery = window.location.search; // url query 조회
+            var urlParams = new URLSearchParams(urlQuery); // id의 값을 조회하기 위한 준비
+            var back_id = urlParams.get('id'); // back_id가 null이면 뒤로가기 x, back_id이 아니면 뒤로가기 o
+
+            if (back_id === null) {
+                window.history.forward();
+            }
+        </script>
         <title>Money SNS</title>
     </head>
 
-    <body>
+    <body onload="noBack();" onpageshow="if(event.persisted) noBack();" onunload="">
         <div class="wrap">
             <header id="header__wrap">
                 <div class="header__top__wrap">
@@ -80,11 +86,11 @@
                     </div>
                     <div class="intro__new__wrap">
                         <a href="/board_video">
-                            <span><img src="https://previews.123rf.com/images/fokaspokas/fokaspokas1607/fokaspokas160700023/59283636-%EC%B1%84%ED%8C%85-%EC%95%84%EC%9D%B4%EC%BD%98.jpg" alt=""/></span></a>
+                            <span><img src="https://cavicast.files.wordpress.com/2018/01/maxresdefault.jpg" alt=""/></span></a>
                         <a id="link_board" href="/board">
                             <span><img src="https://previews.123rf.com/images/anatolir/anatolir2006/anatolir200600046/148243671-school-board-icon-outline-school-board-vector-icon-for-web-design-isolated-on-white-background.jpg" alt=""/></span></a>
                         <a href="#">
-                            <span><img src="https://png.pngtree.com/png-vector/20190802/ourlarge/pngtree-coin-money-icon-png-image_1650295.jpg" alt=""/></span></a>
+                            <span><img src="https://img.huffingtonpost.com/asset/5d718fc42500001c1305a39c.jpeg?ops=scalefit_630_noupscale" alt=""/></span></a>
                     </div>
                 </div>
             </section>

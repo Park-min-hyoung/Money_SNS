@@ -66,8 +66,6 @@ const output = {
                     res.redirect('/loginout');
                 }
             });
-
-
         }
         else {
             console.log("session is not finded")
