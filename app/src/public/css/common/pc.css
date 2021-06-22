@@ -43,6 +43,30 @@
     flex-direction: row;
     flex-wrap: wrap;
   }
+  .intro__new__wrap #select__img #question__wrap{
+    color:white;
+    width:100%;
+    text-align: left;
+    font-size: 15px;
+  }
+  #question__wrap #question_seq{
+    display: inline-block;
+    width: 15%;
+  }
+  #question__wrap #question_title{
+    display: inline-block;
+    width: 30%;
+    color: white;
+    text-decoration:none;
+  }
+  #question__wrap #question_user{
+    display: inline-block;
+    width: 20%;
+  }
+  #question__wrap #question_day{
+    display: inline-block;
+    width: 20%;
+  }
   .intro__new__wrap #select__video {
     width: 100%;
     display: none;
@@ -252,6 +276,12 @@
     display: inline-block;
     font-size: 30px;
     margin: 0 20px;
+    float: right;
+  }
+  /* 질문 게시판 신고 아이콘 */
+  #question_declaration{
+    display: inline-block;
+    font-size: 30px;
     float: right;
   }
   

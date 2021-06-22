@@ -309,8 +309,6 @@ const output = {
             comment_seq:video_comment_seq, comment_nick:video_comment_nick, banner_check_point:user_point});
     },
     mypage: async (req, res) => {var queryData = url.parse(req.url, true).query;
-        var delete_seq = queryData.seq;
-        var delete_check = queryData.delete;
         var photo_array = [];
         var video_array = [];
         var photo_id_array = [];
@@ -319,130 +317,51 @@ const output = {
         const photo_user = new User();
         const video_user = new User();
 
-        if (delete_check == "photo_delete") {
-            var photo_delete_title = await photo_user.photoSearchTitledesLike(delete_seq); // 파일 삭제시 제목 있어야 함
-            await photo_user.photoDelete(delete_seq); // seq에 해당하는 photo의 테이블의 데이터를 삭제
-            await photo_user.photooverlapDelete(photo_delete_title[1] + delete_seq); // photo_like 테이블에 삭제될 사진의 overlap을 삭제
-            await photo_user.photocommentoverlapDelete(photo_delete_title[1] + delete_seq); // photo_comment 테이블에 삭제될 사진의 overlap을 삭제
+        // fs.name 까지는 가장 최근의 img 파일의 이름을 가장 최근의 txt 파일의 이름으로 변경하는 것이다.
+        const dir_photo = './src/public/uploads/photo/';
+        const dir_video = './src/public/uploads/video/';
+        const dir_thumbnail = './src/public/uploads/thumbnail/';
 
-            await photo_user.photoseqUpdate(delete_seq); // photo 테이블에 seq가 삭제 되었으므로 업데이트
-            var photo_final_seq = await photo_user.photoseqSearch(); // title의 목록을 만들기 위해 마지막 seq 조회
-            var photo_comment_final_seq = await photo_user.photocommentseqSearch();
-            await photo_user.seqstartupdatePhoto(photo_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(photo TB)
-            await photo_user.commentseqstartupdatePhoto(photo_comment_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(photo_comment TB)
-
-            await photo_user.minusPoint(photo_delete_title[3]); // 삭제한 사진을 업로드한 user의 point를 차감
-            fs.unlink(`./src/public/uploads/photo/` + photo_delete_title[1] + delete_seq + `.png`,(err)=>{})
-            
-            for (var i = 1; i <= photo_final_seq; i++){ // 삭제한 사진 뒤의 seq에 해당하는 사진 파일과 데이터 업데이트
-                var photo_title = await photo_user.photoSearchTitle(i);
-                photo_array.push(photo_title);
-                if (i > delete_seq - 1) {
-                    fs.rename('src/public/uploads/photo/' + photo_title + (i + 1) + ".png", 
-                    'src/public/uploads/photo/' + photo_title + i + '.png', function(err){});
-                    await photo_user.photooverlapUpdate(photo_title, i + 1, i); // photo TB에서 삭제된 사진의 뒤의 사진들의 overlap 번호를 -1
-                }
+        const list_photo = fs.readdirSync(dir_photo).map(filename => {
+            return {
+                filename: filename,
+                mtime: fs.statSync(dir_photo + filename).mtime
             }
-
-            delete_seq = parseInt(queryData.seq);
-            // 삭제 한 뒤 나머지 사진에서 댓글이 정상적으로 출력되기 위한 작업
-            for (var i = delete_seq + 1; i <= photo_final_seq + 1; i++) { // 삭제한 사진의 overlap 숫자보다 큰 사진들의 숫자들을 -1 하기 위해서
-                var photo_comment_title = await photo_user.photoSearchTitle(i - 1);
-                await photo_user.photocommentoverlapUpdate(photo_comment_title, i, i - 1); // photo_comment TB에서 삭제된 사진의 뒤의 사진들의 overlap 번호를 -1
+        });
+        const list_video = fs.readdirSync(dir_video).map(filename => {
+            return {
+                filename: filename,
+                mtime: fs.statSync(dir_video + filename).mtime
             }
-            
-            var video_final_seq = await photo_user.videoseqSearch();
-            for (var i = 1; i <= video_final_seq; i++){
-                var video_title = await video_user.videoSearchTitle(i);
-                video_array.push(video_title);
+        });
+        const list_thumbnail = fs.readdirSync(dir_thumbnail).map(filename => {
+            return {
+                filename: filename,
+                mtime: fs.statSync(dir_thumbnail + filename).mtime
             }
-        } else if (delete_check == "video_delete") {
-            var video_delete_title = await video_user.videoSearchTitledesLike(delete_seq); // 파일 삭제시 제목 있어야 함
-            await video_user.videoDelete(delete_seq); // seq에 해당하는 데이터를 삭제
-            await video_user.videooverlapDelete(video_delete_title[1] + delete_seq); // video TB에서 삭제될 사진의 overlap을 삭제
-            await video_user.videocommentoverlapDelete(video_delete_title[1] + delete_seq); // video_comment TB에서 삭제될 사진의 overlap을 삭제
+        });
+        
+        list_photo.sort((a, b) => b.mtime - a.mtime);
+        const photo_title = await photo_user.photoSearchTitle(list_photo.length);
+        fs.rename('src/public/uploads/photo/' + list_photo[0].filename, 'src/public/uploads/photo/' + photo_title + list_photo.length + '.png', function(err){});
+        
+        list_video.sort((a, b) => b.mtime - a.mtime);
+        const video_title = await video_user.videoSearchTitle(list_video.length);
+        fs.rename('src/public/uploads/video/' + list_video[0].filename, 'src/public/uploads/video/' + video_title + list_video.length + '.mp4', function(err){});
 
-            await video_user.videoseqUpdate(delete_seq); // seq가 삭제 되었으므로 업데이트
-            var video_final_seq = await video_user.videoseqSearch(); // title의 목록을 만들기 위해 마지막 seq 조회
-            var video_comment_final_seq = await video_user.videocommentseqSearch();
-            await video_user.seqstartupdateVideo(video_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트
-            await video_user.commentseqstartupdateVideo(video_comment_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(video_comment TB)
+        list_thumbnail.sort((a, b) => b.mtime - a.mtime);
+        fs.rename('src/public/uploads/thumbnail/' + list_thumbnail[0].filename, 'src/public/uploads/thumbnail/' + video_title + list_video.length + '.png', function(err){});
+        
+        for (var i = 1; i <= list_photo.length; i++){
+            photo_array.push(await photo_user.photoSearchTitle(i));
+            var photo_title_des_like  = await photo_user.photoSearchTitledesLike(i);
+            photo_id_array.push(photo_title_des_like[3]);
+        }
 
-            await video_user.minusPoint(video_delete_title[3]); // 삭제한 사진을 업로드한 user의 point를 차감
-            fs.unlink(`./src/public/uploads/video/` + video_delete_title[1] + delete_seq + `.mp4`,(err)=>{});
-            fs.unlink(`./src/public/uploads/thumbnail/` + video_delete_title[1] + delete_seq + `.png`,(err)=>{});
-            
-            for (var i = 1; i <= video_final_seq; i++){ // 삭제한 영상의 뒤의 seq에 해당하는 사진 파일과 데이터 업데이트
-                var video_title = await video_user.videoSearchTitle(i);
-                video_array.push(video_title);
-                if (i > delete_seq - 1) {
-                    fs.rename('src/public/uploads/video/' + video_title + (i + 1) + ".mp4", 
-                    'src/public/uploads/video/' + video_title + i + '.mp4', function(err){});
-                    fs.rename('src/public/uploads/thumbnail/' + video_title + (i + 1) + ".png", 
-                    'src/public/uploads/thumbnail/' + video_title + i + '.png', function(err){});
-                    await video_user.videooverlapUpdate(video_title, i + 1, i);
-                }
-            }
-
-            // 삭제 한 후 사진이 정상적으로 출력 되기 위한 작업
-            delete_seq = parseInt(queryData.seq);
-            for (var i = delete_seq + 1; i <= video_final_seq + 1; i++) { // 삭제한 영상의 overlap 숫자보다 큰 사진들의 숫자들을 -1 하기 위해서
-                var video_comment_title = await video_user.videoSearchTitle(i - 1);
-                await video_user.videocommentoverlapUpdate(video_comment_title, i, i - 1); // photo_comment TB에서 삭제된 사진의 뒤의 사진들의 overlap 번호를 -1
-            }
-            
-            var photo_final_seq = await photo_user.photoseqSearch();
-            for (var i = 1; i <= photo_final_seq; i++){
-                var photo_title = await photo_user.photoSearchTitle(i);
-                photo_array.push(photo_title);
-            }
-        } else {
-            // fs.name 까지는 가장 최근의 img 파일의 이름을 가장 최근의 txt 파일의 이름으로 변경하는 것이다.
-            const dir_photo = './src/public/uploads/photo/';
-            const dir_video = './src/public/uploads/video/';
-            const dir_thumbnail = './src/public/uploads/thumbnail/';
-
-            const list_photo = fs.readdirSync(dir_photo).map(filename => {
-                return {
-                    filename: filename,
-                    mtime: fs.statSync(dir_photo + filename).mtime
-                }
-            });
-            const list_video = fs.readdirSync(dir_video).map(filename => {
-                return {
-                    filename: filename,
-                    mtime: fs.statSync(dir_video + filename).mtime
-                }
-            });
-            const list_thumbnail = fs.readdirSync(dir_thumbnail).map(filename => {
-                return {
-                    filename: filename,
-                    mtime: fs.statSync(dir_thumbnail + filename).mtime
-                }
-            });
-            
-            list_photo.sort((a, b) => b.mtime - a.mtime);
-            const photo_title = await photo_user.photoSearchTitle(list_photo.length);
-            fs.rename('src/public/uploads/photo/' + list_photo[0].filename, 'src/public/uploads/photo/' + photo_title + list_photo.length + '.png', function(err){});
-            
-            list_video.sort((a, b) => b.mtime - a.mtime);
-            const video_title = await video_user.videoSearchTitle(list_video.length);
-            fs.rename('src/public/uploads/video/' + list_video[0].filename, 'src/public/uploads/video/' + video_title + list_video.length + '.mp4', function(err){});
-
-            list_thumbnail.sort((a, b) => b.mtime - a.mtime);
-            fs.rename('src/public/uploads/thumbnail/' + list_thumbnail[0].filename, 'src/public/uploads/thumbnail/' + video_title + list_video.length + '.png', function(err){});
-            
-            for (var i = 1; i <= list_photo.length; i++){
-                photo_array.push(await photo_user.photoSearchTitle(i));
-                var photo_title_des_like  = await photo_user.photoSearchTitledesLike(i);
-                photo_id_array.push(photo_title_des_like[3]);
-            }
-
-            for (var i = 1; i <= list_video.length; i++){
-                video_array.push(await video_user.videoSearchTitle(i));
-                var video_title_des_like  = await video_user.videoSearchTitledesLike(i);
-                video_id_array.push(video_title_des_like[3]);
-            }
+        for (var i = 1; i <= list_video.length; i++){
+            video_array.push(await video_user.videoSearchTitle(i));
+            var video_title_des_like  = await video_user.videoSearchTitledesLike(i);
+            video_id_array.push(video_title_des_like[3]);
         }
 
         var queryData = url.parse(req.url, true).query;
@@ -525,6 +444,90 @@ const output = {
             comment_id:photo_comment_id, comment_contents:photo_comment_contents, comment_time:photo_comment_time,
             comment_seq:photo_comment_seq, comment_nick:photo_comment_nick, banner_check_point:user_point});
     },
+    question: async (req, res) => {
+        var question_array = [];
+        var question_id_array = [];
+        var question_num_array = [];
+        var question_data_array = [];
+
+        const question_user = new User();
+
+        var question_final_seq = await question_user.questionseqSearch();
+
+        for (var i = 1; i <= question_final_seq; i++){
+            var question_title_des_like = await question_user.questionSearchTitledesLike(i);
+            question_array.push(question_title_des_like[1]); // question의 title
+            question_id_array.push(question_title_des_like[3]); // question의 id
+            question_num_array.push(question_title_des_like[0]); // question의 댓글 개수
+
+            var now_time = new Date().getTime(); // 현재 시간
+            var question_uploadtime = new Date(question_title_des_like[4]).getTime(); // 댓글 업로드 당시 시간
+            question_data_array.push((now_time - question_uploadtime) / 1000 / 60); // 현재 접속시 댓글 업로드 당시와의 시간 차이
+        }
+
+        var queryData = url.parse(req.url, true).query;
+        upload_id = queryData.id;
+        res.render("home/question", {question_title: question_array, id:upload_id, question_id:question_id_array, 
+            question_num:question_num_array, question_data:question_data_array});
+    },
+    board_question_id: async (req, res) => {
+        var id = req.params.id;
+
+        
+        var queryData = url.parse(req.url, true).query;
+        var question_seq = queryData.n;
+        var question_declaration = queryData.declaration;
+        var question_comment_delete = queryData.comment_delete_seq;
+        var question_comment_update = queryData.comment_update_seq;
+        var update_comment = queryData.update_comment;
+        upload_id = queryData.id;
+        
+        comment_seq = question_seq;
+        comment_title = id;
+
+        const question_user = new User();
+        var question_title_des_like  = await question_user.questionSearchTitledesLike(comment_seq);
+        var user_point = await question_user.getPoint(question_title_des_like[3]); // user의 point에 따라 광고를 표시 할지 말지 결정하기 위한 소스코드
+
+        if (question_declaration && question_declaration != "null") {
+            await question_user.questiondeclarationUpdate(comment_seq); // 신고버튼을 클릭했으면 신고 Count가 올라갈 수 있도록
+        }
+
+        if (question_comment_delete !== undefined) { // 댓글 삭제 버튼을 눌렀을 때 데이터 삭제 및 seq 초기화
+            await question_user.questioncommentDelete(question_comment_delete); // video_comment 테이블에서 해당 seq의 데이터를 삭제
+            var question_comment_final_seq = await question_user.questioncommentseqSearch();
+            await question_user.commentseqstartupdateQuestion(question_comment_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(video_comment TB)
+        }
+
+        if (question_comment_update !== undefined) { // 댓글 수정 버튼을 눌렀을 때 comment 수정
+            await question_user.questioncommentUpdate(question_comment_update, update_comment); // video_comment 테이블에서 해당 seq의 comment 수정
+        }
+
+        var comment_cnt = await question_user.questioncommentCount("%" + id + question_seq); // video_comment 테이블에서 특정 overlap으로 끝나는 데이터 수
+        await question_user.commentqcheckRenew("%" + id + question_seq); // comment_check를 0으로 업데이트(댓글 여러개를 출력하기 위해)
+        var question_comment_id = [];
+        var question_comment_contents = [];
+        var question_comment_time = [];
+        var question_comment_seq = [];
+        var question_comment_nick = [];
+        
+        for (var i = 0; i < comment_cnt; i++) { // board_video.ejs에서 댓글 출력 하기 위한 객체에 값을 저장
+            var question_comment_infromation = await question_user.questioncommentgetId("%" + id + question_seq);
+            question_comment_id.push(question_comment_infromation[0]);
+            question_comment_contents.push(question_comment_infromation[1]);
+
+            var now_time = new Date().getTime(); // 현재 시간
+            var comment_uploadtime = new Date(question_comment_infromation[2]).getTime(); // 댓글 업로드 당시 시간
+            question_comment_time.push((now_time - comment_uploadtime) / 1000 / 60); // 현재 시간 - 업로드 시간
+            question_comment_seq.push(question_comment_infromation[3]);
+            question_comment_nick.push(question_comment_infromation[4]);
+        }
+
+        res.render('home/board_question', {title:question_title_des_like[1], description:question_title_des_like[2], 
+            user_id:question_title_des_like[3], id:upload_id, seq:question_seq, comment_cnt:comment_cnt, 
+            comment_id:question_comment_id, comment_contents:question_comment_contents, comment_time:question_comment_time,
+            comment_seq:question_comment_seq, comment_nick:question_comment_nick, banner_check_point:user_point});
+    },
 }
 
 const process = {
@@ -537,8 +540,13 @@ const process = {
                 const response = await user.videoUpload(upload_id);
                 await user.plusPoint(upload_id, 10);
                 return res.json(response);
-            } else {
+            } else if(extension === "img") {
                 const response = await user.photoUpload(upload_id);
+                await user.plusPoint(upload_id, 10);
+                return res.json(response);
+            } else {
+                const question_uploadtime = new Date(); // 업로드 시간
+                const response = await user.questionUpload(upload_id, question_uploadtime);
                 await user.plusPoint(upload_id, 10);
                 return res.json(response);
             }
@@ -578,6 +586,20 @@ const process = {
         // video_comment DB에 댓글을 작성한 user의 id, overlap, 댓글 내용 Insert
         const response_comment = await comment_user.videocommentUpload(upload_id, video_comment_overlap, 
             video_comment, video_comment_nickname, video_uploadtime);
+        return res.json(response_comment);
+    },
+    board_question_id: async(req, res) => {
+        var question_comment_overlap = upload_id + comment_title + comment_seq;
+
+        const question_comment = req.body.comment; // 댓글창에 입력한 내용
+        const comment_user = new User(req.body);
+        const question_uploadtime = new Date(); // 업로드 시간
+        const question_comment_nickname = await comment_user.videonickSearch(upload_id);
+
+        // video_comment DB에 댓글을 작성한 user의 id, overlap, 댓글 내용 Insert
+        const response_comment = await comment_user.questioncommentUpload(upload_id, question_comment_overlap, 
+            question_comment, question_comment_nickname, question_uploadtime);
+        
         return res.json(response_comment);
     },
 };

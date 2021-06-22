@@ -21,7 +21,8 @@
 
 /* 사진, 영상 업로드 버튼 */
 #photo_upload,
-#video_upload {
+#video_upload,
+#question_upload {
     display: block;
     border-radius: 4px;
     background-color: var(--color-beige);
@@ -37,7 +38,8 @@
   }
   
   #photo_upload span,
-  #video_upload span {
+  #video_upload span,
+  #question_upload span {
     cursor: pointer;
     display: inline-block;
     position: relative;
@@ -45,7 +47,8 @@
   }
   
   #photo_upload span:after,
-  #video_upload span:after {
+  #video_upload span:after,
+  #question_upload span:after {
     content: '\00bb';
     position: absolute;
     opacity: 0;
@@ -55,12 +58,14 @@
   }
   
   #photo_upload:hover span,
-  #video_upload:hover span {
+  #video_upload:hover span,
+  #question_upload:hover span {
     padding-right: 25px;
   }
   
   #photo_upload:hover span:after,
-  #video_upload:hover span:after {
+  #video_upload:hover span:after,
+  #question_upload:hober span:after {
     opacity: 1;
     right: 0;
   }

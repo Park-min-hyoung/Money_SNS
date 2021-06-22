@@ -28,6 +28,16 @@ class Board {
         }
     }
 
+    async questionUpload(id, upload_time) {
+        const client = this.body;
+        try {
+            const response = await UserStorage.saveQuestion(client, id, upload_time);
+            return response;
+        } catch (err) {
+            return { success: false, msg: "업로드에 실패하였습니다."};
+        }
+    }
+
     async getPoint(id) {
         const {point} = await UserStorage.searchPoint(id);
         return point;
@@ -61,6 +71,11 @@ class Board {
     async videoSearchTitledesLike(seq) {
         const {video_like_cnt, video_title, video_description, video_id} = await UserStorage.videogetDescription(seq);
         return [video_like_cnt, video_title, video_description, video_id];
+    }
+
+    async questionSearchTitledesLike(seq) {
+        const {question_title, question_description, question_id, question_num, upload_time} = await UserStorage.questiongetDescription(seq);
+        return [question_num, question_title, question_description, question_id, upload_time];
     }
 
     // 사진 및 영상을 삭제하기 하기 위한 메소드, 삭제하고 난 후 처리 메소드(삭제 : D)
@@ -103,6 +118,11 @@ class Board {
 
     async videoseqSearch() {
         const {seq} = await UserStorage.videosearchSeq();
+        return seq;
+    }
+
+    async questionseqSearch() {
+        const {seq} = await UserStorage.questionsearchSeq();
         return seq;
     }
 
@@ -206,6 +226,11 @@ class Board {
         await UserStorage.videodeClaration(seq, video_declaration);
     }
 
+    async questiondeclarationUpdate(photo_seq) {
+        const {seq, question_declaration} = await UserStorage.questiongetDescription(photo_seq);
+        await UserStorage.questiondeClaration(seq, question_declaration);
+    }
+
     async photonickSearch(user_id) {
         const {nickname} = await UserStorage.searchnickPhoto(user_id);
         return nickname;
@@ -234,12 +259,25 @@ class Board {
         }
     }
 
+    async questioncommentUpload(user_id, overlap, question_comment, question_comment_nickname, upload_time) {
+        try {
+            const response = await UserStorage.uploadcommentQuestion(user_id, overlap, question_comment, question_comment_nickname, upload_time);
+            return response;
+        } catch (err) {
+            return { success: false, msg: "업로드에 실패하였습니다."};
+        }
+    }
+
     async photocommentDelete(delete_seq) {
         return UserStorage.deletecommentPhoto(delete_seq);
     }
     
     async videocommentDelete(delete_seq) {
         return UserStorage.deletecommentVideo(delete_seq);
+    }
+
+    async questioncommentDelete(delete_seq) {
+        return UserStorage.deletecommentQuestion(delete_seq);
     }
 
     async photocommentseqSearch() {
@@ -252,12 +290,21 @@ class Board {
         return seq;
     }
 
+    async questioncommentseqSearch() {
+        const {seq} = await UserStorage.questioncommentsearchSeq();
+        return seq;
+    }
+
     async commentseqstartupdatePhoto(photo_start_seq) {
         await UserStorage.startcommentsequpdatePhoto(photo_start_seq);
     }
 
     async commentseqstartupdateVideo(video_start_seq) {
         await UserStorage.startcommentsequpdateVideo(video_start_seq);
+    }
+
+    async commentseqstartupdateQuestion(question_start_seq) {
+        await UserStorage.startcommentsequpdateQuestion(question_start_seq);
     }
 
     async photocommentUpdate(update_seq, update_comment) {
@@ -268,12 +315,20 @@ class Board {
         return UserStorage.updatecommentVideo(update_seq, update_comment);
     }
 
+    async questioncommentUpdate(update_seq, update_comment) {
+        return UserStorage.updatecommentQuestion(update_seq, update_comment);
+    }
+
     async photocommentCount(overlap) {
         return UserStorage.commentphotoCount(overlap);
     }
 
     async videocommentCount(overlap) {
         return UserStorage.commentvideoCount(overlap);
+    }
+
+    async questioncommentCount(overlap) {
+        return UserStorage.commentQuestionCount(overlap);
     }
     
     async commentpcheckRenew(overlap) {
@@ -282,6 +337,10 @@ class Board {
 
     async commentvcheckRenew(overlap) {
         await UserStorage.videocommentRenew(overlap);
+    }
+
+    async commentqcheckRenew(overlap) {
+        await UserStorage.questioncommentRenew(overlap);
     }
 
     async photocommentgetId(overlap) {
@@ -294,6 +353,12 @@ class Board {
         const {seq, user_id, video_comments, nickname, upload_time} = await UserStorage.commentgetIdVideo(overlap);
         await UserStorage.commentcheckvUpdate(seq, overlap); 
         return [user_id, video_comments, upload_time, seq, nickname];
+    }
+
+    async questioncommentgetId(overlap) {
+        const {seq, user_id, question_comments, nickname, upload_time} = await UserStorage.commentgetIdQuestion(overlap);
+        await UserStorage.commentcheckqUpdate(seq, overlap); 
+        return [user_id, question_comments, upload_time, seq, nickname];
     }
 }
 

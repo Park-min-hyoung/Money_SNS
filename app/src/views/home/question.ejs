@@ -46,7 +46,7 @@
                     <div class="header__bot">
                         <div class="header__bot__container">
                             <ul class="login__wrap" id="login__wrap">
-                                <li class="login"><a href="/login2?href=board">LOGIN</a></li>
+                                <li class="login"><a href="/login2?href=question">LOGIN</a></li>
                                 <li class="sign">
                                   <a href="/join"><span class="sign__a">SIGN</span></a>
                                 </li>
@@ -80,11 +80,7 @@
                             <div class="section__titles">
                                 <a href="#" class="section__logo selected" onclick="selectImg(1)">
                                     <i class="fas fa-image"></i>
-                                    <span class="section__logo__title">Photo</span>
-                                </a>
-                                <a href="#" class="section__logo" onclick="selectImg(2)">
-                                    <i class="fas fa-video"></i>
-                                    <span class="section__logo__title">Video</span>
+                                    <span class="section__logo__title">Question</span>
                                 </a>
                             </div>
                             <span class="half-line"></span>
@@ -92,42 +88,45 @@
                     </div>
                     <div class="intro__new__wrap">
                         <div id="select__img">
-                            <% for(var i = photo.length - 1; i >= 0; i--){ %>
-                                <% if(id != null){ %>
-                                    <a href="/board/<%= photo[i] %>/?id=<%= id %>&n=<%= i + 1 %>">
-                                        <span><img id="profile" src="uploads/photo/<%= photo[i] %><%= i + 1 %>.png" alt=""/></span></a>
-                                <% } else{ %>
-                                    <a href="/board" onclick="alert('로그인 후 이용해주시길 바랍니다');">
-                                        <span><img id="profile" src="uploads/photo/<%= photo[i] %><%= i + 1 %>.png" alt=""/></span></a>
+                            <div id="question__wrap">
+                                <span id="question_seq">번호</span>
+                                <span id="question_title">제목</span>
+                                <span id="question_user">작성자</span>
+                                <span id="question_day">문의일시</span>
+                                <span id="question_num">답변여부(개수)</span><br><br><hr><br><br>
+                                <% for(var i = question_title.length - 1; i >= 0; i--){ %>
+                                    <% if(id != null){ %>
+                                        <span id="question_seq"><%= i + 1 %></span>
+                                        <a href="/board_question/fjfdjdkj$Efjd@/?id=<%= id %>&n=<%= i + 1 %>">
+                                            <span id="question_title"><%= question_title[i] %></span></a>
+                                        <span id="question_user"><%= question_id[i] %></span>
+                                        <% if(question_data[i] < 1){ %>
+                                            <span id="question_day"><%= Math.floor(question_data[i] * 60) %> 초전</span><!-- 1분 이하이므로 분으로 초로 수정 -->
+                                        <% } else if(question_data[i] >= 60 && question_data[i] < 1440) { %>
+                                            <span id="question_day"><%= Math.floor(question_data[i] / 60) %> 시간전</span> <!-- 1시간이 지나서 분으로 시간으로 수정 -->
+                                        <% } else if(question_data[i] >= 1440) { %>
+                                            <span id="question_day"><%= Math.floor(question_data[i] / 60 / 24) %> 일전</span> <!-- 1일이 지나서 시간을 일로 수정 -->
+                                        <% } else {%>
+                                            <span id="question_day"><%= Math.floor(question_data[i]) %> 분전</span>
+                                        <% } %>
+                                        <!-- <span id="question_day">2</span> -->
+                                        <span id="question_num"><%= question_num[i] %>개</span><br><br><hr><br><br>
+                                    <% } else{ %>
+                                            <span id="question_seq"><%= i + 1 %></span>
+                                            <a href="/question" onclick="alert('로그인 후 이용해주시길 바랍니다');">
+                                                <span id="question_title"><%= question_title[i] %></span></a>
+                                            <span id="question_user"><%= question_id[i] %></span>
+                                            <span id="question_day">2</span>
+                                            <span id="question_num"><%= question_num[i] %>개</span><br><br><hr><br><br>
+                                    <% } %>
                                 <% } %>
-                            <% } %>
+
+                                
+                            </div>
                         </div>
                         
-                        <div id="select__video">
-                            <% for(var i = video.length - 1; i >= 0; i--){ %>
-                                <% if(id != null){ %>
-                                    <a href="/board_video/<%= video[i] %>/?id=<%= id %>&n=<%= i + 1 %>">
-                                        <span class="pre_video" target="#<%= video[i] %>">
-                                            <img
-                                                class="video_img"
-                                                src="uploads/thumbnail/<%= video[i] %><%= i + 1 %>.png"
-                                                alt="">
-                                            </span></a>
-                                <% } else{ %>
-                                    <a href="/board" onclick="alert('로그인 후 이용해주시길 바랍니다');">
-                                        <span class="pre_video" target="#<%= video[i] %>">
-                                            <img
-                                                class="video_img"
-                                                src="uploads/thumbnail/<%= video[i] %><%= i + 1 %>.png"
-                                                alt="">
-                                                <!-- <video id="<%= video[i] %>" class="pre" src="uploads/video/<%= video[i] %>.mp4" muted="muted"></video> --></span></a>
-                                <% } %>
-                                
-                            <% } %>
-                        </div>
                     </div>
-                    <a href="#" id="photo_upload" style="display: none;"><span>사진 업로드</span></a>
-                    <a href="#" id="video_upload" style="display: none;"><span>영상 업로드</span></a>
+                    <a href="#" id="question_upload" style="display: none;"><span>질문 등록</span></a>
                 </div>
             </section>
 

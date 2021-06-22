@@ -39,10 +39,33 @@ $(".modal_layer, #cancel").click(function(){
     $("#modal").attr("style", "display:none");
 }); 
 
+
+var seq = document.getElementById("for_like").getAttribute('name');
+var question_id = document.getElementById("video_comment").className;
+// 질문창 에서 댓글 삭제 버튼을 눌렀을 때
+function questioncommentDelete(delete_seq) {
+    location = "/board_question/fjfdjdkj$Efjd@/?id=" + question_id + "&n=" + seq + "&comment_delete_seq=" + delete_seq;
+}
+// 질문창에서 댓글 수정 버튼을 눌렀을 때
+function questioncommentUpdate(update_seq) {
+    var update_comment_text = prompt("댓글 수정");
+    if (update_comment_text !== null && update_comment_text !== "") {
+        location = "/board_question/fjfdjdkj$Efjd@/?id=" + question_id + "&n=" + seq + "&comment_update_seq=" + update_seq + "&update_comment=" + update_comment_text;
+    }
+    
+}
+// 질문 게시판에서 신고 클릭 시 DB에 카운터
+$('#question_declaration').on('click', function(){
+    var declaration_text = prompt("어떠한 사유로 신고하시는지 자세히 적어주세요");
+    if (declaration_text !== null && declaration_text !== "") {
+        location = "/board_question/fjfdjdkj$Efjd@/?id=" + question_id + "&n=" + seq + "&declaration=" + declaration_text;
+    }
+});
+
 var title = document.getElementById('nickname').innerHTML;
 var like_check = document.getElementById("like_cnt").getAttribute('name');
 var id = document.getElementById("like_cnt").className;
-var seq = document.getElementById("for_like").getAttribute('name');
+
 
 // 모달 취소 또는 바깥 화면 누르면 board로 이동
 $('label').on('click', function(){

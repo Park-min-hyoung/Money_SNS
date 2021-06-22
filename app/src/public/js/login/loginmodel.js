@@ -35,6 +35,9 @@ $(document).ready(function () {
               alert('hello');
               if (path == "board") {
                 location.replace('/board?id=' + input_value1);//이걸 사용하면 뒤로가기를 하여도 로그인 상태로 인한 오류가 발생되지 않는다.(앞에 접속 기록은 지워짐.)
+              } 
+              else if (path == "question") {
+                location.replace('/question?id=' + input_value1);
               } else {
                 location.replace('/?id=' + input_value1);
               }

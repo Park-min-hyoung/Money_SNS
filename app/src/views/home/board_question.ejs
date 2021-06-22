@@ -1,32 +1,25 @@
 <!DOCTYPE html>
 <html lang="ko">
-
     <head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=, initial-scale=1.0"/>
-        <link rel="stylesheet" href="/css/common/common.css"/>
-        <link rel="stylesheet" href="/css/common/pc.css"/>
-        <!-- font -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/css/common/common.css" />
+        <link rel="stylesheet" href="/css/common/pc.css" />
+        <link rel="stylesheet" href="/css/board_video/style.css" />
+
         <link
             href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Gothic+A1&family=Orbitron&family=Oswald:wght@700&family=Quicksand:wght@500&display=swap"
             rel="stylesheet"/>
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://kit.fontawesome.com/58412d2786.js" crossorigin="anonymous"></script>
-        <script src="/js/home/login_logout.js" defer="defer"></script>
-        <script src="/js/home/index.js" defer="defer"></script>
-        <script type="text/javascript">
-            var urlQuery = window.location.search; // url query 조회
-            var urlParams = new URLSearchParams(urlQuery); // id의 값을 조회하기 위한 준비
-            var back_id = urlParams.get('id'); // back_id가 null이면 뒤로가기 x, back_id이 아니면 뒤로가기 o
-
-            if (back_id === null) {
-                window.history.forward();
-            }
-        </script>
-        <title>Money SNS</title>
+        <script src ="/js/home/login_logout.js" defer></script>
+        <script src ="/js/home/board_video.js" defer></script>
+        <script src ="/js/home/board.js" defer></script>
+        <script src ="/js/home/comment.js" defer></script>
+        <title>Board_Video</title>
     </head>
 
-    <body onload="noBack();" onpageshow="if(event.persisted) noBack();" onunload="">
+    <body>
         <div class="wrap">
             <header id="header__wrap">
                 <div class="header__top__wrap">
@@ -41,30 +34,14 @@
                         </div>
                     </div>
                 </div>
-
-                <div id="userInfo"></div>
-
                 <div class="header__bot__wrap">
                     <div class="header__bot">
                         <div class="header__bot__container">
-                            <ul class="login__wrap" id="login__wrap">
-                                <li class="login"><a href="/login2">LOGIN</a></li>
-                                <li class="sign">
-                                  <a href="/join"><span class="sign__a">SIGN</span></a>
-                                </li>
-                                <li class="logout">
-                                    <a href="/find"><span class="logout__a">정보찾기</span></a>
-                                </li>
-                            </ul>
-                            <ul class="logout__wrap" id="logout__wrap">
+                              <ul class="logout__wrap" id="logout__wrap">
                                 <li class="logout">
                                   <a href="/loginout"><span class="logout__a">LOGUT</span></a>
                                 </li>
-                                <li class="logout">
-                                    <a id="mypage" href="/mypage">
-                                        <span class="logout__a">MyPage</span></a>
-                                </li>
-                            </ul>
+                              </ul>
                         </div>
                     </div>
                 </div>
@@ -80,25 +57,55 @@
                 <div class="intro__container">
                     <div class="section__title__wrap">
                         <h2 class="txt__harfline">
-                            <span class="txt">여러분의 능력을 보여주세요</span>
+                            <span id="question_title" class="txt" style="font-size: 35px;"><%= title %></span>
                             <span class="half-line"></span>
                         </h2>
                     </div>
-                    <div class="intro__new__wrap">
-                        <a href="/board_video">
-                            <span><img src="https://cavicast.files.wordpress.com/2018/01/maxresdefault.jpg" alt=""/></span></a>
-                        <a id="link_board" href="/board">
-                            <span><img src="https://previews.123rf.com/images/anatolir/anatolir2006/anatolir200600046/148243671-school-board-icon-outline-school-board-vector-icon-for-web-design-isolated-on-white-background.jpg" alt=""/></span></a>
-                        <a href="/question">
-                            <span><img src="https://img.huffingtonpost.com/asset/5d718fc42500001c1305a39c.jpeg?ops=scalefit_630_noupscale" alt=""/></span></a>
+                    <div id="nickname" style="font-size: 25px;"><%= description %></div>
+                        <br><br><br><hr style="margin: 30px 0;">
+                    <div id="video_nickname" ><%= user_id %>
+                        <div id="question_declaration"><i class="fas fa-angry" title="게시물 신고"></i></div>
+                        <div id="video_delete" style="display: none;"><i class="fas fa-trash-alt" title="게시물 삭제"></i></div>
+                    </div>
+                    <div id="for_like" name="<%= seq %>"></div>
+                    <hr style="margin: 40px 0;">
+                    <div id="video_comment" class="<%= id %>">
+                        <input id="comment" type="text" name="comment" placeholder="댓글을 입력하세요"/>
+                        <button id="comment_button">댓글 작성</button>
+                        <div id="comment_contents_title" class="<%= title %>" name="question"></div>
+                    </div>
+                    <div class="video_comment_list">
+                        <% for(var i = comment_cnt - 1; i >= 0; i--){ %>
+                            <div>
+                                <% if(comment_time[i] < 1){ %>
+                                    <%= Math.floor(comment_time[i] * 60) %>초 전 <!-- 1분 이하이므로 분으로 초로 수정 -->
+                                <% } else if(comment_time[i] >= 60 && comment_time[i] < 1440) { %>
+                                    <%= Math.floor(comment_time[i] / 60) %>시간 전 <!-- 1시간이 지나서 분으로 시간으로 수정 -->
+                                <% } else if(comment_time[i] >= 1440) { %>
+                                    <%= Math.floor(comment_time[i] / 60 / 24) %>일 전 <!-- 1일이 지나서 시간을 일로 수정 -->
+                                <% } else {%>
+                                    <%= Math.floor(comment_time[i]) %>분 전
+                                <% } %>
+                                
+                                <% if(comment_id[i] === id){ %> <!-- id는 방문자의 id를 나타낸다, 댓글 작성자와 방문자가 같아야 수정 및 삭제 가능-->
+                                    <span><button id="comment__delete__btn" onclick="questioncommentDelete(<%= comment_seq[i] %>)">
+                                        댓글 삭제</button></span>
+                                    <span><button id="comment__update__btn" onclick="questioncommentUpdate(<%= comment_seq[i] %>)">
+                                        댓글 수정</button></span>
+                            <% } %>
+                            </div>
+                            <div><%= comment_nick[i] %><span> <%= comment_contents[i] %></span></div><br>
+                        <% } %> 
                     </div>
                 </div>
             </section>
 
             <!-- banner -->
-            <section id="banner__wrap">
-                <div class="banner__container">Banner Img</div>
-            </section>
+            <% if(banner_check_point > 100){ %> 
+                <section id="banner__wrap">
+                    <div class="banner__container">Banner Img</div>
+                </section>
+            <% } %>
 
             <!-- footer -->
             <footer id="footer__wrap">
@@ -112,28 +119,21 @@
                         </div>
                         <ul class="footer__btns__wrap">
                             <li>
-                                <a href="#">
-                                    Money SNS 사용방법</a>
+                                <a href="#">Money SNS 사용방법</a>
                             </li>
                             <li>
-                                <a href="#">
-                                    Money SNS 광고의뢰</a>
+                                <a href="#">Money SNS 광고의뢰</a>
                             </li>
                             <li>
-                                <a href="#">
-                                    IR 공고
-                                </a>
+                                <a href="#">IR 공고</a>
                             </li>
                             <li>
-                                <a href="#">
-                                    개인정보처리방침
-                                </a>
+                                <a href="#">개인정보처리방침</a>
                             </li>
                         </ul>
                         <ul class="footer__info__wrap">
                             <li>
-                                <span>Copyright 2021. Money SNS Co. All Rights Reserved</span>
-                            </li>
+                                <span>Copyright 2021. Money SNS Co. All Rights Reserved</span></li>
                             <li>
                                 <a href="#">E-mail : qkralswgud1324@naver.com</a>
                             </li>

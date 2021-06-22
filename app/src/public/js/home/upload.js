@@ -91,8 +91,12 @@ function contentsPlus() {
         .then((res) => res.json())
         .then((res) => {
             if (res.success) {
-                location.href = "/board?id=" + req_id;
-                console.log
+                if (req_extension === "question") {
+                    location.href = "/question?id=" + req_id;
+                } else {
+                    location.href = "/board?id=" + req_id;
+                }
+                
             } else {
                 alert(res.msg);
             }
@@ -104,6 +108,9 @@ function contentsPlus() {
 
 if (req_extension === "mp4") { // 영상 업로드 화면에 들어오면 숨겨져 있던것 출력
     document.getElementById("mp4").style.display = "block";
-} else {
+} else if(req_extension === "img") {
     document.getElementById("img").style.display = "block";
+} else {
+    document.getElementById("question").style.display = "block";
+    document.getElementById("button").disabled = false;
 }

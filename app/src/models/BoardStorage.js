@@ -27,6 +27,18 @@ class BoardStorage {
         });
     }
 
+    static async saveQuestion(contents, id, upload_time) {
+        return new Promise((resolve, reject) => {
+            const query = "INSERT INTO question(question_id, question_title, question_description, upload_time) VALUES(?, ?, ?, ?);";
+            db.query(query, 
+            [id, contents.title, contents.description, upload_time],
+            (err) => {
+                if(err) reject(`${err}`);
+                resolve({ success: true });
+            })
+        });
+    }
+
     static searchPoint(id) {
         return new Promise((resolve, reject) => {
             const query = "SELECT * FROM member WHERE memberid = ?";
@@ -88,6 +100,26 @@ class BoardStorage {
     static videogetDescription(seq) {
         return new Promise((resolve, reject) => {
             const query = "SELECT * FROM video WHERE seq = ?";
+            db.query(query, [seq], (err, data) => {
+                if(err) reject(`${err}`);
+                resolve(data[0]);
+            })
+        });
+    }
+
+    static questiongetDescription(seq) {
+        return new Promise((resolve, reject) => {
+            const query = "SELECT * FROM question WHERE seq = ?";
+            db.query(query, [seq], (err, data) => {
+                if(err) reject(`${err}`);
+                resolve(data[0]);
+            })
+        });
+    }
+
+    static questiongetDescription(seq) {
+        return new Promise((resolve, reject) => {
+            const query = "SELECT * FROM question WHERE seq = ?";
             db.query(query, [seq], (err, data) => {
                 if(err) reject(`${err}`);
                 resolve(data[0]);
@@ -184,6 +216,16 @@ class BoardStorage {
     static async videosearchSeq() {
         return new Promise((resolve, reject) => {
             const query = "SELECT * FROM video ORDER BY seq DESC LIMIT 1";
+            db.query(query, (err, data) => {
+              if (err) reject(`${err}`);
+              else resolve(data[0]);
+            });
+          });
+    }
+
+    static async questionsearchSeq() {
+        return new Promise((resolve, reject) => {
+            const query = "SELECT * FROM question ORDER BY seq DESC LIMIT 1";
             db.query(query, (err, data) => {
               if (err) reject(`${err}`);
               else resolve(data[0]);
@@ -374,6 +416,15 @@ class BoardStorage {
             })
     }
 
+    static async questiondeClaration(seq, declaration) {
+        const query = "UPDATE question SET question_declaration=? WHERE seq = ?";
+            db.query(query, 
+            [declaration + 1, seq],
+            (err) => {
+                if(err) reject(`${err}`);
+            })
+    }
+
     static searchnickPhoto(user_id) {
         return new Promise((resolve, reject) => {
             const query = "SELECT * FROM member WHERE memberid = ?";
@@ -418,6 +469,18 @@ class BoardStorage {
         });
     }
 
+    static async uploadcommentQuestion(user_id, overlap, question_comment, question_comment_nickname, upload_time) {
+        return new Promise((resolve, reject) => {
+            const query = "INSERT INTO question_comment(user_id, overlap, question_comments, nickname, upload_time) VALUES(?, ?, ?, ?, ?);";
+            db.query(query, 
+            [user_id, overlap, question_comment, question_comment_nickname, upload_time],
+            (err) => {
+                if(err) reject(`${err}`);
+                resolve({ success: true });
+            })
+        });
+    }
+
     static async deletecommentPhoto(delete_seq) {
         const query = "DELETE FROM photo_comment WHERE seq = ?;";
             db.query(query, 
@@ -429,6 +492,15 @@ class BoardStorage {
 
     static async deletecommentVideo(delete_seq) {
         const query = "DELETE FROM video_comment WHERE seq = ?;";
+            db.query(query, 
+            [delete_seq],
+            (err) => {
+                if(err) reject(`${err}`);
+            })
+    }
+
+    static async deletecommentQuestion(delete_seq) {
+        const query = "DELETE FROM question_comment WHERE seq = ?;";
             db.query(query, 
             [delete_seq],
             (err) => {
@@ -456,6 +528,16 @@ class BoardStorage {
           });
     }
 
+    static async questioncommentsearchSeq() {
+        return new Promise((resolve, reject) => {
+            const query = "SELECT * FROM question_comment ORDER BY seq DESC LIMIT 1";
+            db.query(query, (err, data) => {
+              if (err) reject(`${err}`);
+              else resolve(data[0]);
+            });
+          });
+    }
+
     static async startcommentsequpdatePhoto(start_seq) {
         const query = "ALTER TABLE photo_comment AUTO_INCREMENT = ?;";
             db.query(query, 
@@ -474,6 +556,15 @@ class BoardStorage {
             })
     }
 
+    static async startcommentsequpdateQuestion(start_seq) {
+        const query = "ALTER TABLE question_comment AUTO_INCREMENT = ?;";
+            db.query(query, 
+            [start_seq],
+            (err) => {
+                if(err) reject(`${err}`);
+            })
+    }
+
     static async updatecommentPhoto(update_seq, update_comment) {
         const query = "UPDATE photo_comment SET photo_comments = ? WHERE seq = ?";
             db.query(query, 
@@ -485,6 +576,15 @@ class BoardStorage {
     
     static async updatecommentVideo(update_seq, update_comment) {
         const query = "UPDATE video_comment SET video_comments = ? WHERE seq = ?";
+            db.query(query, 
+            [update_comment, update_seq],
+            (err) => {
+                if(err) reject(`${err}`);
+            })
+    }
+
+    static async updatecommentQuestion(update_seq, update_comment) {
+        const query = "UPDATE question_comment SET question_comments = ? WHERE seq = ?";
             db.query(query, 
             [update_comment, update_seq],
             (err) => {
@@ -512,6 +612,16 @@ class BoardStorage {
           });
     }
 
+    static async commentQuestionCount(overlap) {
+        return new Promise((resolve, reject) => {
+            const query = "SELECT COUNT(overlap) as cnt FROM question_comment WHERE overlap LIKE ?;";
+            db.query(query, [overlap], (err, data) => {
+              if (err) reject(`${err}`);
+              else resolve(data[0].cnt);
+            });
+          });
+    }
+
     static async photocommentRenew(overlap) {
         const query = "UPDATE photo_comment SET photo_comment_check = 0 WHERE overlap LIKE ?;";
             db.query(query, 
@@ -523,6 +633,15 @@ class BoardStorage {
 
     static async videocommentRenew(overlap) {
         const query = "UPDATE video_comment SET video_comment_check = 0 WHERE overlap LIKE ?;";
+            db.query(query, 
+            [overlap],
+            (err, data) => {
+                if(err) reject(`${err}`);
+            });
+    }
+
+    static async questioncommentRenew(overlap) {
+        const query = "UPDATE question_comment SET question_comment_check = 0 WHERE overlap LIKE ?;";
             db.query(query, 
             [overlap],
             (err, data) => {
@@ -550,6 +669,16 @@ class BoardStorage {
           });
     }
 
+    static async commentgetIdQuestion(overlap) {
+        return new Promise((resolve, reject) => {
+            const query = "SELECT * FROM question_comment WHERE question_comment_check = 0 and overlap LIKE ?;";
+            db.query(query, [overlap], (err, data) => {
+              if (err) reject(`${err}`);
+              else resolve(data[0]);
+            });
+          });
+    }
+
     static async commentcheckpUpdate(seq, overlap) {
         return new Promise((resolve, reject) =>{
             const query = "UPDATE photo_comment SET photo_comment_check = 1 WHERE seq = ? and overlap LIKE ?;";
@@ -565,6 +694,18 @@ class BoardStorage {
     static async commentcheckvUpdate(seq, overlap) {
         return new Promise((resolve, reject) =>{
             const query = "UPDATE video_comment SET video_comment_check = 1 WHERE seq = ? and overlap LIKE ?;";
+                db.query(query, 
+                [seq, overlap],
+                (err, data) => {
+                    if(err) reject(`${err}`);
+                    else resolve(data[0]);
+                });
+        });
+    }
+
+    static async commentcheckqUpdate(seq, overlap) {
+        return new Promise((resolve, reject) =>{
+            const query = "UPDATE question_comment SET question_comment_check = 1 WHERE seq = ? and overlap LIKE ?;";
                 db.query(query, 
                 [seq, overlap],
                 (err, data) => {

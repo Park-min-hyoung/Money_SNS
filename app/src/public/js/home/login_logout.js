@@ -12,8 +12,10 @@ if (req_id !== null) { // 페이지 이동시 id를 넘겨줘야 로그인이 �
     $("#mypage").attr("href", "/mypage?id=" + req_id);
     $('#photo_upload').css('display', 'block');
     $('#photo_delete').css('display', 'block');
+    $('#question_upload').css('display', 'block');
     $("#photo_upload").attr("href", "/upload?id=" + req_id + "&extension=img");
     $("#video_upload").attr("href", "/upload?id=" + req_id + "&extension=mp4");
+    $("#question_upload").attr("href", "/upload?id=" + req_id + "&extension=question");
 }
 
 window.onload = function() { // id의 value를 통해 Login 하면 Logout 뜨게하기
