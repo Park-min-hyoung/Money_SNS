@@ -39,7 +39,7 @@
                         <div class="header__bot__container">
                               <ul class="logout__wrap" id="logout__wrap">
                                 <li class="logout">
-                                  <a href="/loginout"><span class="logout__a">LOGUT</span></a>
+                                  <a onclick="loginout()"><span class="logout__a">LOGUT</span></a>
                                 </li>
                               </ul>
                         </div>
@@ -63,9 +63,9 @@
                     </div>
                     <div id="nickname" style="font-size: 25px;"><%= description %></div>
                         <br><br><br><hr style="margin: 30px 0;">
-                    <div id="video_nickname" ><%= user_id %>
+                    <div id="video_nickname" name="<%= user_id %>"><%= user_id %>
                         <div id="question_declaration"><i class="fas fa-angry" title="게시물 신고"></i></div>
-                        <div id="video_delete" style="display: none;"><i class="fas fa-trash-alt" title="게시물 삭제"></i></div>
+                        <div id="question_delete" style="display: none;"><i class="fas fa-trash-alt" title="게시물 삭제"></i></div>
                     </div>
                     <div id="for_like" name="<%= seq %>"></div>
                     <hr style="margin: 40px 0;">
@@ -97,6 +97,7 @@
                             <div><%= comment_nick[i] %><span> <%= comment_contents[i] %></span></div><br>
                         <% } %> 
                     </div>
+                    <div id="like_cnt" class="<%= user_id %>" name="..."></div>
                 </div>
             </section>
 

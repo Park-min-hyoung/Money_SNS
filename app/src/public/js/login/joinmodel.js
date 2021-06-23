@@ -37,7 +37,6 @@ $(document).ready(function () {
             }
             else 
             {
-              alert(input_value8);
               $.ajax
               ({
                 url: '/member2',

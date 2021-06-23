@@ -3,8 +3,10 @@
 const User = require("../../models/Board");
 const fs = require("fs");
 const url = require('url');
+const db = require("../../config/db");
 
 var upload_id;
+var num;
  // 댓글 처리 하기위한 변수
 var comment_seq;
 var comment_title; 
@@ -157,6 +159,8 @@ const output = {
         var photo_comment_delete = queryData.comment_delete_seq;
         var photo_comment_update = queryData.comment_update_seq;
         var update_comment = queryData.update_comment;
+        var user_point = 0;
+        var id_check = 0;
         upload_id = queryData.id;
 
         comment_seq = photo_seq;
@@ -164,8 +168,21 @@ const output = {
 
         const photo_user = new User();
         var photo_title_des_like = await photo_user.photoSearchTitledesLike(photo_seq); // photo의 title, des, like를 DB에서 같이 가져오는 소스코드
-        var user_point = await photo_user.getPoint(photo_title_des_like[3]); // user의 point에 따라 광고를 표시 할지 말지 결정하기 위한 소스코드
 
+        const query = "SELECT point FROM member WHERE memberid = ?;";
+            db.query (query, [photo_title_des_like[3]], async(err, data) => 
+            {
+                if (data[0] === undefined)
+                {
+                    id_check = 1;
+                }
+                if (id_check === 0){
+                    user_point = await photo_user.getPoint(photo_title_des_like[3]); // user의 point에 따라 광고를 표시 할지 말지 결정하기 위한 소스코드
+                } else {
+                    user_point = await photo_user.getPoint("check"); // user의 point에 따라 광고를 표시 할지 말지 결정하기 위한 소스코드
+                }
+            });
+        
         var photo_like_cnt = photo_title_des_like[0];
         await photo_user.photoLike(upload_id, id, photo_seq); // 특정 id의 해당 사진을 방문한 이력을 가지고 있는 DB 생성
         var photo_like_check = await photo_user.getphotoCheck(upload_id + id + photo_seq); // 방문 이력이 있는 DB의 like_check 값을 가져온다
@@ -242,6 +259,8 @@ const output = {
         var video_comment_delete = queryData.comment_delete_seq;
         var video_comment_update = queryData.comment_update_seq;
         var update_comment = queryData.update_comment;
+        var user_point = 0;
+        var id_check = 0;
         upload_id = queryData.id; 
         
         comment_seq = video_seq;
@@ -249,7 +268,20 @@ const output = {
 
         const video_user = new User();
         var video_title_des_like  = await video_user.videoSearchTitledesLike(video_seq);
-        var user_point = await video_user.getPoint(video_title_des_like[3]); // user의 point에 따라 광고를 표시 할지 말지 결정하기 위한 소스코드
+
+        const query = "SELECT point FROM member WHERE memberid = ?;";
+        db.query (query, [video_title_des_like[3]], async(err, data) => 
+        {
+            if (data[0] === undefined)
+            {
+                id_check = 1;
+            }
+            if (id_check === 0){
+                user_point = await video_user.getPoint(video_title_des_like[3]); // user의 point에 따라 광고를 표시 할지 말지 결정하기 위한 소스코드
+            } else {
+                user_point = await video_user.getPoint("check"); // user의 point에 따라 광고를 표시 할지 말지 결정하기 위한 소스코드
+            }
+        });
 
         var video_like_cnt = video_title_des_like[0];
         await video_user.videoLike(upload_id, id, video_seq); // 특정 id의 해당 영상을 방문한 이력을 가지고 있는 DB 생성
@@ -366,7 +398,9 @@ const output = {
 
         var queryData = url.parse(req.url, true).query;
         upload_id = queryData.id;
-        res.render("home/mypage", {photo: photo_array, video: video_array, id:upload_id, photo_id:photo_id_array, video_id:video_id_array});
+        var user_point = await photo_user.getPoint(upload_id); // user의 point에 따라 광고를 표시 할지 말지 결정하기 위한 소스코드;
+
+        res.render("home/mypage", {photo: photo_array, video: video_array, id:upload_id, photo_id:photo_id_array, video_id:video_id_array, point:user_point});
     },
     mypage_id: async (req, res) => {
         var id = req.params.id;
@@ -450,19 +484,58 @@ const output = {
         var question_num_array = [];
         var question_data_array = [];
 
+        var queryData = url.parse(req.url, true).query;
+        var delete_seq = queryData.seq;
+        var delete_check = queryData.delete;
+
         const question_user = new User();
 
-        var question_final_seq = await question_user.questionseqSearch();
+        if (delete_check == "question_delete") {
+            var question_delete_title = await question_user.questionSearchTitledesLike(delete_seq); // 파일 삭제시 제목 있어야 함
+            await question_user.questionDelete(delete_seq); // seq에 해당하는 photo의 테이블의 데이터를 삭제
+            await question_user.questioncommentoverlapDelete("fjfdjdkj$Efjd@" + delete_seq); // photo_comment 테이블에 삭제될 사진의 overlap을 삭제
 
-        for (var i = 1; i <= question_final_seq; i++){
-            var question_title_des_like = await question_user.questionSearchTitledesLike(i);
-            question_array.push(question_title_des_like[1]); // question의 title
-            question_id_array.push(question_title_des_like[3]); // question의 id
-            question_num_array.push(question_title_des_like[0]); // question의 댓글 개수
+            await question_user.questionseqUpdate(delete_seq); // photo 테이블에 seq가 삭제 되었으므로 업데이트
+            var question_final_seq = await question_user.questionseqSearch(); // title의 목록을 만들기 위해 마지막 seq 조회
+            var question_comment_final_seq = await question_user.questioncommentseqSearch();
+            await question_user.seqstartupdateQuestion(question_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(photo TB)
+            await question_user.commentseqstartupdatePhoto(question_comment_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(photo_comment TB)
 
-            var now_time = new Date().getTime(); // 현재 시간
-            var question_uploadtime = new Date(question_title_des_like[4]).getTime(); // 댓글 업로드 당시 시간
-            question_data_array.push((now_time - question_uploadtime) / 1000 / 60); // 현재 접속시 댓글 업로드 당시와의 시간 차이
+            await question_user.minusPoint(question_delete_title[3]); // 삭제한 사진을 업로드한 user의 point를 차감
+            
+            for (var i = 1; i <= question_final_seq; i++){ // 삭제한 사진 뒤의 seq에 해당하는 사진 파일과 데이터 업데이트
+                var question_title = await question_user.questionSearchTitledesLike(i);
+                question_array.push(question_title[1]);
+            }
+
+            delete_seq = parseInt(queryData.seq);
+            // 삭제 한 뒤 나머지 사진에서 댓글이 정상적으로 출력되기 위한 작업
+            for (var i = delete_seq + 1; i <= question_final_seq + 1; i++) { // 삭제한 사진의 overlap 숫자보다 큰 사진들의 숫자들을 -1 하기 위해서
+                await question_user.questioncommentoverlapUpdate("fjfdjdkj$Efjd@", i, i - 1); // photo_comment TB에서 삭제된 사진의 뒤의 사진들의 overlap 번호를 -1
+            }
+
+            for (var i = 1; i <= question_final_seq; i++){
+                var question_title_des_like = await question_user.questionSearchTitledesLike(i);
+                question_id_array.push(question_title_des_like[3]); // question의 id
+                question_num_array.push(question_title_des_like[0]); // question의 댓글 개수
+    
+                var now_time = new Date().getTime(); // 현재 시간
+                var question_uploadtime = new Date(question_title_des_like[4]).getTime(); // 댓글 업로드 당시 시간
+                question_data_array.push((now_time - question_uploadtime) / 1000 / 60); // 현재 접속시 댓글 업로드 당시와의 시간 차이
+            }
+        } else {
+            var question_final_seq = await question_user.questionseqSearch();
+
+            for (var i = 1; i <= question_final_seq; i++){
+                var question_title_des_like = await question_user.questionSearchTitledesLike(i);
+                question_array.push(question_title_des_like[1]); // question의 title
+                question_id_array.push(question_title_des_like[3]); // question의 id
+                question_num_array.push(question_title_des_like[0]); // question의 댓글 개수
+    
+                var now_time = new Date().getTime(); // 현재 시간
+                var question_uploadtime = new Date(question_title_des_like[4]).getTime(); // 댓글 업로드 당시 시간
+                question_data_array.push((now_time - question_uploadtime) / 1000 / 60); // 현재 접속시 댓글 업로드 당시와의 시간 차이
+            }
         }
 
         var queryData = url.parse(req.url, true).query;
@@ -472,7 +545,6 @@ const output = {
     },
     board_question_id: async (req, res) => {
         var id = req.params.id;
-
         
         var queryData = url.parse(req.url, true).query;
         var question_seq = queryData.n;
@@ -480,14 +552,30 @@ const output = {
         var question_comment_delete = queryData.comment_delete_seq;
         var question_comment_update = queryData.comment_update_seq;
         var update_comment = queryData.update_comment;
+        var user_point = 0;
+        var id_check = 0;
         upload_id = queryData.id;
+        num = question_seq;
         
         comment_seq = question_seq;
         comment_title = id;
 
         const question_user = new User();
         var question_title_des_like  = await question_user.questionSearchTitledesLike(comment_seq);
-        var user_point = await question_user.getPoint(question_title_des_like[3]); // user의 point에 따라 광고를 표시 할지 말지 결정하기 위한 소스코드
+
+        const query = "SELECT point FROM member WHERE memberid = ?;";
+        db.query (query, [question_title_des_like[3]], async(err, data) => 
+        {
+            if (data[0] === undefined)
+            {
+                id_check = 1;
+            }
+            if (id_check === 0){
+                user_point = await question_user.getPoint(question_title_des_like[3]); // user의 point에 따라 광고를 표시 할지 말지 결정하기 위한 소스코드
+            } else {
+                user_point = await question_user.getPoint("check"); // user의 point에 따라 광고를 표시 할지 말지 결정하기 위한 소스코드
+            }
+        });
 
         if (question_declaration && question_declaration != "null") {
             await question_user.questiondeclarationUpdate(comment_seq); // 신고버튼을 클릭했으면 신고 Count가 올라갈 수 있도록
@@ -599,6 +687,7 @@ const process = {
         // video_comment DB에 댓글을 작성한 user의 id, overlap, 댓글 내용 Insert
         const response_comment = await comment_user.questioncommentUpload(upload_id, question_comment_overlap, 
             question_comment, question_comment_nickname, question_uploadtime);
+            await comment_user.questionAnswer(num);
         
         return res.json(response_comment);
     },

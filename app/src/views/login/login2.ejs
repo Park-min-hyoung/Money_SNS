@@ -18,14 +18,14 @@
   <script src ="/js/home/login_logout.js" defer></script>
 
   <script>
-    function doNotReload(){
-      if((event.ctrlKey == true && (event.keyCode == 78|| event.keyCode == 82)) || (event.keyCode == 116)){
-        event.keyCode = 0;
-        event.cancelBubble = true;
-        event.returnValue = false;
-      }
+    window.onload = function doNotReload(event) 
+    {
+            var sessioncon = sessionStorage.getItem("memberid");
+            if (sessioncon != null) 
+            {
+              location.replace('/?id=' + sessioncon);//로그인 페이지에 못들어오게 함.
+            }//넘기는 거 막는 거.
     }
-    document.onkeydown = doNotReload();
   </script>
   <title>Money SNS</title>
 </head>
@@ -35,7 +35,7 @@
     <header id="header__wrap">
       <div class="header__top__wrap">
         <div class="header__top1">
-            <a href="/index">
+            <a href="/">
               <span class="header__title1"> Money SNS</span>
             </a> 
             <span class="half-line1"></span>

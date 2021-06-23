@@ -43,6 +43,7 @@ $(document).ready(function () {
               success: function () {
                 $("#erroring").text('회원정보가 변경되었으므로 로그아웃하겠습니다.');
                 $("#popup").css('display', 'flex').hide().fadeIn();//뜨기도 전에 로그아웃이 바로 되버림.
+                sessionStorage.clear();
                 location.replace('/loginout');
               },
               error: function (error) {

@@ -37,14 +37,18 @@
                         <div class="header__bot__container">
                             <ul class="logout__wrap" id="logout__wrap">
                                 <li class="logout">
-                                  <a href="/loginout"><span class="logout__a">LOGUT</span></a>
+                                    <a href="#"><span class="logout__a">포인트:<%= point %>점</span></a>
                                 </li>
                                 <li class="logout">
-                                  <a href="/modify"><span class="logout__a">정보수정</span></a>
+                                  <a id="modify" href="/modify"><span class="logout__a">정보수정</span></a>
                                 </li>
                                 <li class="logout">
-                                    <a href="/resign"><span class="logout__a">회원탈퇴</span></a>
+                                    <a id="resign" href="/resign"><span class="logout__a">회원탈퇴</span></a>
                                 </li>
+                                <li class="logout">
+                                    <a onclick="loginout()"><span class="logout__a">LOGUT</span></a>
+                                </li>
+                            </ul>
                             </ul>
                         </div>
                     </div>

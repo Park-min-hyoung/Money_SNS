@@ -53,11 +53,15 @@
     display: inline-block;
     width: 15%;
   }
-  #question__wrap #question_title{
+  #question__wrap #question_title,
+  #question__wrap #question_titles{
     display: inline-block;
     width: 30%;
     color: white;
     text-decoration:none;
+  }
+  #question__wrap #question_titles:hover{
+    color: var(--color-orange);
   }
   #question__wrap #question_user{
     display: inline-block;
@@ -66,6 +70,10 @@
   #question__wrap #question_day{
     display: inline-block;
     width: 20%;
+  }
+  #question__wrap #question_num{
+    display: inline-block;
+    width: 10%;
   }
   .intro__new__wrap #select__video {
     width: 100%;
@@ -282,6 +290,13 @@
   #question_declaration{
     display: inline-block;
     font-size: 30px;
+    float: right;
+  }
+  /* 질문 게시판 삭제 아이콘 */
+  #question_delete{
+    display: inline-block;
+    font-size: 30px;
+    margin: 0 20px;
     float: right;
   }
   

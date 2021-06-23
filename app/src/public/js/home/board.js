@@ -129,11 +129,17 @@ $('#photo_delete').on('click', function(){
 $('#video_delete').on('click', function(){
     location = "/board?id=" + id + "&seq=" + seq + "&delete=video_delete";
 });
+// 질문 게시판에서 게시물 삭제 버튼을 눌렀을 때
+$('#question_delete').on('click', function(){
+    location = "/question?id=" + id + "&seq=" + seq + "&delete=question_delete";
+});
 
 var upload_id = document.getElementById("video_nickname").getAttribute('name');
 if (upload_id === req_id) { // 자신이 업로드한 사진이나 영상만 삭제 버튼이 보인다
-    if (contents == "_"){ // board_video 창에서
+    if (contents === "v"){ // board_video 창에서
         document.getElementById('video_delete').style.display = "inline-block";
+    } else if (contents === "q"){
+        document.getElementById('question_delete').style.display = "inline-block";
     } else {
         document.getElementById('Photo_delete').style.display = "block";
         document.getElementById('Photo_delete_line').style.display = "block";

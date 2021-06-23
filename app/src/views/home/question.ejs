@@ -14,6 +14,7 @@
         <script src="https://kit.fontawesome.com/58412d2786.js" crossorigin="anonymous"></script>
         <script src ="/js/home/board.js" defer></script>
         <script src ="/js/home/login_logout.js" defer></script>
+        <script src="/js/login/questionnot.js" defer="defer"></script>
         <script type="text/javascript">
             // window.history.forward();
             var urlQuery = window.location.search; // url query 조회
@@ -48,7 +49,7 @@
                             <ul class="login__wrap" id="login__wrap">
                                 <li class="login"><a href="/login2?href=question">LOGIN</a></li>
                                 <li class="sign">
-                                  <a href="/join"><span class="sign__a">SIGN</span></a>
+                                  <a href="/terms"><span class="sign__a">SIGN</span></a>
                                 </li>
                                 <li class="logout">
                                     <a href="/find"><span class="logout__a">정보찾기</span></a>
@@ -56,7 +57,7 @@
                             </ul>
                             <ul class="logout__wrap" id="logout__wrap">
                                 <li class="logout">
-                                  <a href="/loginout"><span class="logout__a">LOGUT</span></a>
+                                    <a onclick="loginout()"><span class="logout__a">LOGUT</span></a>
                                 </li>
                                 <li class="logout">
                                     <a id="mypage" href="/mypage"><span class="logout__a">MyPage</span></a>
@@ -93,12 +94,12 @@
                                 <span id="question_title">제목</span>
                                 <span id="question_user">작성자</span>
                                 <span id="question_day">문의일시</span>
-                                <span id="question_num">답변여부(개수)</span><br><br><hr><br><br>
+                                <span id="question_num">답변개수</span><br><br><hr><br><br>
                                 <% for(var i = question_title.length - 1; i >= 0; i--){ %>
                                     <% if(id != null){ %>
                                         <span id="question_seq"><%= i + 1 %></span>
                                         <a href="/board_question/fjfdjdkj$Efjd@/?id=<%= id %>&n=<%= i + 1 %>">
-                                            <span id="question_title"><%= question_title[i] %></span></a>
+                                            <span id="question_titles"><%= question_title[i] %></span></a>
                                         <span id="question_user"><%= question_id[i] %></span>
                                         <% if(question_data[i] < 1){ %>
                                             <span id="question_day"><%= Math.floor(question_data[i] * 60) %> 초전</span><!-- 1분 이하이므로 분으로 초로 수정 -->
@@ -116,7 +117,15 @@
                                             <a href="/question" onclick="alert('로그인 후 이용해주시길 바랍니다');">
                                                 <span id="question_title"><%= question_title[i] %></span></a>
                                             <span id="question_user"><%= question_id[i] %></span>
-                                            <span id="question_day">2</span>
+                                            <% if(question_data[i] < 1){ %>
+                                                <span id="question_day"><%= Math.floor(question_data[i] * 60) %> 초전</span><!-- 1분 이하이므로 분으로 초로 수정 -->
+                                            <% } else if(question_data[i] >= 60 && question_data[i] < 1440) { %>
+                                                <span id="question_day"><%= Math.floor(question_data[i] / 60) %> 시간전</span> <!-- 1시간이 지나서 분으로 시간으로 수정 -->
+                                            <% } else if(question_data[i] >= 1440) { %>
+                                                <span id="question_day"><%= Math.floor(question_data[i] / 60 / 24) %> 일전</span> <!-- 1일이 지나서 시간을 일로 수정 -->
+                                            <% } else {%>
+                                                <span id="question_day"><%= Math.floor(question_data[i]) %> 분전</span>
+                                            <% } %>
                                             <span id="question_num"><%= question_num[i] %>개</span><br><br><hr><br><br>
                                     <% } %>
                                 <% } %>

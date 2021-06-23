@@ -40,7 +40,6 @@ const output = {
     modify: (req, res) => {
         if (req.session.user) 
         {
-            console.log(req.session.user_id);
             db.query('SELECT * FROM member WHERE memberid = ?', [req.session.user_id], function (error, data) 
             {
 
@@ -50,7 +49,6 @@ const output = {
                         console.log('user infor is:', error);
                     }
                     else {
-                        console.log("귀하의 아이디는 :", data[0].memberid);
                         res.render('login/modify.ejs', { 'data': data }, function (err, html) {
                             if (err) {
                                 console.log(err);
@@ -62,14 +60,12 @@ const output = {
                 else 
                 {
                     console.log('데이터 베이스에 오류 발생');
-                    msg.info("오류가 발생하였습니다. 로그아웃합니다.")
                     res.redirect('/loginout');
                 }
             });
         }
         else {
             console.log("session is not finded")
-            console.log('로그인 정보가 없어, 회원정보를 수정할 수 없습니다.');
             res.redirect('/login2');
         }
     },
@@ -80,7 +76,6 @@ const output = {
         res.render("login/member");
     },
     loginout: (req, res) => {
-        console.log("clear cookie");
         if (req.session.user) {
             req.session.destroy(function (err) 
             {
@@ -101,8 +96,6 @@ const output = {
     finded: (req, res) => {
         var data1 = req.query.data1;
         var data2 = req.query.data2;
-        console.log(data1);
-        console.log(data2);
 
         if (data1 != "" && data2 == "undefined") {
             res.render("login/passwordfind", { data: data1 });
@@ -128,8 +121,6 @@ const process = {
     },
     usercheck: async(req, res) => {
         const user = new User(req.body);
-        console.log(req.body.data); // 잘들어 온다
-
         const response = await user.idCheck();
 
         return res.json(response);
@@ -178,16 +169,13 @@ const process = {
                     req.session.user_id = memberid;
                     req.session.user.expire = new Date();
                     console.log("The solution is :", response)
-                    console.log("로그인에 성공하였습니다.");
                     res.json(response);
                 }
                 else {
-                    console.log("비밀번호가 다릅니다.");
                     res.json(response);
                 }
             }
             else {
-                console.log("아이디가 정확하지 않습니다.");
                 res.json(response);
             }
         }
@@ -210,8 +198,6 @@ const process = {
 
         if (phone != "" && mail != "" && memberid == "" && sua == "" && sub == "")
         {
-            console.log(mail);
-            console.log(phone);
             const response = await user.findId(mail, phone);
             return res.json(response);
         } 
@@ -223,9 +209,6 @@ const process = {
     },
     resigned: async(req, res) => {
         const user = new User(req.body);
-        console.log(req.body.data1);
-        console.log(req.body.data2);
-        console.log(req.body.data3);
 
         if (req.session.user) 
         {
@@ -234,7 +217,6 @@ const process = {
         }
         else {
             console.log("session is not finded")
-            console.log('로그인 정보가 없어, 회원탈퇴를 수정할 수 없습니다.');
             res.redirect('/login2');
         }
     },   

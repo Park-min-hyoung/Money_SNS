@@ -14,12 +14,14 @@
         <script src="https://kit.fontawesome.com/58412d2786.js" crossorigin="anonymous"></script>
         <script src="/js/home/login_logout.js" defer="defer"></script>
         <script src="/js/home/index.js" defer="defer"></script>
+        <script src="/js/login/indexnot.js" defer="defer"></script>
         <script type="text/javascript">
             var urlQuery = window.location.search; // url query 조회
             var urlParams = new URLSearchParams(urlQuery); // id의 값을 조회하기 위한 준비
             var back_id = urlParams.get('id'); // back_id가 null이면 뒤로가기 x, back_id이 아니면 뒤로가기 o
+            var sessioncon = sessionStorage.getItem("memberid");
 
-            if (back_id === null) {
+            if (back_id === null || sessioncon === null) {
                 window.history.forward();
             }
         </script>
@@ -50,7 +52,7 @@
                             <ul class="login__wrap" id="login__wrap">
                                 <li class="login"><a href="/login2">LOGIN</a></li>
                                 <li class="sign">
-                                  <a href="/join"><span class="sign__a">SIGN</span></a>
+                                  <a href="/terms"><span class="sign__a">SIGN</span></a>
                                 </li>
                                 <li class="logout">
                                     <a href="/find"><span class="logout__a">정보찾기</span></a>
@@ -58,7 +60,7 @@
                             </ul>
                             <ul class="logout__wrap" id="logout__wrap">
                                 <li class="logout">
-                                  <a href="/loginout"><span class="logout__a">LOGUT</span></a>
+                                    <a onclick="loginout()"><span class="logout__a">LOGUT</span></a>
                                 </li>
                                 <li class="logout">
                                     <a id="mypage" href="/mypage">
@@ -85,11 +87,11 @@
                         </h2>
                     </div>
                     <div class="intro__new__wrap">
-                        <a href="/board_video">
-                            <span><img src="https://cavicast.files.wordpress.com/2018/01/maxresdefault.jpg" alt=""/></span></a>
                         <a id="link_board" href="/board">
                             <span><img src="https://previews.123rf.com/images/anatolir/anatolir2006/anatolir200600046/148243671-school-board-icon-outline-school-board-vector-icon-for-web-design-isolated-on-white-background.jpg" alt=""/></span></a>
-                        <a href="/question">
+                        <a href="#">
+                            <span><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSv2iA0BeQhg-DQ8ltpHcloMO02xWFc4nJvEA&usqp=CAU" alt=""/></span></a>
+                        <a id="link_question" href="/question">
                             <span><img src="https://img.huffingtonpost.com/asset/5d718fc42500001c1305a39c.jpeg?ops=scalefit_630_noupscale" alt=""/></span></a>
                     </div>
                 </div>

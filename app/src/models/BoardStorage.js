@@ -145,6 +145,15 @@ class BoardStorage {
             })
     }
 
+    static async deleteQuestion(seq) {
+        const query = "DELETE FROM question WHERE seq = ?";
+            db.query(query, 
+            [seq],
+            (err) => {
+                if(err) reject(`${err}`);
+            })
+    }
+
     static async deleteoverlapPhoto(delete_overlap) {
         var del_overlap = "%" + delete_overlap;
         const query = "DELETE FROM photo_like WHERE overlap LIKE ?;";
@@ -185,6 +194,16 @@ class BoardStorage {
             })
     }
 
+    static async deletecommentoverlapQuestion(delete_overlap) {
+        var del_overlap = "%" + delete_overlap;
+        const query = "DELETE FROM question_comment WHERE overlap LIKE ?;";
+            db.query(query, 
+            [del_overlap],
+            (err) => {
+                if(err) reject(`${err}`);
+            })
+    }
+
     static async seqincreasePhoto(seq) {
         const query = "UPDATE photo SET seq = seq - 1 WHERE seq > ?";
             db.query(query, 
@@ -196,6 +215,15 @@ class BoardStorage {
     
     static async seqincreaseVideo(seq) {
         const query = "UPDATE video SET seq = seq - 1 WHERE seq > ?";
+            db.query(query, 
+            [seq],
+            (err) => {
+                if(err) reject(`${err}`);
+            })
+    }
+    
+    static async seqincreaseQuestion(seq) {
+        const query = "UPDATE question SET seq = seq - 1 WHERE seq > ?";
             db.query(query, 
             [seq],
             (err) => {
@@ -252,6 +280,15 @@ class BoardStorage {
             })
     }
 
+    static async startsequpdateQuestion(start_seq) {
+        const query = "ALTER TABLE question AUTO_INCREMENT = ?;";
+            db.query(query, 
+            [start_seq],
+            (err) => {
+                if(err) reject(`${err}`);
+            })
+    }
+
     static async updateoverlapPhoto(current_overlap, title, update_cnt) {
         return new Promise((resolve, reject) =>{
             const query = "UPDATE photo_like SET overlap = REPLACE(overlap, ?, ?);";
@@ -291,6 +328,18 @@ class BoardStorage {
     static async updatecommentoverlapVideo(current_overlap, title, update_cnt) {
         return new Promise((resolve, reject) =>{
             const query = "UPDATE video_comment SET overlap = REPLACE(overlap, ?, ?);";
+                db.query(query, 
+                [current_overlap, title + update_cnt],
+                (err, data) => {
+                    if(err) reject(`${err}`);
+                    else resolve(data[0]);
+                });
+        });
+    }
+    
+    static async updatecommentoverlapQuestion(current_overlap, title, update_cnt) {
+        return new Promise((resolve, reject) =>{
+            const query = "UPDATE question_comment SET overlap = REPLACE(overlap, ?, ?);";
                 db.query(query, 
                 [current_overlap, title + update_cnt],
                 (err, data) => {
@@ -713,6 +762,25 @@ class BoardStorage {
                     else resolve(data[0]);
                 });
         });
+    }
+
+    static searchanswerNum(seq) {
+        return new Promise((resolve, reject) => {
+            const query = "SELECT * FROM question WHERE seq = ?";
+            db.query(query, [seq], (err, data) => {
+                if(err) reject(`${err}`);
+                resolve(data[0]);
+            })
+        });
+    }
+
+    static async addAnswer(question_num, seq) {
+        const query = "UPDATE question SET question_num=? WHERE seq = ?";
+        db.query(query, 
+        [question_num + 1, seq],
+        (err) => {
+            if(err) reject(`${err}`);
+        })
     }
 }
 

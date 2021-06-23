@@ -87,6 +87,10 @@ class Board {
         await UserStorage.deleteVideo(video_seq);
     }
 
+    async questionDelete(question_seq) {
+        await UserStorage.deleteQuestion(question_seq);
+    }
+
     async photooverlapDelete(delete_overlap) {
         await UserStorage.deleteoverlapPhoto(delete_overlap);
     }
@@ -103,12 +107,20 @@ class Board {
         await UserStorage.deletecommentoverlapVideo(delete_overlap);
     }
 
+    async questioncommentoverlapDelete(delete_overlap) {
+        await UserStorage.deletecommentoverlapQuestion(delete_overlap);
+    }
+
     async photoseqUpdate(photo_seq) {
         await UserStorage.seqincreasePhoto(photo_seq);
     }
 
     async videoseqUpdate(video_seq) {
         await UserStorage.seqincreaseVideo(video_seq);
+    }
+
+    async questionseqUpdate(video_seq) {
+        await UserStorage.seqincreaseQuestion(video_seq);
     }
 
     async photoseqSearch() {
@@ -134,6 +146,10 @@ class Board {
         await UserStorage.startsequpdateVideo(video_start_seq);
     }
 
+    async seqstartupdateQuestion(question_start_seq) {
+        await UserStorage.startsequpdateQuestion(question_start_seq);
+    }
+
     async photooverlapUpdate(title, current_cnt, update_cnt) {
         var current_overlap = title + current_cnt;
         await UserStorage.updateoverlapPhoto(current_overlap, title, update_cnt);
@@ -152,6 +168,11 @@ class Board {
     async videocommentoverlapUpdate(title, current_cnt, update_cnt) {
         var current_overlap = title + current_cnt;
         await UserStorage.updatecommentoverlapVideo(current_overlap, title, update_cnt);
+    }
+
+    async questioncommentoverlapUpdate(title, current_cnt, update_cnt) {
+        var current_overlap = title + current_cnt;
+        await UserStorage.updatecommentoverlapQuestion(current_overlap, title, update_cnt);
     }
 
     // 사진 또는 영상을 클릭한 다음 할 수 있는 모든 작업들(생성 : C)
@@ -359,6 +380,11 @@ class Board {
         const {seq, user_id, question_comments, nickname, upload_time} = await UserStorage.commentgetIdQuestion(overlap);
         await UserStorage.commentcheckqUpdate(seq, overlap); 
         return [user_id, question_comments, upload_time, seq, nickname];
+    }
+
+    async questionAnswer(seq) {
+        const {question_num} = await UserStorage.searchanswerNum(seq);
+        await UserStorage.addAnswer(question_num, seq);
     }
 }
 

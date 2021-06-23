@@ -60,9 +60,11 @@ function photoPlus() {
                 if (res.destination === 'src/public/uploads/photo') { // 사진 업로드 시에 사진 올라갔을 때
                     document.getElementById("pre_photo").style.display = "block";
                     document.getElementById("pre_photo").src = "uploads/photo/" + res.image;
+                    document.getElementById("pre_photo").style.margin = "0 auto";
                 } else { // 영상 업로드 시에 썸네일용 사진이 올라갔을 때
                     document.getElementById("video_photo").style.display = "block";
                     document.getElementById("video_photo").src = "uploads/thumbnail/" + res.image;
+                    document.getElementById("video_photo").style.margin = "0 auto";
                 }
                 document.getElementById("button").disabled = false;
             } else {
