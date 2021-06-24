@@ -15,8 +15,29 @@
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://kit.fontawesome.com/58412d2786.js" crossorigin="anonymous"></script>
   <script type="text/javascript" src="http://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+  <script>
+        function comand()
+        {
+            
+              if( document.getElementById('OK1').checked != true && document.getElementById('OK2').checked == true)
+              {
+                alert("이용약관 동의 2에 동의해주세요");
+              }
+              else if(document.getElementById('OK1').checked == true && document.getElementById('OK2').checked != true)
+              {
+                alert("개인정보 제공에 동의해주세요");
+              }
+              else if(document.getElementById('OK1').checked == true && document.getElementById('OK2').checked == true)
+              {
+                alert("이용약관에 동의하셨습니다.");
+                document.getElementById('join').submit();
+              }
+        }
+          
+  </script>
   <title>회원가입 페이지</title>
 </head>
+
 
 <body>
   <div class="wrap">
@@ -43,7 +64,7 @@
 
     <!-- Select Content -->
     <section id="intro">
-      <form name= "join" action='/join' method="GET">
+      <form id= "join" name= "join" action='/join' method="GET">
       <div class="intro__container">
         <div class="section__title__wrap">
           <h2 class="txt__harfline">
@@ -367,37 +388,7 @@
           </div>
         </div>
         <div>
-
-          <button onclick="comand()" class="snip1535"> 회원가입 신청</button>
-          <script>
-            
-            function comand()
-            {
-            
-              if( document.getElementById('OK1').checked != true)
-              {
-                alert("이용약관 동의에 동의해주세요");
-              }
-              if( document.getElementById('OK2').checked != true)
-              {
-                alert("개인정보 제공에 동의해주세요");
-              }
-              if(document.getElementById('OK1').checked == true && document.getElementById('OK2').checked == true)
-              {
-                alert("이용약관에 동의하셨습니다.");
-                document.getElementById('frm').submit();
-              }
-                      
-            }
-            $(".hover").mouseleave(
-            function() 
-            {
-                    $(this).removeClass("hover");
-                    
-            }
-            );          
-
-</script>
+          <button type = "button" onclick = "comand()" class="snip1535"> 회원가입 신청</button>
         </div>
       </div>
 

@@ -48,9 +48,9 @@ class Board {
         await UserStorage.addPoint(point, id, pluspoint);
     }
 
-    async minusPoint(id) {
+    async minusPoint(id, minuspoint) {
         const {point} = await UserStorage.searchPoint(id);
-        await UserStorage.removePoint(point, id);
+        await UserStorage.removePoint(point, id, minuspoint);
     }
 
     async photoSearchTitle(num) {

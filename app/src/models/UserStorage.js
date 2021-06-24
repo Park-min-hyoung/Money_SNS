@@ -249,6 +249,7 @@ class UserStorage {
                                     cnonsole.log("err ocurred", error);
                                 }
                                 else {
+                                    
                                     console.log("떠나신 회원님의 앞날에 행복이 있기를....")
                                     resolve(data);
                                 }

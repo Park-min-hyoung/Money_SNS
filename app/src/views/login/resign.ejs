@@ -26,6 +26,12 @@
                 event.returnValue = false;
             }
         }
+        
+            var sessioncon = sessionStorage.getItem("memberid");
+            if (sessioncon == null) 
+            {
+              location.replace('/login2');//로그인 페이지에 못들어오게 함.
+            }//넘기는 거 막는 거.
         document.onkeydown = doNotReload();
     </script>
     <title>Money SNS</title>

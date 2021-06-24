@@ -29,6 +29,18 @@
       window.history.back();
 
     }
+    function resignout()
+    {
+      sessionStorage.clear();
+      document.getElementById('resign').submit();
+
+    }
+    function homeout()
+    {
+      sessionStorage.clear();
+      location.replace('/');
+
+    }
   </script>
   <title>Money SNS</title>
 </head>
@@ -38,7 +50,7 @@
     <header id="header__wrap">
       <div class="header__top__wrap">
         <div class="header__top1">
-            <a href="/">
+            <a onclick="homeout()">
               <span class="header__title1"> Money SNS</span>
               <span class="half-line1"></span>
             </a>
@@ -57,9 +69,9 @@
     <!-- Select Content -->
     <section id="intro">
       <div class="intro__container">
-        <form name= "join" action='/' method="GET">
+        <form name= "resign" action='/' method="GET">
         <div class="bd-box"> 회원님과 함께 할 수 있어 영광이었습니다. </div>
-        <button type = "submit"  class="snip1535"> 처음 화면으로</button>
+        <button type = "submit"  class="snip1535" onclick="resignout()"> 처음 화면으로</button>
       </div>
     </section>
 

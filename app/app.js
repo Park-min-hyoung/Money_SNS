@@ -25,7 +25,7 @@ app.use(session({
     resave: false, // 세션이 수정되지 않아도 항상 저장할지 확인하는 옵션
     saveUninitialized: true, // 세션이 uninitalized 상태로 미리 만들어서 저장하는지 묻는 옵션
     cookie: { // 쿠키에 들어가는 세션 ID값의 옵션
-        maxAge: 4000 * 60 * 2 // 2분후 폭파
+        maxAge: 4000 * 60 * 10 // 2분후 폭파
     }
 }));
 

@@ -32,6 +32,7 @@ $(document).ready(function () {
           { 
             if(result[0].password == input_value2)
             {
+              sessionStorage.removeItem('memberid');
               sessionStorage.setItem('memberid', input_value1);
               if (path == "board") {
                 location.replace('/board?id=' + input_value1);//이걸 사용하면 뒤로가기를 하여도 로그인 상태로 인한 오류가 발생되지 않는다.(앞에 접속 기록은 지워짐.)
@@ -51,7 +52,7 @@ $(document).ready(function () {
           }
           else
           {
-            $("#erroring").text('아이디나 비밀번호가 달라 로그인이 되질 않습니다.');
+            $("#erroring").text('회원이 아님으로 로그인이 되질 않습니다.');
             $("#popup").css('display', 'flex').hide().fadeIn();
           }
         },

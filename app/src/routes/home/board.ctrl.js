@@ -34,7 +34,7 @@ const output = {
             await photo_user.seqstartupdatePhoto(photo_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(photo TB)
             await photo_user.commentseqstartupdatePhoto(photo_comment_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(photo_comment TB)
 
-            await photo_user.minusPoint(photo_delete_title[3]); // 삭제한 사진을 업로드한 user의 point를 차감
+            await photo_user.minusPoint(photo_delete_title[3], 10); // 삭제한 사진을 업로드한 user의 point를 차감
             fs.unlink(`./src/public/uploads/photo/` + photo_delete_title[1] + delete_seq + `.png`,(err)=>{})
             
             for (var i = 1; i <= photo_final_seq; i++){ // 삭제한 사진 뒤의 seq에 해당하는 사진 파일과 데이터 업데이트
@@ -71,7 +71,7 @@ const output = {
             await video_user.seqstartupdateVideo(video_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트
             await video_user.commentseqstartupdateVideo(video_comment_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(video_comment TB)
 
-            await video_user.minusPoint(video_delete_title[3]); // 삭제한 사진을 업로드한 user의 point를 차감
+            await video_user.minusPoint(video_delete_title[3], 10); // 삭제한 사진을 업로드한 user의 point를 차감
             fs.unlink(`./src/public/uploads/video/` + video_delete_title[1] + delete_seq + `.mp4`,(err)=>{});
             fs.unlink(`./src/public/uploads/thumbnail/` + video_delete_title[1] + delete_seq + `.png`,(err)=>{});
             
@@ -199,6 +199,7 @@ const output = {
             photo_like_cnt -= 1;
             await photo_user.photoChecklike(upload_id + id + photo_seq, check); // 방문 이력이 있는 DB의 like_check 값을 0으로 수정
             photo_like_check = 0;
+            await photo_user.minusPoint(photo_title_des_like[3], 5); // 좋아요 누른 사진을 업로드한 user의 point - 5
         }
 
         if (photo_declaration && photo_declaration != "null") { // 신고하기 버튼을 눌렀을 때
@@ -299,6 +300,7 @@ const output = {
             video_like_cnt -= 1;
             await video_user.videoChecklike(upload_id + id + video_seq, check); // 방문 이력이 있는 DB의 like_check 값을 2으로 수정
             video_like_check = 2;
+            await video_user.minusPoint(video_title_des_like[3], 5); 
         }
 
         if (video_declaration && video_declaration != "null") {
@@ -437,6 +439,7 @@ const output = {
             photo_like_cnt -= 1;
             await photo_user.photoChecklike(upload_id + id + photo_seq, check); // 방문 이력이 있는 DB의 like_check 값을 0으로 수정
             photo_like_check = 0;
+            await photo_user.minusPoint(photo_title_des_like[3], 5); // 좋아요 누른 사진을 업로드한 user의 point - 5
         }
 
         if (photo_declaration && photo_declaration != "null") { // 신고하기 버튼을 눌렀을 때
@@ -501,7 +504,7 @@ const output = {
             await question_user.seqstartupdateQuestion(question_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(photo TB)
             await question_user.commentseqstartupdatePhoto(question_comment_final_seq + 1); // seq를 파라미터로 넘겨준 숫자부터 시작할 수 있도록 업데이트(photo_comment TB)
 
-            await question_user.minusPoint(question_delete_title[3]); // 삭제한 사진을 업로드한 user의 point를 차감
+            await question_user.minusPoint(question_delete_title[3], 10); // 삭제한 사진을 업로드한 user의 point를 차감
             
             for (var i = 1; i <= question_final_seq; i++){ // 삭제한 사진 뒤의 seq에 해당하는 사진 파일과 데이터 업데이트
                 var question_title = await question_user.questionSearchTitledesLike(i);

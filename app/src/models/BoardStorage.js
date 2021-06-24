@@ -58,10 +58,10 @@ class BoardStorage {
         })
     }
 
-    static async removePoint(pt, id) {
+    static async removePoint(pt, id, minuspoint) {
         const query = "UPDATE member SET point=? WHERE memberid = ?";
         db.query(query, 
-        [pt - 10, id],
+        [pt - minuspoint, id],
         (err) => {
             if(err) reject(`${err}`);
         })

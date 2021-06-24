@@ -155,6 +155,7 @@
     text-align: left;
     font-size: 25px;
     margin: 15px 10px;
+    font-family: 'Black Han Sans', sans-serif;
   }
   
   /* 소개 */
@@ -163,11 +164,19 @@
     font-size: var(--font-headermenu);
     margin: 20px 10px;
   }
+  input[id*="popup"] + label + div > div > div > #introduce #upload_time{
+    font-family: 'Black Han Sans', sans-serif;
+  }
+  input[id*="popup"] + label + div > div > div > #introduce #photo_nickname{
+    font-family: 'Black Han Sans', sans-serif;
+    font-size:22px;
+  }
+
   /* 두번째 hr 위치 고정(내용마다 위아래 위치가 달라지므로 고정)*/
   input[id*="popup"] + label + div > div > div > .second__line {
     position: absolute;
     /* 원래는 450px */
-    top: 450px;
+    top: 460px;
     width: 100%;
   }
   /* 좋아요 */

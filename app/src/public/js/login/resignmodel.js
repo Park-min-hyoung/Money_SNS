@@ -30,11 +30,12 @@ $(document).ready(function () {
             {
               if (result[0].password == input_value2) 
               {
+                sessionStorage.removeItem('memberid');
                 location.href = "/resignA";
               }
               else 
               {
-                $("#erroring").text('아이디나 비밀번호가 달라 로그인이 되질 않습니다.');
+                $("#erroring").text('아이디나 비밀번호가 달라 회원탈퇴가 되질 않습니다.');
                 $("#popup").css('display', 'flex').hide().fadeIn();
               }
             }

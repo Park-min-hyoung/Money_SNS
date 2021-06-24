@@ -24,6 +24,7 @@
     color: var(--color-white);
     font-size: var(--font-hometext);
     margin: 20px 0;
+    font-family: 'Black Han Sans', sans-serif;
 }
 /* 영상 좋아요 정보 */
 .video_like {
@@ -52,6 +53,7 @@
     color: var(--color-white);
     font-size: var(--font-headermenu);
     margin: 20px 0;
+    font-family: 'Black Han Sans', sans-serif;
 }
 /* 영상 소개 */
 #video_introduce {

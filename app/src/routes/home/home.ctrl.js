@@ -213,6 +213,7 @@ const process = {
         if (req.session.user) 
         {
             const response = await user.meberResign();
+            req.session.destroy();
             return res.json(response);
         }
         else {

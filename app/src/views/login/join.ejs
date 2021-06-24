@@ -67,14 +67,14 @@
 
       <!-- content-->
       <div id="content">
-
+        <form>
         <!-- ID -->
         <div>
           <h3 class="join_title">
             <label for="id" class="txt5">아이디</label>
           </h3>
           <span class="box int_id">
-            <input type="text" id="userId" class="int" maxlength="20" name="userId">
+            <input type="text" id="userId" class="int" maxlength="20" name="userId"  placeholder="아이디 입력">
           </span>
           <label class="error_next_box" id="_check1" for = "labelA"></label>>
         </div>
@@ -83,7 +83,7 @@
         <div>
           <h3 class="join_title"> <label for="pswd1" class="txt5">비밀번호</label></h3>
           <span class="box int_pass">
-            <input type="password" id="password1" class="int" maxlength="20" name="password1" onblur="return checkPasswordA(form.password1.value)">
+            <input type="password" id="password1" class="int" maxlength="20" name="password1" placeholder="비밀번호입력" onblur="return checkPasswordA(form.password1.value)">
             <span id="alertTxt">사용불가</span>
             <img src="img/icon/m_icon_pass.png" id="pswd1_img1" class="pswdImg" name = "pswdImg1">
           </span>
@@ -96,7 +96,7 @@
         <div>
           <h3 class="join_title"><label for="pswd2" class="txt5">비밀번호 재확인</label></h3>
           <span class="box int_pass_check">
-            <input type="password" id="password2" class="int" maxlength="20" name = "password2" onblur="return checkPasswordB(form.userId.value, form.password1.value,form.password2.value)">
+            <input type="password" id="password2" class="int" maxlength="20" placeholder="비밀번호 재확인" name = "password2" onblur="return checkPasswordB(form.userId.value, form.password1.value,form.password2.value)">
             <img src="img/icon/m_icon_check_disable.png" id="pswd2_img1" class="pswdImg" name = "pswdImg2">
           </span>
           <label class="error_next_box" id="_check3"></label> 
@@ -107,7 +107,7 @@
          <div>
           <h3 class="join_title"><label for="nickname" class="txt5">닉네임</span></label></h3>
           <span class="box int_email">
-            <input type="text" id="nickname" class="int" maxlength="20" placeholder="선택입력" name = "nickname">
+            <input type="text" id="nickname" class="int" maxlength="20" placeholder="닉네임 입력" name = "nickname">
           </span>
           <label class="error_next_box" id="_check7"></label>
         </div>
@@ -116,7 +116,7 @@
         <div>
           <h3 class="join_title"><label for="email" class="txt5">본인확인 이메일</span></label></h3>
           <span class="box int_email">
-            <input type="text" id="mail" class="int" maxlength="100" placeholder="선택입력" name = "mail" onblur="return checkMail(form.mail.value)">
+            <input type="text" id="mail" class="int" maxlength="100" placeholder="이메일 입력" name = "mail" onblur="return checkMail(form.mail.value)">
           </span>
           <label class="error_next_box" id="_check4"></label>
         </div>
@@ -175,6 +175,7 @@
       <div class="open">
           <button type = "button" class="snip1535"  id = "TestBtn"> 회원가입 신청</button>
       </div>
+    </form>
       <div class="popup-wrap" id="popup">
         <div class="popup">
           <div class="popup-body">
